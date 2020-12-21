@@ -11,19 +11,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({BankAccountNotFoundException.class, CustomerNotFoundException.class, CartNotFoundException.class, ProductCategoryNotFound.class, ProductNotInStock.class})
+    //@ExceptionHandler({BankAccountNotFoundException.class, CustomerNotFoundException.class, CartNotFoundException.class, ProductCategoryNotFound.class, ProductNotInStock.class, InsufficientFundsException.class, BankAccountNotBelongingToCustomer.class})
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handle(RuntimeException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage()); //+ " at " + LocalDateTime.now());
     }
-
-    /*@ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<String> handle(CustomerNotFoundException e) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(e.getMessage());
-    }*/
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handle(MethodArgumentNotValidException e) {

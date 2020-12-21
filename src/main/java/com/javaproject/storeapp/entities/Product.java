@@ -1,5 +1,6 @@
 package com.javaproject.storeapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Product {
     private ProductCategory productCategory;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<OrderItem> orderItems;
 
     public Product() {

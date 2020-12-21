@@ -1,5 +1,6 @@
 package com.javaproject.storeapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Order {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer")
+    @JsonIgnore
     private Customer customer;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -27,6 +29,7 @@ public class Order {
     private BankAccount account;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    //@JsonIgnore
     private List<OrderItem> orderItems;
 
     public Order() {

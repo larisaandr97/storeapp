@@ -1,9 +1,9 @@
 package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
-import com.javaproject.storeapp.entities.Cart;
-import com.javaproject.storeapp.entities.Customer;
-import com.javaproject.storeapp.entities.Product;
+import com.javaproject.storeapp.entities.*;
+import com.javaproject.storeapp.exception.CartIsEmptyException;
+import com.javaproject.storeapp.exception.CartNotFoundException;
 import com.javaproject.storeapp.exception.ProductNotInStock;
 import com.javaproject.storeapp.service.MainService;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +67,16 @@ public class CartController {
     }
 
     @PostMapping("/checkout/{customerId}")
-    public void checkout(@PathVariable int customerId) {
-
+    public Order checkout(@PathVariable int customerId, @RequestParam int accountId) {
+        Customer customer = mainService.findCustomerById(customerId);
+        BankAccount account = mainService.confirmBankAccount(customerId, accountId);
+        Cart cart = mainService.findCartByCustomer(customer);
+        if (cart == null)
+            throw new CartNotFoundException(customerId);
+        if (cart.getTotalAmount() == 0)
+            throw new CartIsEmptyException(customerId);
+        Order order = mainService.createOrder(customer, cartItems.get(customerId), account);
+        mainService.resetCart(cart);
+        return order;
     }
 }

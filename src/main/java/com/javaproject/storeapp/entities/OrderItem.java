@@ -1,5 +1,6 @@
 package com.javaproject.storeapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,10 +14,11 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private int quantity;
-    private int price;
+    private double price;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "orders")
+    @JsonIgnore
     private Order orders;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -26,7 +28,7 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public OrderItem(int quantity, int price, Product product) {
+    public OrderItem(int quantity, double price, Product product) {
         this.quantity = quantity;
         this.price = price;
         this.product = product;

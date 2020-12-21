@@ -1,7 +1,6 @@
 package com.javaproject.storeapp.repository;
 
 import com.javaproject.storeapp.entities.Order;
-import com.javaproject.storeapp.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
