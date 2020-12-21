@@ -44,6 +44,7 @@ public class MainService {
         return productRepository.getProductsBy(category, name, descending);
     }
 
+
     /* Customer */
     public Customer addCustomer(Customer c) {
         return customerRepository.save(c);
@@ -67,11 +68,6 @@ public class MainService {
         return bankAccountRepository.findBankAccountsByCustomer(customerId);
     }
 
-    /* Order */
-    public Order findOrderById(int id) {
-        return orderRepository.findOrderById(id);
-    }
-
 
     /* Cart */
     public Cart findCartByCustomer(Customer customer) {
@@ -91,12 +87,24 @@ public class MainService {
         cartRepository.save(cart);
     }
 
+    public void resetCart(Cart cart) {
+        cart.setTotalAmount(0);
+        cartRepository.save(cart);
+    }
+
+
+    /* Order */
+    public Order findOrderById(int id) {
+        return orderRepository.findOrderById(id);
+    }
+
     public List<Order> getOrdersByCustomerId(int customerId) {
         Customer customer = findCustomerById(customerId);
         return orderRepository.findOrdersByCustomerId(customerId);
     }
 
     public Order createOrder(Customer customer, List<OrderItemRequest> orderItemRequests, BankAccount bankAccount) {
+        // Creating order object
         Order order = new Order();
         order.setCustomer(customer);
         order.setAccount(bankAccount);
@@ -106,6 +114,7 @@ public class MainService {
         for (OrderItemRequest item : orderItemRequests) {
             Product product = productRepository.findProductById(item.getProductId());
             int stock = product.getStock();
+            // if there is available stock for the product, we add to list of order items
             if (stock >= item.getQuantity()) {
                 product.setStock(stock - item.getQuantity());
                 productRepository.save(product);
@@ -113,17 +122,22 @@ public class MainService {
                 orderItems.add(new OrderItem(item.getQuantity(), item.getPrice(), product));
             }
         }
+        // check if there is enough money in the account to pay the order
         checkBalanceForOrder(bankAccount, total);
         order.setTotalAmount(total);
         order.setDatePlaced(LocalDate.now());
-        orderRepository.save(order);
 
+        // Saving entities in database
+        orderRepository.save(order);
         orderItems.forEach(item -> {
             item.setOrders(order);
             orderItemRepository.save(item);
         });
+
+        // withdraw money from bank account
         bankAccount.setBalance(bankAccount.getBalance() - total);
         bankAccountRepository.save(bankAccount);
+
         return order;
     }
 
@@ -132,7 +146,7 @@ public class MainService {
             throw new InsufficientFundsException(bankAccount.getId());
     }
 
-    public BankAccount confirmBankAccount(int customerId, int accountId) {
+    public BankAccount validateBankAccount(int customerId, int accountId) {
         BankAccount bankAccount = bankAccountRepository.findBankAccountById(accountId);
         if (bankAccount == null)
             throw new BankAccountNotFoundException(accountId);
@@ -141,9 +155,5 @@ public class MainService {
         return bankAccount;
     }
 
-    public void resetCart(Cart cart) {
-        cart.setTotalAmount(0);
-        cartRepository.save(cart);
-    }
 }
 

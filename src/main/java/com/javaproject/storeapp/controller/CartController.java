@@ -6,8 +6,10 @@ import com.javaproject.storeapp.exception.CartIsEmptyException;
 import com.javaproject.storeapp.exception.CartNotFoundException;
 import com.javaproject.storeapp.exception.ProductNotInStock;
 import com.javaproject.storeapp.service.MainService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -67,9 +69,9 @@ public class CartController {
     }
 
     @PostMapping("/checkout/{customerId}")
-    public Order checkout(@PathVariable int customerId, @RequestParam int accountId) {
+    public ResponseEntity<Order> checkout(@PathVariable int customerId, @RequestParam int accountId) {
         Customer customer = mainService.findCustomerById(customerId);
-        BankAccount account = mainService.confirmBankAccount(customerId, accountId);
+        BankAccount account = mainService.validateBankAccount(customerId, accountId);
         Cart cart = mainService.findCartByCustomer(customer);
         if (cart == null)
             throw new CartNotFoundException(customerId);
@@ -77,6 +79,9 @@ public class CartController {
             throw new CartIsEmptyException(customerId);
         Order order = mainService.createOrder(customer, cartItems.get(customerId), account);
         mainService.resetCart(cart);
-        return order;
+        return ResponseEntity
+                .created(URI.create("/orders/" + order.getId()))
+                .body(order);
+
     }
 }
