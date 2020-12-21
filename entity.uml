@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.javaproject.storeapp.entity</OriginalElement>
+  <nodes>
+    <node x="374.25" y="0.0">com.javaproject.storeapp.entity.ProductCategory</node>
+    <node x="301.25" y="170.0">com.javaproject.storeapp.entity.Product</node>
+    <node x="199.0" y="11.0">com.javaproject.storeapp.entity.OrderItem</node>
+    <node x="10.0" y="0.0">com.javaproject.storeapp.entity.BankAccount</node>
+    <node x="0.0" y="406.0">com.javaproject.storeapp.entity.Customer</node>
+    <node x="348.4813432835821" y="459.49701492537315">com.javaproject.storeapp.entity.Cart</node>
+    <node x="72.25" y="192.0">com.javaproject.storeapp.entity.Order</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.javaproject.storeapp.entity.Product" target="com.javaproject.storeapp.entity.ProductCategory">
+      <point x="0.0" y="-93.0" />
+      <point x="-42.0" y="60.0" />
+    </edge>
+    <edge source="com.javaproject.storeapp.entity.Customer" target="com.javaproject.storeapp.entity.BankAccount">
+      <point x="-57.0" y="-93.0" />
+      <point x="57.0" y="381.0" />
+      <point x="52.25" y="381.0" />
+      <point x="-42.25" y="60.0" />
+    </edge>
+    <edge source="com.javaproject.storeapp.entity.Order" target="com.javaproject.storeapp.entity.OrderItem">
+      <point x="52.25" y="-71.0" />
+      <point x="-30.0" y="49.0" />
+    </edge>
+    <edge source="com.javaproject.storeapp.entity.Product" target="com.javaproject.storeapp.entity.OrderItem">
+      <point x="-77.0" y="-93.0" />
+      <point x="339.75" y="145.0" />
+      <point x="289.0" y="145.0" />
+      <point x="30.0" y="49.0" />
+    </edge>
+    <edge source="com.javaproject.storeapp.entity.Customer" target="com.javaproject.storeapp.entity.Order">
+      <point x="57.0" y="-93.0" />
+      <point x="171.0" y="381.0" />
+      <point x="176.75" y="381.0" />
+      <point x="0.0" y="71.0" />
+    </edge>
+    <edge source="com.javaproject.storeapp.entity.Order" target="com.javaproject.storeapp.entity.BankAccount">
+      <point x="-52.25" y="-71.0" />
+      <point x="124.5" y="145.0" />
+      <point x="136.75" y="145.0" />
+      <point x="42.25" y="60.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9423347398030942" x="371.5" y="335.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
