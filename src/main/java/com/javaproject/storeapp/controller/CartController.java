@@ -9,6 +9,7 @@ import com.javaproject.storeapp.service.MainService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -25,6 +26,7 @@ public class CartController {
     }
 
     @PostMapping("/add")
+    @Transactional
     public Cart addProductToCart(@RequestParam int customerId,
                                  @RequestParam int productId,
                                  @RequestParam int quantity) {
@@ -62,10 +64,24 @@ public class CartController {
         return cart;
     }
 
+    @DeleteMapping("/delete")
+    public List<OrderItemRequest> deleteItemFromCart(@RequestParam int customerId,
+                                                     @RequestParam int productId) {
+        List<OrderItemRequest> items = cartItems.get(customerId);
+        int index = IntStream.range(0, items.size())
+                .filter(i -> items.get(i).getProductId() == productId)
+                .findFirst().orElse(-1);
+        items.remove(index);
+        cartItems.put(customerId, items);
+        return items;
+    }
+
     @GetMapping("/{customerId}")
     public List<OrderItemRequest> getCartContents(@PathVariable int customerId) {
         Customer customer = mainService.findCustomerById(customerId);
-        return cartItems.get(customerId);
+        if (cartItems.get(customerId) == null)
+            throw new CartIsEmptyException(customerId);
+        else return cartItems.get(customerId);
     }
 
     @PostMapping("/checkout/{customerId}")

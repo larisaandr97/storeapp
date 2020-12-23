@@ -9,6 +9,7 @@ import com.javaproject.storeapp.exception.InsufficientFundsException;
 import com.javaproject.storeapp.repository.*;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -57,7 +58,6 @@ public class MainService {
         } else {
             throw new CustomerNotFoundException(id);
         }
-
     }
 
     public BankAccount createBankAccount(BankAccount bankAccount) {
@@ -67,7 +67,6 @@ public class MainService {
     public List<BankAccount> getBankAccountsForCustomer(int customerId) {
         return bankAccountRepository.findBankAccountsByCustomer(customerId);
     }
-
 
     /* Cart */
     public Cart findCartByCustomer(Customer customer) {
@@ -103,6 +102,7 @@ public class MainService {
         return orderRepository.findOrdersByCustomerId(customerId);
     }
 
+    @Transactional
     public Order createOrder(Customer customer, List<OrderItemRequest> orderItemRequests, BankAccount bankAccount) {
         // Creating order object
         Order order = new Order();
