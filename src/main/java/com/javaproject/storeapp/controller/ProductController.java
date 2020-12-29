@@ -3,7 +3,7 @@ package com.javaproject.storeapp.controller;
 import com.javaproject.storeapp.dto.ProductRequest;
 import com.javaproject.storeapp.mapper.ProductMapper;
 import com.javaproject.storeapp.entities.Product;
-import com.javaproject.storeapp.service.MainService;
+import com.javaproject.storeapp.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +15,11 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    private final MainService mainService;
+    private final ProductService productService;
     private final ProductMapper productMapper;
 
-    public ProductController(MainService mainService, ProductMapper productMapper) {
-        this.mainService = mainService;
+    public ProductController(ProductService productService, ProductMapper productMapper) {
+        this.productService = productService;
         this.productMapper = productMapper;
     }
 
@@ -27,7 +27,7 @@ public class ProductController {
     public ResponseEntity<Product> addProduct(@Valid @RequestBody ProductRequest p) {
         Product product = productMapper.productRequestToProduct(p);
 
-        Product createdProduct = mainService.addProduct(product);
+        Product createdProduct = productService.addProduct(product);
         return ResponseEntity
                 //created() will return the 201 HTTP code and set the Location header on the response, with the url to the newly created customer
                 .created(URI.create("/products/" + createdProduct.getId()))
@@ -37,7 +37,7 @@ public class ProductController {
 
     @GetMapping("{id}")
     public Product getProduct(@PathVariable int id) {
-        return mainService.findProductById(id);
+        return productService.findProductById(id);
     }
 
     @GetMapping
@@ -45,7 +45,7 @@ public class ProductController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) boolean descending) {
-        return mainService.getProductsBy(category, name, descending);
+        return productService.getProductsBy(category, name, descending);
     }
 
 }

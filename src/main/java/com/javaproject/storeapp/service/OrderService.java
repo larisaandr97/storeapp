@@ -1,105 +1,39 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
+import com.javaproject.storeapp.entities.*;
 import com.javaproject.storeapp.exception.BankAccountNotBelongingToCustomer;
 import com.javaproject.storeapp.exception.BankAccountNotFoundException;
-import com.javaproject.storeapp.exception.CustomerNotFoundException;
-import com.javaproject.storeapp.entities.*;
 import com.javaproject.storeapp.exception.InsufficientFundsException;
 import com.javaproject.storeapp.repository.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
-public class MainService {
+public class OrderService {
 
-    private final ProductRepository productRepository;
-    private final CustomerRepository customerRepository;
     private final OrderRepository orderRepository;
     private final BankAccountRepository bankAccountRepository;
-    private final CartRepository cartRepository;
     private final OrderItemRepository orderItemRepository;
+    private final ProductRepository productRepository;
 
-    public MainService(ProductRepository productRepository, CustomerRepository customerRepository, OrderRepository orderRepository, BankAccountRepository bankAccountRepository, CartRepository cartRepository, OrderItemRepository orderItemRepository) {
-        this.productRepository = productRepository;
-        this.customerRepository = customerRepository;
+    public OrderService(OrderRepository orderRepository, BankAccountRepository bankAccountRepository, OrderItemRepository orderItemRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.bankAccountRepository = bankAccountRepository;
-        this.cartRepository = cartRepository;
         this.orderItemRepository = orderItemRepository;
+        this.productRepository = productRepository;
     }
 
-    /* Product */
-    public Product addProduct(Product p) {
-        return productRepository.save(p);
-    }
-
-    public Product findProductById(int id) {
-        return productRepository.findProductById(id);
-    }
-
-    public List<Product> getProductsBy(String category, String name, boolean descending) {
-        return productRepository.getProductsBy(category, name, descending);
-    }
-
-
-    /* Customer */
-    public Customer addCustomer(Customer c) {
-        return customerRepository.save(c);
-    }
-
-    public Customer findCustomerById(int id) {
-        Optional<Customer> customerOptional = Optional.ofNullable(customerRepository.findCustomerById(id));
-        if (customerOptional.isPresent()) {
-            return customerOptional.get();
-        } else {
-            throw new CustomerNotFoundException(id);
-        }
-    }
-
-    public BankAccount createBankAccount(BankAccount bankAccount) {
-        return bankAccountRepository.save(bankAccount);
-    }
-
-    public List<BankAccount> getBankAccountsForCustomer(int customerId) {
-        return bankAccountRepository.findBankAccountsByCustomer(customerId);
-    }
-
-    /* Cart */
-    public Cart findCartByCustomer(Customer customer) {
-        return cartRepository.findCartByCustomer(customer);
-    }
-
-    public Cart createCart(Customer customer, double value) {
-        Cart cart = new Cart();
-        cart.setTotalAmount(value);
-        cart.setCustomer(customer);
-        return cartRepository.save(cart);
-    }
-
-    public void updateCartAmount(int cartId, double value) {
-        Cart cart = cartRepository.findCartById(cartId);
-        cart.setTotalAmount(cart.getTotalAmount() + value);
-        cartRepository.save(cart);
-    }
-
-    public void resetCart(Cart cart) {
-        cart.setTotalAmount(0);
-        cartRepository.save(cart);
-    }
-
-
-    /* Order */
     public Order findOrderById(int id) {
         return orderRepository.findOrderById(id);
     }
 
-    public List<Order> getOrdersByCustomerId(int customerId) {
-        Customer customer = findCustomerById(customerId);
-        return orderRepository.findOrdersByCustomerId(customerId);
+    public List<Order> getOrdersByCustomer(Customer customer) {
+        return orderRepository.findOrdersByCustomer(customer);
     }
 
     @Transactional
@@ -154,6 +88,4 @@ public class MainService {
             throw new BankAccountNotBelongingToCustomer(accountId, customerId);
         return bankAccount;
     }
-
 }
-

@@ -2,11 +2,11 @@ package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.dto.BankAccountRequest;
 import com.javaproject.storeapp.dto.CustomerRequest;
-import com.javaproject.storeapp.mapper.BankAccountMapper;
-import com.javaproject.storeapp.mapper.CustomerMapper;
 import com.javaproject.storeapp.entities.BankAccount;
 import com.javaproject.storeapp.entities.Customer;
-import com.javaproject.storeapp.service.MainService;
+import com.javaproject.storeapp.mapper.BankAccountMapper;
+import com.javaproject.storeapp.mapper.CustomerMapper;
+import com.javaproject.storeapp.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +19,12 @@ import java.util.List;
 @Validated
 public class CustomerController {
 
-    private final MainService mainService;
+    private final CustomerService customerService;
     private final BankAccountMapper bankAccountMapper;
     private final CustomerMapper customerMapper;
 
-    public CustomerController(MainService mainService, BankAccountMapper bankAccountMapper, CustomerMapper customerMapper) {
-        this.mainService = mainService;
+    public CustomerController(CustomerService customerService, BankAccountMapper bankAccountMapper, CustomerMapper customerMapper) {
+        this.customerService = customerService;
         this.bankAccountMapper = bankAccountMapper;
         this.customerMapper = customerMapper;
     }
@@ -34,7 +34,7 @@ public class CustomerController {
                                                 @RequestBody CustomerRequest customerRequest) {
         Customer customer = customerMapper.customerRequestToCustomer(customerRequest);
 
-        Customer createdCustomer = mainService.addCustomer(customer);
+        Customer createdCustomer = customerService.addCustomer(customer);
         return ResponseEntity
                 //created() will return the 201 HTTP code and set the Location header on the response, with the url to the newly created customer
                 .created(URI.create("/customers/" + createdCustomer.getId()))
@@ -45,7 +45,7 @@ public class CustomerController {
 
     @GetMapping("customers/{id}")
     public Customer getCustomerById(@PathVariable int id) {
-        return mainService.findCustomerById(id);
+        return customerService.findCustomerById(id);
     }
 
     /* Bank Account */
@@ -56,16 +56,15 @@ public class CustomerController {
         Customer customer = getCustomerById(customerId);
         bankAccountRequest.setCustomer(customer);
         BankAccount bankAccount = bankAccountMapper.bankAccountRequestToBankAccount(bankAccountRequest);
-        BankAccount createdBankAccount = mainService.createBankAccount(bankAccount);
+        BankAccount createdBankAccount = customerService.createBankAccount(bankAccount);
         return ResponseEntity
                 .created(URI.create("/bankAccount/" + createdBankAccount.getId()))
                 .body(createdBankAccount);
     }
 
     @GetMapping("/accounts/{customerId}")
-    public List<BankAccount> getBankAccountsForCustomer(@PathVariable int customerId){
-        Customer customer = getCustomerById(customerId);
-        return mainService.getBankAccountsForCustomer(customerId);
+    public List<BankAccount> getBankAccountsForCustomer(@PathVariable int customerId) {
+        return customerService.getBankAccountsForCustomer(customerId);
     }
 
 }

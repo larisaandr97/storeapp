@@ -5,7 +5,10 @@ import com.javaproject.storeapp.entities.*;
 import com.javaproject.storeapp.exception.CartIsEmptyException;
 import com.javaproject.storeapp.exception.CartNotFoundException;
 import com.javaproject.storeapp.exception.ProductNotInStock;
-import com.javaproject.storeapp.service.MainService;
+import com.javaproject.storeapp.service.CartService;
+import com.javaproject.storeapp.service.CustomerService;
+import com.javaproject.storeapp.service.ProductService;
+import com.javaproject.storeapp.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +21,17 @@ import java.util.stream.IntStream;
 @RequestMapping("/cart")
 public class CartController {
 
-    private final MainService mainService;
+    private final ProductService productService;
+    private final OrderService orderService;
+    private final CartService cartService;
+    private final CustomerService customerService;
     private final Map<Integer, List<OrderItemRequest>> cartItems = new HashMap<>();
 
-    public CartController(MainService mainService) {
-        this.mainService = mainService;
+    public CartController(ProductService productService, OrderService orderService, CartService cartService, CustomerService customerService) {
+        this.productService = productService;
+        this.orderService = orderService;
+        this.cartService = cartService;
+        this.customerService = customerService;
     }
 
     @PostMapping("/add")
@@ -30,18 +39,18 @@ public class CartController {
     public Cart addProductToCart(@RequestParam int customerId,
                                  @RequestParam int productId,
                                  @RequestParam int quantity) {
-        Customer customer = mainService.findCustomerById(customerId);
-        Product product = mainService.findProductById(productId);
+        Customer customer = customerService.findCustomerById(customerId);
+        Product product = productService.findProductById(productId);
         if (product.getStock() < quantity) {
             throw new ProductNotInStock(productId);
         }
 
-        Cart cart = mainService.findCartByCustomer(customer);
+        Cart cart = cartService.findCartByCustomer(customer);
         OrderItemRequest item = new OrderItemRequest(productId, quantity, product.getPrice());
 
         if (cart == null) {
             // if there is no existing cart for the customerId, we create one, also initializing the amount with the product added
-            cart = mainService.createCart(customer, quantity * product.getPrice());
+            cart = cartService.createCart(customer, quantity * product.getPrice());
             List<OrderItemRequest> items = new ArrayList<>();
             items.add(item);
             cartItems.put(customerId, items);
@@ -59,7 +68,7 @@ public class CartController {
                 items.add(item);
             }
             cartItems.put(customerId, items);
-            mainService.updateCartAmount(cart.getId(), quantity * product.getPrice());
+            cartService.updateCartAmount(cart.getId(), quantity * product.getPrice());
         }
         return cart;
     }
@@ -78,7 +87,6 @@ public class CartController {
 
     @GetMapping("/{customerId}")
     public List<OrderItemRequest> getCartContents(@PathVariable int customerId) {
-        Customer customer = mainService.findCustomerById(customerId);
         if (cartItems.get(customerId) == null)
             throw new CartIsEmptyException(customerId);
         else return cartItems.get(customerId);
@@ -86,15 +94,15 @@ public class CartController {
 
     @PostMapping("/checkout/{customerId}")
     public ResponseEntity<Order> checkout(@PathVariable int customerId, @RequestParam int accountId) {
-        Customer customer = mainService.findCustomerById(customerId);
-        BankAccount account = mainService.validateBankAccount(customerId, accountId);
-        Cart cart = mainService.findCartByCustomer(customer);
+        Customer customer = customerService.findCustomerById(customerId);
+        BankAccount account = orderService.validateBankAccount(customerId, accountId);
+        Cart cart = cartService.findCartByCustomer(customer);
         if (cart == null)
             throw new CartNotFoundException(customerId);
         if (cart.getTotalAmount() == 0)
             throw new CartIsEmptyException(customerId);
-        Order order = mainService.createOrder(customer, cartItems.get(customerId), account);
-        mainService.resetCart(cart);
+        Order order = orderService.createOrder(customer, cartItems.get(customerId), account);
+        cartService.resetCart(cart);
         return ResponseEntity
                 .created(URI.create("/orders/" + order.getId()))
                 .body(order);

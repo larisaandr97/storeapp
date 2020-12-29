@@ -1,12 +1,13 @@
 package com.javaproject.storeapp.exception.advice;
 
 
-import com.javaproject.storeapp.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,7 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handle(MethodArgumentNotValidException e) {
         return ResponseEntity.badRequest()
-                .body("Invalid value " + e.getFieldError().getRejectedValue()
+                .body("Invalid value " + Objects.requireNonNull(e.getFieldError()).getRejectedValue()
                         + " for field " + e.getFieldError().getField()
                         + " with message: " + e.getFieldError().getDefaultMessage());
 
