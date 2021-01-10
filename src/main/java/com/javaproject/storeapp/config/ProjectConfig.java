@@ -1,7 +1,5 @@
 package com.javaproject.storeapp.config;
 
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
+//@Configuration
 public class ProjectConfig {
 }

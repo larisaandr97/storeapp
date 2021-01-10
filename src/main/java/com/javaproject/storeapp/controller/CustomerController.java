@@ -1,40 +1,48 @@
 package com.javaproject.storeapp.controller;
 
-import com.javaproject.storeapp.dto.BankAccountRequest;
 import com.javaproject.storeapp.dto.CustomerRequest;
-import com.javaproject.storeapp.entities.BankAccount;
 import com.javaproject.storeapp.entities.Customer;
 import com.javaproject.storeapp.mapper.BankAccountMapper;
 import com.javaproject.storeapp.mapper.CustomerMapper;
 import com.javaproject.storeapp.service.CustomerService;
+import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
+@RequestMapping("/customers")
 @Validated
+@Api(value = "/customers",
+        tags = "Customers")
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final BankAccountMapper bankAccountMapper;
     private final CustomerMapper customerMapper;
 
     public CustomerController(CustomerService customerService, BankAccountMapper bankAccountMapper, CustomerMapper customerMapper) {
         this.customerService = customerService;
-        this.bankAccountMapper = bankAccountMapper;
         this.customerMapper = customerMapper;
     }
 
-    @PostMapping("/customers")
+    @PostMapping()
+    @ApiOperation(value = "Create a Customer",
+            notes = "Creates a new Customer based on the information received in the request")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "The Customer was successfully created based on the received request"),
+            @ApiResponse(code = 400, message = "Validation error on the received request")
+    })
     public ResponseEntity<Customer> addCostumer(@Valid
-                                                @RequestBody CustomerRequest customerRequest) {
+                                                @RequestBody
+                                                @ApiParam(name = "customer", value = "Customer details", required = true)
+                                                        CustomerRequest customerRequest) {
         Customer customer = customerMapper.customerRequestToCustomer(customerRequest);
 
         Customer createdCustomer = customerService.addCustomer(customer);
+
         return ResponseEntity
                 //created() will return the 201 HTTP code and set the Location header on the response, with the url to the newly created customer
                 .created(URI.create("/customers/" + createdCustomer.getId()))
@@ -43,28 +51,15 @@ public class CustomerController {
 
     }
 
-    @GetMapping("customers/{id}")
+    @GetMapping("/{id}")
+    @ApiOperation(value = "Get Customer",
+            notes = "Get a Customer based on the Id received in the request")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "The Customer with the entered Id does not exist")
+    })
     public Customer getCustomerById(@PathVariable int id) {
         return customerService.findCustomerById(id);
     }
 
-    /* Bank Account */
-    @PostMapping("/accounts/{customerId}")
-    public ResponseEntity<BankAccount> createBankAccount(
-            @Valid
-            @RequestBody BankAccountRequest bankAccountRequest, @PathVariable int customerId) {
-        Customer customer = getCustomerById(customerId);
-        bankAccountRequest.setCustomer(customer);
-        BankAccount bankAccount = bankAccountMapper.bankAccountRequestToBankAccount(bankAccountRequest);
-        BankAccount createdBankAccount = customerService.createBankAccount(bankAccount);
-        return ResponseEntity
-                .created(URI.create("/bankAccount/" + createdBankAccount.getId()))
-                .body(createdBankAccount);
-    }
-
-    @GetMapping("/accounts/{customerId}")
-    public List<BankAccount> getBankAccountsForCustomer(@PathVariable int customerId) {
-        return customerService.getBankAccountsForCustomer(customerId);
-    }
 
 }

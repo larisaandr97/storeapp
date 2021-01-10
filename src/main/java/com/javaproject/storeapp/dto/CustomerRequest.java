@@ -1,10 +1,13 @@
 package com.javaproject.storeapp.dto;
 
+import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import static com.javaproject.storeapp.entities.Pattern.EMAIL_ADDRESS;
 
+@Data
 public class CustomerRequest {
 
     @NotBlank
@@ -25,35 +28,4 @@ public class CustomerRequest {
         this.address = address;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 }

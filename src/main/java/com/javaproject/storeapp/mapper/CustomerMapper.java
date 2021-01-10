@@ -1,6 +1,5 @@
 package com.javaproject.storeapp.mapper;
 
-
 import com.javaproject.storeapp.dto.CustomerRequest;
 import com.javaproject.storeapp.entities.Customer;
 import org.springframework.stereotype.Component;

@@ -25,12 +25,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                 .filter(product -> {
                     if (category != null) {//we filter by category only if the category was sent in the request
                         if (name != null) { //we filter by name only if the name was sent in the request
-                            return ProductCategory.valueOf(category.toUpperCase()).equals(product.getProductCategory()) && product.getName().equals(name);
+                            return ProductCategory.valueOf(category.toUpperCase()).equals(product.getProductCategory()) && product.getName().toLowerCase().contains(name.toLowerCase());
                         } else {
                             return ProductCategory.valueOf(category.toUpperCase()).equals(product.getProductCategory());
                         }
                     } else if (name != null) { //we filter by name only if the name was sent in the request
-                        return product.getName().equals(name);
+                        return product.getName().toLowerCase().contains(name.toLowerCase());
                     } else {//no filters are sent in the request, all products should be returned
                         return true;
                     }

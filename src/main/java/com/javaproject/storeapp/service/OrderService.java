@@ -2,9 +2,7 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entities.*;
-import com.javaproject.storeapp.exception.BankAccountNotBelongingToCustomer;
-import com.javaproject.storeapp.exception.BankAccountNotFoundException;
-import com.javaproject.storeapp.exception.InsufficientFundsException;
+import com.javaproject.storeapp.exception.*;
 import com.javaproject.storeapp.repository.*;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +10,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -29,7 +28,12 @@ public class OrderService {
     }
 
     public Order findOrderById(int id) {
-        return orderRepository.findOrderById(id);
+        Optional<Order> orderOptional = Optional.ofNullable(orderRepository.findOrderById(id));
+        if (orderOptional.isPresent()) {
+            return orderOptional.get();
+        } else {
+            throw new OrderNotFoundException(id);
+        }
     }
 
     public List<Order> getOrdersByCustomer(Customer customer) {

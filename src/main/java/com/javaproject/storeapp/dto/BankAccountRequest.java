@@ -2,6 +2,7 @@ package com.javaproject.storeapp.dto;
 
 
 import com.javaproject.storeapp.entities.Customer;
+import lombok.Data;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +11,7 @@ import javax.validation.constraints.Pattern;
 
 import static com.javaproject.storeapp.entities.Pattern.VISA_CREDIT_CARD;
 
-
+@Data
 public class BankAccountRequest {
 
     @NotBlank(message = "Account number cannot be null.")
@@ -32,38 +33,6 @@ public class BankAccountRequest {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.cardNumber = cardNumber;
-        this.customer = customer;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 }
