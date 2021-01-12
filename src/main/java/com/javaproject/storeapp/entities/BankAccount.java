@@ -39,4 +39,12 @@ public class BankAccount {
         this.cardNumber = cardNumber;
         this.customer = customer;
     }
+
+    public BankAccount(int id, String accountNumber, double balance, String cardNumber, Customer customer) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.cardNumber = cardNumber;
+        this.customer = customer;
+    }
 }

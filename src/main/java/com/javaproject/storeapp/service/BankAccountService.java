@@ -14,11 +14,11 @@ import java.util.Optional;
 public class BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
-    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
-    public BankAccountService(BankAccountRepository bankAccountRepository, CustomerRepository customerRepository) {
+    public BankAccountService(BankAccountRepository bankAccountRepository, CustomerService customerService) {
         this.bankAccountRepository = bankAccountRepository;
-        this.customerRepository = customerRepository;
+        this.customerService = customerService;
     }
 
     public BankAccount createBankAccount(BankAccount bankAccount) {
@@ -26,12 +26,13 @@ public class BankAccountService {
     }
 
     public List<BankAccount> getBankAccountsForCustomer(int customerId) {
-        Optional<Customer> customerOptional = Optional.ofNullable(customerRepository.findCustomerById(customerId));
-        if (customerOptional.isPresent()) {
+        Customer customer = customerService.findCustomerById(customerId);
+        return bankAccountRepository.findBankAccountsByCustomer(customerId);
+      /*  if (customerOptional.isPresent()) {
             return bankAccountRepository.findBankAccountsByCustomer(customerId);
         } else {
             throw new CustomerNotFoundException(customerId);
-        }
+        }*/
 
     }
 }

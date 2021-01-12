@@ -9,10 +9,11 @@ import java.util.List;
 @Data
 @Entity
 public class Customer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int id;
+
     @Column(name = "firstName")
     private String firstName;
     @Column(name = "lastName")
@@ -28,7 +29,7 @@ public class Customer {
     private List<BankAccount> bankAccounts;
 
     @OneToOne(mappedBy = "customer", fetch = FetchType.LAZY)
-   // @JsonIgnore
+    // @JsonIgnore
     private Cart cart;
 
     public Customer(String firstName, String lastName, String mail, String address) {

@@ -5,7 +5,7 @@ import com.javaproject.storeapp.entities.*;
 import com.javaproject.storeapp.exception.CartIsEmptyException;
 import com.javaproject.storeapp.exception.CartNotFoundException;
 import com.javaproject.storeapp.exception.NegativeQuantityException;
-import com.javaproject.storeapp.exception.ProductNotInStock;
+import com.javaproject.storeapp.exception.ProductNotInStockException;
 import com.javaproject.storeapp.service.CartService;
 import com.javaproject.storeapp.service.CustomerService;
 import com.javaproject.storeapp.service.ProductService;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.net.URI;
 import java.util.*;
-import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping("/cart")
@@ -29,7 +28,7 @@ public class CartController {
     private final OrderService orderService;
     private final CartService cartService;
     private final CustomerService customerService;
-    private final Map<Integer, List<OrderItemRequest>> cartItems = new HashMap<>();
+
 
     public CartController(ProductService productService, OrderService orderService, CartService cartService, CustomerService customerService) {
         this.productService = productService;
@@ -42,7 +41,7 @@ public class CartController {
     @ApiOperation(value = "Add Product to Cart",
             notes = "Add the Product received in the request to the Cart")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "The Product was successfully added to the cart"),
+            @ApiResponse(code = 200, message = "The Product was successfully added to the cart, returning Cart details"),
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
     @Transactional
@@ -55,7 +54,7 @@ public class CartController {
         if (quantity <= 0)
             throw new NegativeQuantityException();
         if (product.getStock() < quantity) {
-            throw new ProductNotInStock(productId);
+            throw new ProductNotInStockException(productId);
         }
 
         Cart cart = cartService.findCartByCustomer(customer);
@@ -63,48 +62,31 @@ public class CartController {
 
         if (cart == null) {
             // if there is no existing cart for the customerId, we create one, also initializing the amount with the product added
-            cart = cartService.createCart(customer, quantity * product.getPrice());
-
-            List<OrderItemRequest> items = new ArrayList<>();
-            items.add(item);
-            cartItems.put(customerId, items);
+            cart = cartService.createCart(customer, quantity * product.getPrice(), item);
 
         } else {
-            List<OrderItemRequest> items = cartItems.get(customerId);
-
-            int index = IntStream.range(0, items.size())
-                    .filter(i -> items.get(i).getProductId() == productId)
-                    .findFirst().orElse(-1);
-
-            if (index != -1) { // item already exists in lists, only add
-                OrderItemRequest old = items.get(index);
-                // update quantity of item in customer's list
-                items.set(index, new OrderItemRequest(old.getProductId(), old.getQuantity() + quantity, old.getPrice()));
-            } else {
-                items.add(item);
-            }
-            cartItems.put(customerId, items);
-            cartService.updateCartAmount(cart.getId(), quantity * product.getPrice());
+            cartService.addItemToCart(customer, item);
+            cartService.addToCartAmount(cart.getId(), quantity * product.getPrice());
         }
         return cart;
     }
 
+    @Transactional
     @DeleteMapping("/delete")
     @ApiOperation(value = "Delete Product from Cart",
             notes = "Deletes the Product received in the request from the Cart")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "The Product was successfully deleted from the cart"),
+            @ApiResponse(code = 200, message = "The Product was successfully deleted from the Cart, returning Cart details"),
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
     public List<OrderItemRequest> deleteItemFromCart(@RequestParam int customerId,
                                                      @RequestParam int productId) {
-        List<OrderItemRequest> items = cartItems.get(customerId);
-        int index = IntStream.range(0, items.size())
-                .filter(i -> items.get(i).getProductId() == productId)
-                .findFirst().orElse(-1);
-        items.remove(index);
-        cartItems.put(customerId, items);
-        return items;
+
+        Customer customer = customerService.findCustomerById(customerId);
+
+        Cart cart = cartService.findCartByCustomer(customer);
+
+        return cartService.deleteItemFromCart(cart, customerId, productId);
     }
 
     @GetMapping("/{customerId}")
@@ -116,21 +98,19 @@ public class CartController {
     public List<OrderItemRequest> getCartContents(@PathVariable int customerId) {
         customerService.findCustomerById(customerId);
 
-        if (cartItems.get(customerId) == null)
-            throw new CartIsEmptyException(customerId);
-        else return cartItems.get(customerId);
+        return cartService.getCartContents(customerId);
     }
 
     @PostMapping("/checkout/{customerId}")
     @ApiOperation(value = "Checkout Cart for Customer",
-            notes = "Checkout all Products from Cart and pay with account received in the request")
+            notes = "Checkout all Products from Cart and pay with Account received in the request")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "The Order was successfully created based on the received request"),
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
     public ResponseEntity<Order> checkout(@PathVariable int customerId,
                                           @RequestParam
-                                          @ApiParam(name = "account", value = "Account used for paying for order", required = true)
+                                          @ApiParam(name = "accountId", value = "Account used for paying for Order", required = true)
                                                   int accountId) {
         Customer customer = customerService.findCustomerById(customerId);
 
@@ -142,9 +122,10 @@ public class CartController {
         if (cart.getTotalAmount() == 0)
             throw new CartIsEmptyException(customerId);
 
-        Order order = orderService.createOrder(customer, cartItems.get(customerId), account);
+        Order order = orderService.createOrder(customer, cartService.getCartItems().get(customerId), account);
 
         cartService.resetCart(cart);
+
         return ResponseEntity
                 .created(URI.create("/orders/" + order.getId()))
                 .body(order);

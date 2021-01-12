@@ -58,7 +58,7 @@ public class BankAccountController {
     }
 
     @GetMapping("/{customerId}")
-    @ApiOperation(value = "Get Bank Accounts",
+    @ApiOperation(value = "Get Bank Accounts for Customer",
             notes = "Get all Bank Accounts for a Customer based on the Id received in the request")
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "The Customer with the entered Id does not exist!")

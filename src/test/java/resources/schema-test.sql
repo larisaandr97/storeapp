@@ -1,13 +1,5 @@
-create database if not exists storeapp;
 
-create table if not exists audit(
-    id int not null auto_increment primary key,
-    signature varchar(100) not null,
-    class varchar(100) not null,
-    timestamp_value timestamp not null
-);
-
-create table if not exists customer(
+create table customer(
     id int not null auto_increment primary key,
     firstName varchar(100) not null,
     lastName varchar(100) not null,
@@ -15,7 +7,7 @@ create table if not exists customer(
     address varchar(100) not null
 );
 
-create table if not exists bankAccount(
+create table bankAccount(
     id int not null auto_increment primary key,
     accountNumber varchar(100) not null,
     balance double not null,
@@ -25,7 +17,7 @@ create table if not exists bankAccount(
     CONSTRAINT FK_customerId_account FOREIGN KEY (customer) REFERENCES customer(id)
 );
 
-create table if not exists product(
+create table product(
     id int not null auto_increment primary key,
     name varchar(100) not null,
     description varchar(100) not null,
@@ -34,7 +26,7 @@ create table if not exists product(
     category varchar(45) not null
 );
 
-create table if not exists orders(
+create table orders(
     id int not null auto_increment primary key,
     totalAmount double not null,
     datePlaced date not null,
@@ -44,7 +36,7 @@ create table if not exists orders(
     CONSTRAINT FK_customerId_order FOREIGN KEY (customer) REFERENCES customer(id)
 );
 
-create table if not exists orderItem(
+create table orderItem(
     id int not null auto_increment primary key,
    quantity int not null,
    price double not null,
@@ -54,9 +46,8 @@ create table if not exists orderItem(
    CONSTRAINT FK_orderId_item FOREIGN KEY (orders) REFERENCES orders(id)
 );
 
-drop table if exists cart;
 
-create table if not exists cart(
+create table cart(
     id int not null auto_increment primary key,
     totalAmount double not null,
     customer int not null,

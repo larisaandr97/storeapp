@@ -66,7 +66,7 @@ public class ProductController {
             @ApiResponse(code = 200, message = "The data was retrieved successfully"),
             @ApiResponse(code = 404, message = "Products with the entered properties were not found")
     })
-    public ResponseEntity getAllProducts(
+    public ResponseEntity<?> getAllProducts(
             @RequestParam(required = false)
             @ApiParam(name = "category", value = "Product category", allowableValues = ("CLOTHES, FOOD, LAPTOPS, PHONES, HOME"))
                     String category,
