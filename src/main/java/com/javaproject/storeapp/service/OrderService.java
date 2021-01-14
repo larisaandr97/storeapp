@@ -19,12 +19,16 @@ public class OrderService {
     private final BankAccountRepository bankAccountRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
+    private final CustomerService customerService;
+    private final CartService cartService;
 
-    public OrderService(OrderRepository orderRepository, BankAccountRepository bankAccountRepository, OrderItemRepository orderItemRepository, ProductRepository productRepository) {
+    public OrderService(OrderRepository orderRepository, BankAccountRepository bankAccountRepository, OrderItemRepository orderItemRepository, ProductRepository productRepository, CustomerService customerService, CartService cartService) {
         this.orderRepository = orderRepository;
         this.bankAccountRepository = bankAccountRepository;
         this.orderItemRepository = orderItemRepository;
         this.productRepository = productRepository;
+        this.customerService = customerService;
+        this.cartService = cartService;
     }
 
     public Order findOrderById(int id) {
@@ -41,7 +45,18 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrder(Customer customer, List<OrderItemRequest> orderItemRequests, BankAccount bankAccount) {
+    public Order createOrder(int customerId, List<OrderItemRequest> orderItemRequests, int accountId) {
+
+        Customer customer = customerService.findCustomerById(customerId);
+
+        BankAccount bankAccount = validateBankAccount(customerId, accountId);
+
+        Cart cart = cartService.findCartByCustomer(customer);
+        if (cart == null)
+            throw new CartNotFoundException(customerId);
+        if (cart.getTotalAmount() == 0)
+            throw new CartIsEmptyException(customerId);
+
         // Creating order object
         Order order = new Order();
         order.setCustomer(customer);
@@ -61,7 +76,7 @@ public class OrderService {
             }
         }
         // check if there is enough money in the account to pay the order
-        checkBalanceForOrder(bankAccount, total);
+        boolean result = checkBalanceForOrder(bankAccount, total);
         order.setTotalAmount(total);
         order.setDatePlaced(LocalDate.now());
 
@@ -76,12 +91,14 @@ public class OrderService {
         bankAccount.setBalance(bankAccount.getBalance() - total);
         bankAccountRepository.save(bankAccount);
 
+        cartService.resetCart(cart);
         return order;
     }
 
-    private void checkBalanceForOrder(BankAccount bankAccount, double total) {
+    public boolean checkBalanceForOrder(BankAccount bankAccount, double total) {
         if (bankAccount.getBalance() < total)
             throw new InsufficientFundsException(bankAccount.getId());
+        else return true;
     }
 
     public BankAccount validateBankAccount(int customerId, int accountId) {

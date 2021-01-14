@@ -49,26 +49,12 @@ public class CartController {
                                  @RequestParam int productId,
                                  @RequestParam int quantity) {
         Customer customer = customerService.findCustomerById(customerId);
-        Product product = productService.findProductById(productId);
 
-        if (quantity <= 0)
-            throw new NegativeQuantityException();
-        if (product.getStock() < quantity) {
-            throw new ProductNotInStockException(productId);
-        }
+        Product product = cartService.validateProduct(productId, quantity);
 
-        Cart cart = cartService.findCartByCustomer(customer);
         OrderItemRequest item = new OrderItemRequest(productId, quantity, product.getPrice());
 
-        if (cart == null) {
-            // if there is no existing cart for the customerId, we create one, also initializing the amount with the product added
-            cart = cartService.createCart(customer, quantity * product.getPrice(), item);
-
-        } else {
-            cartService.addItemToCart(customer, item);
-            cartService.addToCartAmount(cart.getId(), quantity * product.getPrice());
-        }
-        return cart;
+        return cartService.addProductToCart(customer, item);
     }
 
     @Transactional
@@ -112,19 +98,8 @@ public class CartController {
                                           @RequestParam
                                           @ApiParam(name = "accountId", value = "Account used for paying for Order", required = true)
                                                   int accountId) {
-        Customer customer = customerService.findCustomerById(customerId);
 
-        BankAccount account = orderService.validateBankAccount(customerId, accountId);
-
-        Cart cart = cartService.findCartByCustomer(customer);
-        if (cart == null)
-            throw new CartNotFoundException(customerId);
-        if (cart.getTotalAmount() == 0)
-            throw new CartIsEmptyException(customerId);
-
-        Order order = orderService.createOrder(customer, cartService.getCartItems().get(customerId), account);
-
-        cartService.resetCart(cart);
+        Order order = orderService.createOrder(customerId, cartService.getCartItems().get(customerId), accountId);
 
         return ResponseEntity
                 .created(URI.create("/orders/" + order.getId()))

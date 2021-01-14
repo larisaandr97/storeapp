@@ -41,7 +41,7 @@ public class CustomerController {
                                                         CustomerRequest customerRequest) {
         Customer customer = customerMapper.customerRequestToCustomer(customerRequest);
 
-        Customer createdCustomer = customerService.addCustomer(customer);
+        Customer createdCustomer = customerService.createCustomer(customer);
 
         return ResponseEntity
                 //created() will return the 201 HTTP code and set the Location header on the response, with the url to the newly created customer

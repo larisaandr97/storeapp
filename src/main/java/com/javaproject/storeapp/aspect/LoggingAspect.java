@@ -5,7 +5,6 @@ import com.javaproject.storeapp.repository.AuditRepository;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -14,8 +13,11 @@ import java.time.LocalDateTime;
 @Component
 public class LoggingAspect {
 
-    @Autowired
-    private AuditRepository auditRepository;
+    private final AuditRepository auditRepository;
+
+    public LoggingAspect(AuditRepository auditRepository) {
+        this.auditRepository = auditRepository;
+    }
 
     @AfterReturning("execution(* com.javaproject.storeapp.service.*.*(..))")
     public void log(JoinPoint joinPoint) {

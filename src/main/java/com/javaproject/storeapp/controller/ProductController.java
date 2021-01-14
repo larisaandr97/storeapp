@@ -40,7 +40,7 @@ public class ProductController {
                                                       ProductRequest productRequest) {
         Product product = productMapper.productRequestToProduct(productRequest);
 
-        Product createdProduct = productService.addProduct(product);
+        Product createdProduct = productService.createProduct(product);
 
         return ResponseEntity
                 //created() will return the 201 HTTP code and set the Location header on the response, with the url to the newly created customer
@@ -68,7 +68,7 @@ public class ProductController {
     })
     public ResponseEntity<?> getAllProducts(
             @RequestParam(required = false)
-            @ApiParam(name = "category", value = "Product category", allowableValues = ("CLOTHES, FOOD, LAPTOPS, PHONES, HOME"))
+            @ApiParam(name = "category", value = "Product category", allowableValues = ("FASHION, SUPERMARKET, LAPTOPS, PHONES, HOME, BOOKS, TOYS"))
                     String category,
             @RequestParam(required = false)
             @ApiParam(name = "name", value = "Product name")

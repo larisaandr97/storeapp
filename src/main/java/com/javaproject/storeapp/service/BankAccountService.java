@@ -2,9 +2,8 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entities.BankAccount;
 import com.javaproject.storeapp.entities.Customer;
-import com.javaproject.storeapp.exception.CustomerNotFoundException;
+import com.javaproject.storeapp.exception.DuplicateCardNumberException;
 import com.javaproject.storeapp.repository.BankAccountRepository;
-import com.javaproject.storeapp.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +21,10 @@ public class BankAccountService {
     }
 
     public BankAccount createBankAccount(BankAccount bankAccount) {
+        Optional<BankAccount> existingAccountCardNumber = Optional.ofNullable(bankAccountRepository.findBankAccountByCardNumber(bankAccount.getCardNumber()));
+        existingAccountCardNumber.ifPresent(e -> {
+            throw new DuplicateCardNumberException(bankAccount.getCardNumber());
+        });
         return bankAccountRepository.save(bankAccount);
     }
 

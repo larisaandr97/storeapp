@@ -23,4 +23,9 @@ public class Cart {
     public Cart() {
     }
 
+    public Cart(int id, double totalAmount, Customer customer) {
+        this.id = id;
+        this.totalAmount = totalAmount;
+        this.customer = customer;
+    }
 }

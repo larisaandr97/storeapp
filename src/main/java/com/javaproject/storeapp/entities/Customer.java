@@ -32,6 +32,14 @@ public class Customer {
     // @JsonIgnore
     private Cart cart;
 
+    public Customer(int id, String firstName, String lastName, String mail, String address) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mail = mail;
+        this.address = address;
+    }
+
     public Customer(String firstName, String lastName, String mail, String address) {
         this.firstName = firstName;
         this.lastName = lastName;

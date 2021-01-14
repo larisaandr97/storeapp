@@ -1,6 +1,8 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entities.Product;
+import com.javaproject.storeapp.entities.ProductCategory;
+import com.javaproject.storeapp.exception.ProductCategoryNotFound;
 import com.javaproject.storeapp.exception.ProductNotFoundException;
 import com.javaproject.storeapp.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product addProduct(Product p) {
+    public Product createProduct(Product p) {
         return productRepository.save(p);
     }
 
@@ -31,6 +33,11 @@ public class ProductService {
     }
 
     public List<Product> getProductsBy(String category, String name, boolean descending) {
+        if (category != null) {
+            String upperCaseCategory = category.toUpperCase();
+            if (!ProductCategory.contains(upperCaseCategory))
+                throw new ProductCategoryNotFound(category);
+        }
         return productRepository.getProductsBy(category, name, descending);
     }
 

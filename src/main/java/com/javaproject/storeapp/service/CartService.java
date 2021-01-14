@@ -3,8 +3,11 @@ package com.javaproject.storeapp.service;
 import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entities.Cart;
 import com.javaproject.storeapp.entities.Customer;
+import com.javaproject.storeapp.entities.Product;
 import com.javaproject.storeapp.exception.CartIsEmptyException;
+import com.javaproject.storeapp.exception.NegativeQuantityException;
 import com.javaproject.storeapp.exception.ProductNotInCartException;
+import com.javaproject.storeapp.exception.ProductNotInStockException;
 import com.javaproject.storeapp.repository.CartRepository;
 import org.springframework.stereotype.Service;
 
@@ -105,5 +108,30 @@ public class CartService {
 
     public Map<Integer, List<OrderItemRequest>> getCartItems() {
         return cartItems;
+    }
+
+    public Product validateProduct(int productId, int quantity) {
+        Product product = productService.findProductById(productId);
+
+        if (quantity <= 0)
+            throw new NegativeQuantityException();
+        if (product.getStock() < quantity) {
+            throw new ProductNotInStockException(productId);
+        }
+        return product;
+    }
+
+    public Cart addProductToCart(Customer customer, OrderItemRequest item) {
+        Cart cart = findCartByCustomer(customer);
+
+        if (cart == null) {
+            // if there is no existing cart for the customerId, we create one, also initializing the amount with the product added
+            cart = createCart(customer, item.getQuantity() * item.getPrice(), item);
+
+        } else {
+            addItemToCart(customer, item);
+            addToCartAmount(cart.getId(), item.getQuantity() * item.getPrice());
+        }
+        return cart;
     }
 }

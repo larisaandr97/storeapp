@@ -42,9 +42,11 @@ public class BankAccountController {
     public ResponseEntity<BankAccount> createBankAccount(
             @Valid
             @ApiParam(name = "bankAccount", value = "Bank account details", required = true)
-            @RequestBody BankAccountRequest bankAccountRequest,
+            @RequestBody
+                    BankAccountRequest bankAccountRequest,
             @PathVariable
-            @ApiParam(name = "customerId", value = "Id of account holder", required = true) int customerId) {
+            @ApiParam(name = "customerId", value = "Id of account holder", required = true)
+                    int customerId) {
         Customer customer = customerService.findCustomerById(customerId);
 
         bankAccountRequest.setCustomer(customer);

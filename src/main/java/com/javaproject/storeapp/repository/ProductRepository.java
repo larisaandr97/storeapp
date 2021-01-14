@@ -16,11 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     default List<Product> getProductsBy(String category, String name, boolean descending) {
 
-        if (category != null) {
-            String upperCaseCategory = category.toUpperCase();
-            if (!ProductCategory.contains(upperCaseCategory))
-                throw new ProductCategoryNotFound(category);
-        }
+
         return this.findAll(descending ? Sort.by("price").descending() : Sort.by("price").ascending()).stream()
                 .filter(product -> {
                     if (category != null) {//we filter by category only if the category was sent in the request
