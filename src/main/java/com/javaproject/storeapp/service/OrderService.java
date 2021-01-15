@@ -16,17 +16,17 @@ import java.util.Optional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final BankAccountRepository bankAccountRepository;
+    private final BankAccountService bankAccountService;
     private final OrderItemRepository orderItemRepository;
-    private final ProductRepository productRepository;
+    private final ProductService productService;
     private final CustomerService customerService;
     private final CartService cartService;
 
-    public OrderService(OrderRepository orderRepository, BankAccountRepository bankAccountRepository, OrderItemRepository orderItemRepository, ProductRepository productRepository, CustomerService customerService, CartService cartService) {
+    public OrderService(OrderRepository orderRepository, BankAccountService bankAccountService, OrderItemRepository orderItemRepository, ProductService productService, CustomerService customerService, CartService cartService) {
         this.orderRepository = orderRepository;
-        this.bankAccountRepository = bankAccountRepository;
+        this.bankAccountService = bankAccountService;
         this.orderItemRepository = orderItemRepository;
-        this.productRepository = productRepository;
+        this.productService = productService;
         this.customerService = customerService;
         this.cartService = cartService;
     }
@@ -40,7 +40,8 @@ public class OrderService {
         }
     }
 
-    public List<Order> getOrdersByCustomer(Customer customer) {
+    public List<Order> getOrdersByCustomer(int customerId) {
+        Customer customer = customerService.findCustomerById(customerId);
         return orderRepository.findOrdersByCustomer(customer);
     }
 
@@ -65,12 +66,11 @@ public class OrderService {
         double total = 0;
         List<OrderItem> orderItems = new ArrayList<>();
         for (OrderItemRequest item : orderItemRequests) {
-            Product product = productRepository.findProductById(item.getProductId());
+            Product product = productService.findProductById(item.getProductId());
             int stock = product.getStock();
             // if there is available stock for the product, we add to list of order items
             if (stock >= item.getQuantity()) {
-                product.setStock(stock - item.getQuantity());
-                productRepository.save(product);
+                productService.updateStock(product.getId(), stock - item.getQuantity());
                 total += product.getPrice() * item.getQuantity();
                 orderItems.add(new OrderItem(item.getQuantity(), item.getPrice(), product));
             }
@@ -88,8 +88,7 @@ public class OrderService {
         });
 
         // withdraw money from bank account
-        bankAccount.setBalance(bankAccount.getBalance() - total);
-        bankAccountRepository.save(bankAccount);
+        bankAccountService.withdrawMoneyFromAccount(bankAccount.getId(), bankAccount.getBalance() - total);
 
         cartService.resetCart(cart);
         return order;
@@ -102,9 +101,7 @@ public class OrderService {
     }
 
     public BankAccount validateBankAccount(int customerId, int accountId) {
-        BankAccount bankAccount = bankAccountRepository.findBankAccountById(accountId);
-        if (bankAccount == null)
-            throw new BankAccountNotFoundException(accountId);
+        BankAccount bankAccount = bankAccountService.findBankAccountById(accountId);
         if (customerId != bankAccount.getCustomer().getId())
             throw new BankAccountNotBelongingToCustomer(accountId, customerId);
         return bankAccount;

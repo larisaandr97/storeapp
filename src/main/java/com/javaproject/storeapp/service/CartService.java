@@ -21,7 +21,7 @@ import java.util.stream.IntStream;
 public class CartService {
 
     private final CartRepository cartRepository;
-    private final Map<Integer, List<OrderItemRequest>> cartItems = new HashMap<>();
+    private Map<Integer, List<OrderItemRequest>> cartItems = new HashMap<>();
     private final ProductService productService;
 
     public CartService(CartRepository cartRepository, ProductService productService) {
@@ -101,13 +101,17 @@ public class CartService {
     }
 
     public List<OrderItemRequest> getCartContents(int customerId) {
-        if (cartItems.get(customerId) == null)
+        if (getCartItems().get(customerId) == null)
             throw new CartIsEmptyException(customerId);
         else return cartItems.get(customerId);
     }
 
     public Map<Integer, List<OrderItemRequest>> getCartItems() {
         return cartItems;
+    }
+
+    public void setCartItems(Map<Integer, List<OrderItemRequest>> items) {
+        this.cartItems = items;
     }
 
     public Product validateProduct(int productId, int quantity) {

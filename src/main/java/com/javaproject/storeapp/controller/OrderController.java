@@ -47,9 +47,8 @@ public class OrderController {
             @ApiResponse(code = 404, message = "Customer not found")
     })
     public List<Order> getOrdersByCustomerId(@PathVariable int customerId) {
-        Customer customer = customerService.findCustomerById(customerId);
 
-        return orderService.getOrdersByCustomer(customer);
+        return orderService.getOrdersByCustomer(customerId);
     }
 
 }

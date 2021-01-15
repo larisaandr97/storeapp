@@ -41,5 +41,11 @@ public class ProductService {
         return productRepository.getProductsBy(category, name, descending);
     }
 
+    public Product updateStock(int productId, int stock) {
+        Product product = findProductById(productId);
+        product.setStock(stock);
+        return productRepository.save(product);
+    }
+
 }
 

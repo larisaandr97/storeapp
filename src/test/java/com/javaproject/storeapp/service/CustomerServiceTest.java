@@ -55,7 +55,7 @@ public class CustomerServiceTest {
 
         Customer result = customerService.findCustomerById(customer.getId());
 
-        assertNotNull(customer.getId());
+        assertNotNull(result.getId());
         assertEquals(customer.getId(), result.getId());
 
     }

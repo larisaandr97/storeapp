@@ -2,9 +2,7 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entities.*;
-import com.javaproject.storeapp.exception.InsufficientFundsException;
-import com.javaproject.storeapp.exception.OrderNotFoundException;
-import com.javaproject.storeapp.repository.BankAccountRepository;
+import com.javaproject.storeapp.exception.*;
 import com.javaproject.storeapp.repository.OrderItemRepository;
 import com.javaproject.storeapp.repository.OrderRepository;
 import com.javaproject.storeapp.repository.ProductRepository;
@@ -16,14 +14,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -35,11 +33,11 @@ public class OrderServiceTest {
     @Mock
     private CustomerService customerService;
     @Mock
-    private ProductRepository productRepository;
+    private ProductService productService;
     @Mock
     private OrderItemRepository orderItemRepository;
     @Mock
-    private BankAccountRepository bankAccountRepository;
+    private BankAccountService bankAccountService;
 
     @InjectMocks
     private OrderService orderService;
@@ -89,14 +87,14 @@ public class OrderServiceTest {
         orderCreated.setAccount(bankAccount);
         List<OrderItemRequest> items = Collections.singletonList(new OrderItemRequest(1, 1, 100.0));
         OrderItem item = new OrderItem(1, 100, product);
-        orderCreated.setOrderItems(Arrays.asList(item));
+        orderCreated.setOrderItems(Collections.singletonList(item));
         when(customerService.findCustomerById(anyInt())).thenReturn(customer);
         when(cartService.findCartByCustomer(customer)).thenReturn(cart);
-        when(productRepository.findProductById(anyInt())).thenReturn(product);
-        when(productRepository.save(any())).thenReturn(product);
+        when(productService.findProductById(anyInt())).thenReturn(product);
+        when(productService.updateStock(product.getId(), product.getStock() - item.getQuantity())).thenReturn(product);
         when(orderRepository.save(any())).thenReturn(orderCreated);
         when(orderItemRepository.save(any())).thenReturn(item);
-        when(bankAccountRepository.findBankAccountById(anyInt())).thenReturn(bankAccount);
+        when(bankAccountService.findBankAccountById(anyInt())).thenReturn(bankAccount);
 
         //act
         Order result = orderService.createOrder(customer.getId(), items, bankAccount.getId());
@@ -109,27 +107,63 @@ public class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("Create order - customer not found")
-    public void createOrderTestCustomerNotFound() {
+    @DisplayName("Get Orders by Customer - happy flow")
+    public void getOrdersByCustomerHappyFlow() {
+        Customer customer = new Customer();
+        customer.setId(1);
+        when(customerService.findCustomerById(customer.getId()))
+                .thenReturn(customer);
+        when(orderRepository.findOrdersByCustomer(customer)).thenReturn(Collections.singletonList(new Order(100, LocalDate.now(), customer)));
 
+        List<Order> result = orderService.getOrdersByCustomer(customer.getId());
+
+        assertEquals(1, result.size());
+        verify(orderRepository, times(1)).findOrdersByCustomer(customer);
+        verify(customerService, times(1)).findCustomerById(customer.getId());
     }
 
     @Test
-    @DisplayName("Create order - account not validated")
-    public void createOrderTestAccountNotValidated() {
+    @DisplayName("Create order - account not belonging to customer")
+    public void createOrderTestAccountNotBelongingToCustomer() {
+        Customer customer = new Customer();
+        customer.setId(1);
+        Customer anotherCustomer = new Customer();
+        anotherCustomer.setId(2);
+        BankAccount bankAccount = new BankAccount(1, "3331965465", 200, "4331256148952346", anotherCustomer);
 
+        when(bankAccountService.findBankAccountById(anyInt())).thenReturn(bankAccount);
+        BankAccountNotBelongingToCustomer exception = assertThrows(BankAccountNotBelongingToCustomer.class, () -> orderService.validateBankAccount(customer.getId(), bankAccount.getId()));
+        assertEquals("Bank account with Id " + bankAccount.getId() + " does not belong to customer with Id " + customer.getId() + ".", exception.getMessage());
     }
 
     @Test
     @DisplayName("Create order - cart not found")
     public void createOrderTestCartNotFound() {
+        Customer customer = new Customer();
+        customer.setId(1);
+        BankAccount bankAccount = new BankAccount(1, "3331965465", 200, "4331256148952346", customer);
 
+        when(bankAccountService.findBankAccountById(bankAccount.getId())).thenReturn(bankAccount);
+        when(cartService.findCartByCustomer(any())).thenReturn(null);
+
+        CartNotFoundException exception = assertThrows(CartNotFoundException.class, () -> orderService.createOrder(customer.getId(), new ArrayList<>(), bankAccount.getId()));
+        assertEquals("Cart for customer with Id " + customer.getId() + " not found.", exception.getMessage());
     }
 
     @Test
     @DisplayName("Create order - cart is empty")
     public void createOrderTestCartIsEmpty() {
+        Customer customer = new Customer();
+        customer.setId(1);
+        BankAccount bankAccount = new BankAccount(1, "3331965465", 200, "4331256148952346", customer);
+        Cart cart = new Cart();
+        cart.setTotalAmount(0);
 
+        when(bankAccountService.findBankAccountById(bankAccount.getId())).thenReturn(bankAccount);
+        when(cartService.findCartByCustomer(any())).thenReturn(cart);
+
+        CartIsEmptyException exception = assertThrows(CartIsEmptyException.class, () -> orderService.createOrder(customer.getId(), new ArrayList<>(), bankAccount.getId()));
+        assertEquals("Cart for customer with Id " + customer.getId() + " is empty! You must add some items before making an order.", exception.getMessage());
     }
 
     @Test

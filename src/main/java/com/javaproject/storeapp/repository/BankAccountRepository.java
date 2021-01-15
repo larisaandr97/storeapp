@@ -10,6 +10,7 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Intege
     BankAccount findBankAccountById(int id);
 
     BankAccount findBankAccountByCardNumber(String cardNumber);
+
     default List<BankAccount> findBankAccountsByCustomer(int customerId) {
         return this.findAll()
                 .stream().filter(account -> account.getCustomer().getId() == customerId)

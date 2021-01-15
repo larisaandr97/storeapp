@@ -2,6 +2,7 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entities.BankAccount;
 import com.javaproject.storeapp.entities.Customer;
+import com.javaproject.storeapp.exception.BankAccountNotFoundException;
 import com.javaproject.storeapp.exception.DuplicateCardNumberException;
 import com.javaproject.storeapp.repository.BankAccountRepository;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,20 @@ public class BankAccountService {
     public List<BankAccount> getBankAccountsForCustomer(int customerId) {
         Customer customer = customerService.findCustomerById(customerId);
         return bankAccountRepository.findBankAccountsByCustomer(customerId);
-      /*  if (customerOptional.isPresent()) {
-            return bankAccountRepository.findBankAccountsByCustomer(customerId);
-        } else {
-            throw new CustomerNotFoundException(customerId);
-        }*/
+    }
 
+    public BankAccount findBankAccountById(int id) {
+        Optional<BankAccount> accountOptional = Optional.ofNullable(bankAccountRepository.findBankAccountById(id));
+        if (accountOptional.isPresent()) {
+            return accountOptional.get();
+        } else {
+            throw new BankAccountNotFoundException(id);
+        }
+    }
+
+    public void withdrawMoneyFromAccount(int accountId, double balance) {
+        BankAccount bankAccount = findBankAccountById(accountId);
+        bankAccount.setBalance(balance);
+        bankAccountRepository.save(bankAccount);
     }
 }

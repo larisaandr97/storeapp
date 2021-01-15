@@ -2,6 +2,7 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entities.BankAccount;
 import com.javaproject.storeapp.entities.Customer;
+import com.javaproject.storeapp.exception.BankAccountNotFoundException;
 import com.javaproject.storeapp.exception.DuplicateCardNumberException;
 import com.javaproject.storeapp.repository.BankAccountRepository;
 import com.javaproject.storeapp.repository.CustomerRepository;
@@ -16,8 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,9 +28,6 @@ public class BankAccountServiceTest {
 
     @Mock
     private CustomerService customerService;
-
-    @Mock
-    private CustomerRepository customerRepository;
 
     @InjectMocks
     private BankAccountService bankAccountService;
@@ -106,19 +103,34 @@ public class BankAccountServiceTest {
         verify(bankAccountRepository, times(1)).findBankAccountsByCustomer(customer.getId());
     }
 
-    /*@Test
-    @DisplayName("Get Bank Accounts for Customer - case when customer does not exist")
-    public void getBankAccountForCustomerSadFlow() {
-        //arrange
-        Customer customer = new Customer();
-        customer.setId(1);
+    @Test
+    @DisplayName("Find Bank Account By Id - happy flow")
+    public void findBankAccountByIdTestHappyFlow() {
 
-        when(customerRepository.findCustomerById(customer.getId()))
+        BankAccount account = new BankAccount();
+        account.setId(1);
+        when(bankAccountRepository.findBankAccountById(account.getId()))
+                .thenReturn(account);
+
+        BankAccount result = bankAccountService.findBankAccountById(account.getId());
+
+        assertNotNull(result.getId());
+        assertEquals(account.getId(), result.getId());
+
+    }
+
+    @Test
+    @DisplayName("Find Bank Account By Id - bank account not found")
+    public void findBankAccountByIdTestNotFound() {
+
+        BankAccount account = new BankAccount();
+        account.setId(1);
+        when(bankAccountRepository.findBankAccountById(account.getId()))
                 .thenReturn(null);
 
-        //act and assert
-        assertThrows(CustomerNotFoundException.class, () -> bankAccountService.getBankAccountsForCustomer(customer.getId()));
+        RuntimeException exception = assertThrows(BankAccountNotFoundException.class, () -> bankAccountService.findBankAccountById(account.getId()));
+        assertEquals("Bank account with Id " + account.getId() + " not found.", exception.getMessage());
 
-    }*/
+    }
 
 }

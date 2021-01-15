@@ -30,7 +30,8 @@ public class SwaggerConfig {
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Shop API Documentation")
-                .description("API Documentation for all available operations with products, customers and orders.")
+                .description("API Documentation for all available operations with products, customers and orders." +
+                        " GitHub repo: https://github.com/larisaandr97/storeapp")
                 .build();
     }
 }
