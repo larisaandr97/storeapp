@@ -1,7 +1,6 @@
 package com.javaproject.storeapp.controller;
 
-import com.javaproject.storeapp.entities.Customer;
-import com.javaproject.storeapp.entities.Order;
+import com.javaproject.storeapp.entity.Order;
 import com.javaproject.storeapp.service.CustomerService;
 import com.javaproject.storeapp.service.OrderService;
 import io.swagger.annotations.Api;

@@ -1,11 +1,10 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
-import com.javaproject.storeapp.entities.*;
+import com.javaproject.storeapp.entity.*;
 import com.javaproject.storeapp.exception.*;
 import com.javaproject.storeapp.repository.OrderItemRepository;
 import com.javaproject.storeapp.repository.OrderRepository;
-import com.javaproject.storeapp.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

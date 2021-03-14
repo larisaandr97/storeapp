@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-import static com.javaproject.storeapp.entities.Pattern.EMAIL_ADDRESS;
+import static com.javaproject.storeapp.entity.Pattern.EMAIL_ADDRESS;
 
 @Data
 public class CustomerRequest {

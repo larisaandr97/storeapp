@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.service;
 
-import com.javaproject.storeapp.entities.BankAccount;
-import com.javaproject.storeapp.entities.Customer;
+import com.javaproject.storeapp.entity.BankAccount;
+import com.javaproject.storeapp.entity.Customer;
 import com.javaproject.storeapp.repository.BankAccountRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;

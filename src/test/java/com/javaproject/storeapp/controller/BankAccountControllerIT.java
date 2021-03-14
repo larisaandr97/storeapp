@@ -2,8 +2,8 @@ package com.javaproject.storeapp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaproject.storeapp.dto.BankAccountRequest;
-import com.javaproject.storeapp.entities.BankAccount;
-import com.javaproject.storeapp.entities.Customer;
+import com.javaproject.storeapp.entity.BankAccount;
+import com.javaproject.storeapp.entity.Customer;
 import com.javaproject.storeapp.mapper.BankAccountMapper;
 import com.javaproject.storeapp.service.BankAccountService;
 import com.javaproject.storeapp.service.CustomerService;

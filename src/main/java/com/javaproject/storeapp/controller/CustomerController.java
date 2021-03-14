@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.dto.CustomerRequest;
-import com.javaproject.storeapp.entities.Customer;
+import com.javaproject.storeapp.entity.Customer;
 import com.javaproject.storeapp.mapper.BankAccountMapper;
 import com.javaproject.storeapp.mapper.CustomerMapper;
 import com.javaproject.storeapp.service.CustomerService;

@@ -1,9 +1,10 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
-import com.javaproject.storeapp.entities.*;
+import com.javaproject.storeapp.entity.*;
 import com.javaproject.storeapp.exception.*;
-import com.javaproject.storeapp.repository.*;
+import com.javaproject.storeapp.repository.OrderItemRepository;
+import com.javaproject.storeapp.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

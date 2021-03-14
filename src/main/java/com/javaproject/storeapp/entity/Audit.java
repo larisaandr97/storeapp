@@ -1,4 +1,4 @@
-package com.javaproject.storeapp.entities;
+package com.javaproject.storeapp.entity;
 
 import lombok.Data;
 

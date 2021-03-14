@@ -1,8 +1,8 @@
 package com.javaproject.storeapp.service;
 
 
-import com.javaproject.storeapp.entities.Product;
-import com.javaproject.storeapp.entities.ProductCategory;
+import com.javaproject.storeapp.entity.Product;
+import com.javaproject.storeapp.entity.ProductCategory;
 import com.javaproject.storeapp.exception.ProductCategoryNotFound;
 import com.javaproject.storeapp.exception.ProductNotFoundException;
 import com.javaproject.storeapp.repository.ProductRepository;

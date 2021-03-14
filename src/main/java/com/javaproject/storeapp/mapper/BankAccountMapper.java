@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.mapper;
 
 import com.javaproject.storeapp.dto.BankAccountRequest;
-import com.javaproject.storeapp.entities.BankAccount;
+import com.javaproject.storeapp.entity.BankAccount;
 import org.springframework.stereotype.Component;
 
 @Component

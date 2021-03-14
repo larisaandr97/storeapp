@@ -1,22 +1,21 @@
 package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
-import com.javaproject.storeapp.entities.*;
-import com.javaproject.storeapp.exception.CartIsEmptyException;
-import com.javaproject.storeapp.exception.CartNotFoundException;
-import com.javaproject.storeapp.exception.NegativeQuantityException;
-import com.javaproject.storeapp.exception.ProductNotInStockException;
+import com.javaproject.storeapp.entity.Cart;
+import com.javaproject.storeapp.entity.Customer;
+import com.javaproject.storeapp.entity.Order;
+import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.service.CartService;
 import com.javaproject.storeapp.service.CustomerService;
-import com.javaproject.storeapp.service.ProductService;
 import com.javaproject.storeapp.service.OrderService;
+import com.javaproject.storeapp.service.ProductService;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.net.URI;
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/cart")

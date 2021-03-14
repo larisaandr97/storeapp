@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.dto.ProductRequest;
-import com.javaproject.storeapp.entities.Product;
+import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.mapper.ProductMapper;
 import com.javaproject.storeapp.service.ProductService;
 import io.swagger.annotations.*;
@@ -66,6 +66,7 @@ public class ProductController {
             @ApiResponse(code = 200, message = "The data was retrieved successfully"),
             @ApiResponse(code = 404, message = "Products with the entered properties were not found")
     })
+
     public ResponseEntity<?> getAllProducts(
             @RequestParam(required = false)
             @ApiParam(name = "category", value = "Product category", allowableValues = ("FASHION, SUPERMARKET, LAPTOPS, PHONES, HOME, BOOKS, TOYS"))

@@ -1,6 +1,6 @@
 package com.javaproject.storeapp.service;
 
-import com.javaproject.storeapp.entities.Customer;
+import com.javaproject.storeapp.entity.Customer;
 import com.javaproject.storeapp.repository.CustomerRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;

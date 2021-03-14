@@ -1,11 +1,10 @@
 package com.javaproject.storeapp.service;
 
-import com.javaproject.storeapp.entities.BankAccount;
-import com.javaproject.storeapp.entities.Customer;
+import com.javaproject.storeapp.entity.BankAccount;
+import com.javaproject.storeapp.entity.Customer;
 import com.javaproject.storeapp.exception.BankAccountNotFoundException;
 import com.javaproject.storeapp.exception.DuplicateCardNumberException;
 import com.javaproject.storeapp.repository.BankAccountRepository;
-import com.javaproject.storeapp.repository.CustomerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

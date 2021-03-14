@@ -1,4 +1,4 @@
-package com.javaproject.storeapp.entities;
+package com.javaproject.storeapp.entity;
 
 public enum ProductCategory {
     FASHION, SUPERMARKET, LAPTOPS, PHONES, HOME, BOOKS, TOYS;

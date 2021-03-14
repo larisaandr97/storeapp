@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.repository;
 
-import com.javaproject.storeapp.entities.Customer;
-import com.javaproject.storeapp.entities.Order;
+import com.javaproject.storeapp.entity.Customer;
+import com.javaproject.storeapp.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

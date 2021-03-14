@@ -1,6 +1,6 @@
 package com.javaproject.storeapp.repository;
 
-import com.javaproject.storeapp.entities.BankAccount;
+import com.javaproject.storeapp.entity.BankAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

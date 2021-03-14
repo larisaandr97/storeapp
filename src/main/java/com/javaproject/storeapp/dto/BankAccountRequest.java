@@ -2,7 +2,7 @@ package com.javaproject.storeapp.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.javaproject.storeapp.entities.Customer;
+import com.javaproject.storeapp.entity.Customer;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import static com.javaproject.storeapp.entities.Pattern.VISA_CREDIT_CARD;
+import static com.javaproject.storeapp.entity.Pattern.VISA_CREDIT_CARD;
 
 @Data
 public class BankAccountRequest {

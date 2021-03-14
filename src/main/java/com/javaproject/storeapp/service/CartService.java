@@ -1,9 +1,9 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
-import com.javaproject.storeapp.entities.Cart;
-import com.javaproject.storeapp.entities.Customer;
-import com.javaproject.storeapp.entities.Product;
+import com.javaproject.storeapp.entity.Cart;
+import com.javaproject.storeapp.entity.Customer;
+import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.exception.CartIsEmptyException;
 import com.javaproject.storeapp.exception.NegativeQuantityException;
 import com.javaproject.storeapp.exception.ProductNotInCartException;
@@ -29,6 +29,12 @@ public class CartService {
         this.productService = productService;
     }
 
+    /**
+     * Find cart by customer method
+     *
+     * @param customer {@link Customer}
+     * @return {@link Cart} Object
+     */
     public Cart findCartByCustomer(Customer customer) {
         return cartRepository.findCartByCustomer(customer);
     }

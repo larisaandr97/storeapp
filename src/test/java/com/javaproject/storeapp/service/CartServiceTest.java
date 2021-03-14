@@ -1,8 +1,8 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
-import com.javaproject.storeapp.entities.Product;
-import com.javaproject.storeapp.entities.ProductCategory;
+import com.javaproject.storeapp.entity.Product;
+import com.javaproject.storeapp.entity.ProductCategory;
 import com.javaproject.storeapp.exception.CartIsEmptyException;
 import com.javaproject.storeapp.exception.NegativeQuantityException;
 import com.javaproject.storeapp.exception.ProductNotInStockException;

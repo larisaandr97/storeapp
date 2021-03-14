@@ -1,6 +1,6 @@
 package com.javaproject.storeapp.aspect;
 
-import com.javaproject.storeapp.entities.Audit;
+import com.javaproject.storeapp.entity.Audit;
 import com.javaproject.storeapp.repository.AuditRepository;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;

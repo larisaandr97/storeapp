@@ -1,6 +1,6 @@
 package com.javaproject.storeapp.dto;
 
-import com.javaproject.storeapp.entities.ProductCategory;
+import com.javaproject.storeapp.entity.ProductCategory;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
