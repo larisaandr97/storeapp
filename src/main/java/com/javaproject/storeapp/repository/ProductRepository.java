@@ -3,19 +3,20 @@ package com.javaproject.storeapp.repository;
 
 import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.ProductCategory;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Product findProductById(int id);
 
-    default List<Product> getProductsBy(String category, String name, boolean descending) {
-
-        return this.findAll(descending ? Sort.by("price").descending() : Sort.by("price").ascending()).stream()
+    default List<Product> getProductsBy(String category, String name, boolean descending, Pageable pageable) {
+        return this.findAll(pageable).stream()
                 .filter(product -> {
                     if (category != null) {//we filter by category only if the category was sent in the request
                         if (name != null) { //we filter by name only if the name was sent in the request

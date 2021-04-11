@@ -1,6 +1,5 @@
 package com.javaproject.storeapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,24 +19,21 @@ public class Order {
     private LocalDate datePlaced;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer")
-    @JsonIgnore
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account")
     private BankAccount account;
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
-    //@JsonIgnore
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
     public Order() {
     }
 
-    public Order(double totalAmount, LocalDate datePlaced, Customer customer) {
+    public Order(double totalAmount, LocalDate datePlaced, User user) {
         this.totalAmount = totalAmount;
         this.datePlaced = datePlaced;
-        this.customer = customer;
+        this.user = user;
     }
 }

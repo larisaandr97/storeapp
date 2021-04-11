@@ -30,6 +30,9 @@ public class ProductRequest {
     @NotNull
     private ProductCategory productCategory;
 
+    public ProductRequest() {
+    }
+
     public ProductRequest(String name, String description, double price, int stock, ProductCategory productCategory) {
         this.name = name;
         this.description = description;

@@ -1,17 +1,20 @@
 package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.entity.Order;
+import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.service.CustomerService;
 import com.javaproject.storeapp.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -45,9 +48,9 @@ public class OrderController {
             @ApiResponse(code = 200, message = "The data was retrieved successfully"),
             @ApiResponse(code = 404, message = "Customer not found")
     })
-    public List<Order> getOrdersByCustomerId(@PathVariable int customerId) {
-
-        return orderService.getOrdersByCustomer(customerId);
+    public List<Order> getOrdersByUser(Principal principal) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        return orderService.getOrdersByUser(user);
     }
 
 }

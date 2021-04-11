@@ -41,27 +41,26 @@ public class OrderService {
         }
     }
 
-    public List<Order> getOrdersByCustomer(int customerId) {
-        Customer customer = customerService.findCustomerById(customerId);
-        return orderRepository.findOrdersByCustomer(customer);
+    public List<Order> getOrdersByUser(User user) {
+        return orderRepository.findOrdersByUser(user);
     }
 
     @Transactional
-    public Order createOrder(int customerId, List<OrderItemRequest> orderItemRequests, int accountId) {
+    public Order createOrder(User user, List<OrderItemRequest> orderItemRequests, int accountId) {
 
-        Customer customer = customerService.findCustomerById(customerId);
+        //  Customer customer = customerService.findCustomerById(customerId);
 
-        BankAccount bankAccount = validateBankAccount(customerId, accountId);
+        BankAccount bankAccount = validateBankAccount(user.getId(), accountId);
 
-        Cart cart = cartService.findCartByCustomer(customer);
+        Cart cart = cartService.findCartByUser(user);
         if (cart == null)
-            throw new CartNotFoundException(customerId);
+            throw new CartNotFoundException(user.getId());
         if (cart.getTotalAmount() == 0)
-            throw new CartIsEmptyException(customerId);
+            throw new CartIsEmptyException(user.getId());
 
         // Creating order object
         Order order = new Order();
-        order.setCustomer(customer);
+        order.setUser(user);
         order.setAccount(bankAccount);
 
         double total = 0;
@@ -84,7 +83,7 @@ public class OrderService {
         // Saving entities in database
         orderRepository.save(order);
         orderItems.forEach(item -> {
-            item.setOrders(order);
+            item.setOrder(order);
             orderItemRepository.save(item);
         });
 
@@ -101,10 +100,10 @@ public class OrderService {
         else return true;
     }
 
-    public BankAccount validateBankAccount(int customerId, int accountId) {
+    public BankAccount validateBankAccount(int userId, int accountId) {
         BankAccount bankAccount = bankAccountService.findBankAccountById(accountId);
-        if (customerId != bankAccount.getCustomer().getId())
-            throw new BankAccountNotBelongingToCustomer(accountId, customerId);
+        if (userId != bankAccount.getUser().getId())
+            throw new BankAccountNotBelongingToCustomer(accountId, userId);
         return bankAccount;
     }
 }

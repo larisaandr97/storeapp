@@ -2,38 +2,35 @@ package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entity.Cart;
-import com.javaproject.storeapp.entity.Customer;
 import com.javaproject.storeapp.entity.Order;
 import com.javaproject.storeapp.entity.Product;
+import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.service.CartService;
-import com.javaproject.storeapp.service.CustomerService;
 import com.javaproject.storeapp.service.OrderService;
-import com.javaproject.storeapp.service.ProductService;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/cart")
 @Api(value = "/cart",
         tags = "Cart")
 public class CartController {
 
-    private final ProductService productService;
     private final OrderService orderService;
     private final CartService cartService;
-    private final CustomerService customerService;
 
-
-    public CartController(ProductService productService, OrderService orderService, CartService cartService, CustomerService customerService) {
-        this.productService = productService;
+    public CartController(OrderService orderService, CartService cartService) {
         this.orderService = orderService;
         this.cartService = cartService;
-        this.customerService = customerService;
     }
 
     @PostMapping("/add")
@@ -43,17 +40,14 @@ public class CartController {
             @ApiResponse(code = 200, message = "The Product was successfully added to the cart, returning Cart details"),
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
-    @Transactional
-    public Cart addProductToCart(@RequestParam int customerId,
-                                 @RequestParam int productId,
-                                 @RequestParam int quantity) {
-        Customer customer = customerService.findCustomerById(customerId);
 
+    public String addProductToCart(@RequestParam int productId,
+                                   @RequestParam int quantity, Principal principal) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Product product = cartService.validateProduct(productId, quantity);
-
         OrderItemRequest item = new OrderItemRequest(productId, quantity, product.getPrice());
-
-        return cartService.addProductToCart(customer, item);
+        cartService.addProductToCart(user, item);
+        return "redirect:/cart/";
     }
 
     @Transactional
@@ -64,42 +58,38 @@ public class CartController {
             @ApiResponse(code = 200, message = "The Product was successfully deleted from the Cart, returning Cart details"),
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
-    public List<OrderItemRequest> deleteItemFromCart(@RequestParam int customerId,
-                                                     @RequestParam int productId) {
-
-        Customer customer = customerService.findCustomerById(customerId);
-
-        Cart cart = cartService.findCartByCustomer(customer);
-
-        return cartService.deleteItemFromCart(cart, customerId, productId);
+    public List<OrderItemRequest> deleteItemFromCart(@RequestParam int productId, Principal principal) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        Cart cart = cartService.findCartByUser(user);
+        return cartService.deleteItemFromCart(cart, user.getId(), productId);
     }
 
-    @GetMapping("/{customerId}")
+    @GetMapping()
     @ApiOperation(value = "Get Cart for Customer",
             notes = "Get the Cart for the Customer received in the request")
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
-    public List<OrderItemRequest> getCartContents(@PathVariable int customerId) {
-        customerService.findCustomerById(customerId);
-
-        return cartService.getCartContents(customerId);
+    public String getCartContents(Principal principal, Model model) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        List<OrderItemRequest> items = cartService.getCartContents(user.getId());
+        model.addAttribute("items", items);
+        return "cart";
     }
 
-    @PostMapping("/checkout/{customerId}")
+    @PostMapping("/checkout")
     @ApiOperation(value = "Checkout Cart for Customer",
             notes = "Checkout all Products from Cart and pay with Account received in the request")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "The Order was successfully created based on the received request"),
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
-    public ResponseEntity<Order> checkout(@PathVariable int customerId,
-                                          @RequestParam
+    public ResponseEntity<Order> checkout(@RequestParam
                                           @ApiParam(name = "accountId", value = "Account used for paying for Order", required = true)
-                                                  int accountId) {
-
-        Order order = orderService.createOrder(customerId, cartService.getCartItems().get(customerId), accountId);
-
+                                                  int accountId,
+                                          Principal principal) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        Order order = orderService.createOrder(user, cartService.getCartItems().get(user.getId()), accountId);
         return ResponseEntity
                 .created(URI.create("/orders/" + order.getId()))
                 .body(order);

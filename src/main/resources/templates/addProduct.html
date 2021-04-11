@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head"></head>
+
+<body>
+<nav th:replace="layout :: nav"></nav>
+<div th:replace="layout :: flash"></div>
+
+<form th:object="${productRequest}" th:action="@{/products/}" method="post" enctype="multipart/form-data">
+<!--    <input type="hidden" th:field="*{id}"/>-->
+    <div class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="background-color:lightgray;">
+                <h1 class="panel-title">Product INFO</h1>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label>Product name:</label>
+                        <input type="text" class="form-control" th:field="*{name}"/>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Description:</label>
+                        <input type="text" class="form-control" th:field="*{description}"/>
+                    </div>
+                </div>
+
+                    <div class="col-md-3 ">
+                        <label class="control-label">Select image:</label>
+                        <input id="imagefile" name="imagefile" type="file" class="file">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label th:for="info">Info</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label th:for="price">Price:</label>
+                        <input type="number" class="form-control" th:field="*{price}"/>
+                    </div>
+                    <div class="col-md-3">
+                        <label th:for="stock">Stock:</label>
+                        <input type="number" class="form-control" th:field="*{stock}"/>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="category">Category: </label>
+                        <select id="category" name="category" th:field="*{productCategory}">
+                            <option
+
+                                    th:each="category:${T(com.javaproject.storeapp.entity.ProductCategory).values()}"
+                                    th:value="${category}" th:text="${category}">
+
+                            </option>
+                        </select>
+
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-7 ml-md-auto">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</form>
+</body>
+
+</html>

@@ -1,6 +1,5 @@
 package com.javaproject.storeapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,17 +14,16 @@ public class Cart {
 
     private double totalAmount;
 
-    @JoinColumn(name = "customer")
-    @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Customer customer;
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     public Cart() {
     }
 
-    public Cart(int id, double totalAmount, Customer customer) {
+    public Cart(int id, double totalAmount, User user) {
         this.id = id;
         this.totalAmount = totalAmount;
-        this.customer = customer;
+        this.user = user;
     }
 }

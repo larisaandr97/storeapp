@@ -2,29 +2,44 @@ package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.dto.ProductRequest;
 import com.javaproject.storeapp.entity.Product;
+import com.javaproject.storeapp.entity.ProductCategory;
 import com.javaproject.storeapp.mapper.ProductMapper;
+import com.javaproject.storeapp.service.ImageService;
 import com.javaproject.storeapp.service.ProductService;
 import io.swagger.annotations.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/products")
+@CrossOrigin(origins = {"http://localhost:3000"})
 @Api(value = "/products",
         tags = "Products")
 public class ProductController {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
+    private final ImageService imageService;
 
-    public ProductController(ProductService productService, ProductMapper productMapper) {
+    public ProductController(ProductService productService, ProductMapper productMapper, ImageService imageService) {
         this.productService = productService;
         this.productMapper = productMapper;
+        this.imageService = imageService;
+    }
+
+    @GetMapping("/new")
+    public String newProduct(Model model) {
+        List<ProductCategory> categoriesAll = Arrays.asList(ProductCategory.values());
+        model.addAttribute("productRequest", new ProductRequest());
+        model.addAttribute("categoriesAll", categoriesAll);
+        return "addProduct";
     }
 
     @PostMapping
@@ -34,19 +49,22 @@ public class ProductController {
             @ApiResponse(code = 201, message = "The Product was successfully created based on the received request"),
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
-    public ResponseEntity<Product> addProduct(@Valid
-                                              @RequestBody
-                                              @ApiParam(name = "product", value = "Product details", required = true)
-                                                      ProductRequest productRequest) {
+    public String addProduct(@Valid
+                             @RequestBody
+                             @ModelAttribute
+                             @ApiParam(name = "product", value = "Product details", required = true)
+                                     ProductRequest productRequest,
+                             @RequestParam("imagefile") MultipartFile file) {
         Product product = productMapper.productRequestToProduct(productRequest);
-
         Product createdProduct = productService.createProduct(product);
-
-        return ResponseEntity
-                //created() will return the 201 HTTP code and set the Location header on the response, with the url to the newly created customer
-                .created(URI.create("/products/" + createdProduct.getId()))
-                //body() will populate the body of the response with the customer details
-                .body(createdProduct);
+        imageService.saveImageFile(createdProduct.getId(), file);
+        return "redirect:/products/";
+//        return ResponseEntity
+//                //created() will return the 201 HTTP code and set the Location header on the response, with the url to the newly created customer
+//                //   .created()//URI.create("/products/" + createdProduct.getId()))
+//                //body() will populate the body of the response with the customer details
+//                .status(HttpStatus.CREATED)
+//                .body(product.getId());
     }
 
     @GetMapping("{id}")
@@ -66,8 +84,7 @@ public class ProductController {
             @ApiResponse(code = 200, message = "The data was retrieved successfully"),
             @ApiResponse(code = 404, message = "Products with the entered properties were not found")
     })
-
-    public ResponseEntity<?> getAllProducts(
+    public /*ResponseEntity<?>*/ ModelAndView getAllProducts(
             @RequestParam(required = false)
             @ApiParam(name = "category", value = "Product category", allowableValues = ("FASHION, SUPERMARKET, LAPTOPS, PHONES, HOME, BOOKS, TOYS"))
                     String category,
@@ -79,12 +96,14 @@ public class ProductController {
                     boolean descending) {
 
         List<Product> productsFound = productService.getProductsBy(category, name, descending);
-
-        if (productsFound.size() == 0)
+        ModelAndView modelAndView = new ModelAndView("products");
+        modelAndView.addObject("products", productsFound);
+        return modelAndView;
+        /* if (productsFound.size() == 0)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Products with the entered properties were not found");
         else return ResponseEntity
                 .ok()
-                .body(productsFound);
+                .body(productsFound);*/
 
     }
 

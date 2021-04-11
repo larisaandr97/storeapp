@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entity.BankAccount;
-import com.javaproject.storeapp.entity.Customer;
+import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.exception.BankAccountNotFoundException;
 import com.javaproject.storeapp.exception.DuplicateCardNumberException;
 import com.javaproject.storeapp.repository.BankAccountRepository;
@@ -36,10 +36,10 @@ public class BankAccountServiceTest {
     public void createBankAccountTestHappyFlow() {
 
         //arrange
-        Customer customer = new Customer();
-        customer.setId(1);
-        BankAccount bankAccount = new BankAccount("3331965465", 200, "4331256148952346", customer);
-        BankAccount savedBankAccount = new BankAccount(1, "3331965465", 200, "4331256148952346", customer);
+        User user = new User();
+        user.setId(1);
+        BankAccount bankAccount = new BankAccount("3331965465", 200, "4331256148952346", user);
+        BankAccount savedBankAccount = new BankAccount(1, "3331965465", 200, "4331256148952346", user);
         when(bankAccountRepository.save(bankAccount)).thenReturn(savedBankAccount);
 
         //act
@@ -57,10 +57,10 @@ public class BankAccountServiceTest {
     public void createBankAccountTestDuplicateException() {
 
         //arrange
-        Customer customer = new Customer();
-        customer.setId(1);
-        BankAccount bankAccount = new BankAccount("3331965465", 200, "4331256148952346", customer);
-        BankAccount savedBankAccount = new BankAccount(1, "3331965465", 200, "4331256148952346", customer);
+        User user = new User();
+        user.setId(1);
+        BankAccount bankAccount = new BankAccount("3331965465", 200, "4331256148952346", user);
+        BankAccount savedBankAccount = new BankAccount(1, "3331965465", 200, "4331256148952346", user);
         when(bankAccountRepository.findBankAccountByCardNumber(any())).thenReturn(savedBankAccount);
 
         //act
@@ -77,29 +77,29 @@ public class BankAccountServiceTest {
     @DisplayName("Get all BankAccounts for a Customer")
     public void getBankAccountForCustomerHappyFlow() {
         //arrange
-        Customer customer = new Customer();
-        customer.setId(1);
+        User user = new User();
+        user.setId(1);
 
-        BankAccount bankAccount1 = new BankAccount(1, "3331965465", 200, "4331256148952346", customer);
-        BankAccount bankAccount2 = new BankAccount(2, "4441965465", 340, "4229256148952346", customer);
+        BankAccount bankAccount1 = new BankAccount(1, "3331965465", 200, "4331256148952346", user);
+        BankAccount bankAccount2 = new BankAccount(2, "4441965465", 340, "4229256148952346", user);
 
-        customer.setBankAccounts(Arrays.asList(bankAccount1, bankAccount2));
+        user.setBankAccounts(Arrays.asList(bankAccount1, bankAccount2));
 
-        when(customerService.findCustomerById(customer.getId()))
-                .thenReturn(customer);
-        when(bankAccountRepository.findBankAccountsByCustomer(customer.getId()))
+       /* when(customerService.findCustomerById(user.getId()))
+                .thenReturn(customer);*/
+        when(bankAccountRepository.findBankAccountsByUser(user))
                 .thenReturn(Arrays.asList(bankAccount1, bankAccount2));
 
         //act
-        List<BankAccount> result = bankAccountService.getBankAccountsForCustomer(customer.getId());
+        List<BankAccount> result = bankAccountService.getBankAccountsForUser(user);
 
         //assert
-        assertEquals(customer.getBankAccounts(), result);
+        assertEquals(user.getBankAccounts(), result);
         assertEquals(result.size(), 2);
         assertEquals(result.get(0).getBalance(), 200);
 
-        verify(customerService, times(1)).findCustomerById(customer.getId());
-        verify(bankAccountRepository, times(1)).findBankAccountsByCustomer(customer.getId());
+        //verify(customerService, times(1)).findCustomerById(customer.getId());
+        verify(bankAccountRepository, times(1)).findBankAccountsByUser(user);
     }
 
     @Test

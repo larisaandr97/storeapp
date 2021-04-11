@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entity.BankAccount;
-import com.javaproject.storeapp.entity.Customer;
+import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.repository.BankAccountRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,8 +33,8 @@ public class BankAccountServiceIT {
     @DisplayName("Create Bank Account - happy flow")
     public void createBankAccountHappyFlow() {
 
-        Customer customer = new Customer();
-        BankAccount bankAccount = new BankAccount("3331965465", 200, "4331256148952346", customer);
+        User user = new User();
+        BankAccount bankAccount = new BankAccount("3331965465", 200, "4331256148952346", user);
 
         BankAccount createdAccount = bankAccountService.createBankAccount(bankAccount);
 
@@ -42,7 +42,7 @@ public class BankAccountServiceIT {
         assertEquals(bankAccount.getAccountNumber(), createdAccount.getAccountNumber());
         assertEquals(bankAccount.getCardNumber(), createdAccount.getCardNumber());
         assertEquals(bankAccount.getBalance(), createdAccount.getBalance());
-        assertEquals(bankAccount.getCustomer(), createdAccount.getCustomer());
+        assertEquals(bankAccount.getUser(), createdAccount.getUser());
 
     }
 }

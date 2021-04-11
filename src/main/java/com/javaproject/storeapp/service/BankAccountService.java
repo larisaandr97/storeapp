@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entity.BankAccount;
-import com.javaproject.storeapp.entity.Customer;
+import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.exception.BankAccountNotFoundException;
 import com.javaproject.storeapp.exception.DuplicateCardNumberException;
 import com.javaproject.storeapp.repository.BankAccountRepository;
@@ -14,11 +14,9 @@ import java.util.Optional;
 public class BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
-    private final CustomerService customerService;
 
-    public BankAccountService(BankAccountRepository bankAccountRepository, CustomerService customerService) {
+    public BankAccountService(BankAccountRepository bankAccountRepository) {
         this.bankAccountRepository = bankAccountRepository;
-        this.customerService = customerService;
     }
 
     public BankAccount createBankAccount(BankAccount bankAccount) {
@@ -29,9 +27,9 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
 
-    public List<BankAccount> getBankAccountsForCustomer(int customerId) {
-        Customer customer = customerService.findCustomerById(customerId);
-        return bankAccountRepository.findBankAccountsByCustomer(customerId);
+    public List<BankAccount> getBankAccountsForUser(User user) {
+        //   Customer customer = customerService.findCustomerById(customerId);
+        return bankAccountRepository.findBankAccountsByUser(user);
     }
 
     public BankAccount findBankAccountById(int id) {

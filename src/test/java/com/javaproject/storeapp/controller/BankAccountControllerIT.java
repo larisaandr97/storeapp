@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaproject.storeapp.dto.BankAccountRequest;
 import com.javaproject.storeapp.entity.BankAccount;
 import com.javaproject.storeapp.entity.Customer;
+import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.mapper.BankAccountMapper;
 import com.javaproject.storeapp.service.BankAccountService;
 import com.javaproject.storeapp.service.CustomerService;
@@ -37,14 +38,14 @@ public class BankAccountControllerIT {
     @Test
     @DisplayName("Create a new Bank Account")
     public void createBankAccountHappyFlow() throws Exception {
-        Customer customer = new Customer();
-        customer.setId(1);
-        BankAccountRequest request = new BankAccountRequest("3331965465", 200, "4331256148952346", customer);
+        User user = new User();
+        user.setId(1);
+        BankAccountRequest request = new BankAccountRequest("3331965465", 200, "4331256148952346", user);
 
-        when(bankAccountService.createBankAccount(any())).thenReturn(new BankAccount(1, "3331965465", 200, "4331256148952346", customer));
-        when(customerService.findCustomerById(customer.getId())).thenReturn(customer);
+        when(bankAccountService.createBankAccount(any())).thenReturn(new BankAccount(1, "3331965465", 200, "4331256148952346", user));
+       // when(customerService.findCustomerById(customer.getId())).thenReturn(customer);
 
-        mockMvc.perform(post("/accounts/" + customer.getId())
+        mockMvc.perform(post("/accounts/" + user.getId())
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())

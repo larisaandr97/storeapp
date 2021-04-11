@@ -1,10 +1,8 @@
 package com.javaproject.storeapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity
@@ -21,16 +19,6 @@ public class Customer {
     private String mail;
     private String address;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Order> orders;
-
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<BankAccount> bankAccounts;
-
-    @OneToOne(mappedBy = "customer", fetch = FetchType.LAZY)
-    // @JsonIgnore
-    private Cart cart;
 
     public Customer(int id, String firstName, String lastName, String mail, String address) {
         this.id = id;

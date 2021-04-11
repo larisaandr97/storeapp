@@ -2,7 +2,7 @@ package com.javaproject.storeapp.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.javaproject.storeapp.entity.Customer;
+import com.javaproject.storeapp.entity.User;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
@@ -26,15 +26,15 @@ public class BankAccountRequest {
     private String cardNumber;
 
     @JsonIgnore
-    private Customer customer;
+    private User user;
 
     public BankAccountRequest() {
     }
 
-    public BankAccountRequest(String accountNumber, double balance, String cardNumber, Customer customer) {
+    public BankAccountRequest(String accountNumber, double balance, String cardNumber, User user) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.cardNumber = cardNumber;
-        this.customer = customer;
+        this.user = user;
     }
 }

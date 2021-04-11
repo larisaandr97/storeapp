@@ -2,8 +2,8 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entity.Cart;
-import com.javaproject.storeapp.entity.Customer;
 import com.javaproject.storeapp.entity.Product;
+import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.exception.CartIsEmptyException;
 import com.javaproject.storeapp.exception.NegativeQuantityException;
 import com.javaproject.storeapp.exception.ProductNotInCartException;
@@ -32,21 +32,21 @@ public class CartService {
     /**
      * Find cart by customer method
      *
-     * @param customer {@link Customer}
+     * @param user {@link User}
      * @return {@link Cart} Object
      */
-    public Cart findCartByCustomer(Customer customer) {
-        return cartRepository.findCartByCustomer(customer);
+    public Cart findCartByUser(User user) {
+        return cartRepository.findCartByUser(user);
     }
 
-    public Cart createCart(Customer customer, double value, OrderItemRequest item) {
+    public Cart createCart(User user, double value, OrderItemRequest item) {
         Cart cart = new Cart();
         cart.setTotalAmount(value);
-        cart.setCustomer(customer);
+        cart.setUser(user);
 
         List<OrderItemRequest> items = new ArrayList<>();
         items.add(item);
-        cartItems.put(customer.getId(), items);
+        cartItems.put(user.getId(), items);
         return cartRepository.save(cart);
     }
 
@@ -67,8 +67,8 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public void addItemToCart(Customer customer, OrderItemRequest item) {
-        List<OrderItemRequest> items = cartItems.get(customer.getId());
+    public void addItemToCart(User user, OrderItemRequest item) {
+        List<OrderItemRequest> items = cartItems.get(user.getId());
         int index = IntStream.range(0, items.size())
                 .filter(i -> items.get(i).getProductId() == item.getProductId())
                 .findFirst().orElse(-1);
@@ -82,14 +82,14 @@ public class CartService {
         } else {
             items.add(item);
         }
-        cartItems.put(customer.getId(), items);
+        cartItems.put(user.getId(), items);
     }
 
-    public List<OrderItemRequest> deleteItemFromCart(Cart cart, int customerId, int productId) {
+    public List<OrderItemRequest> deleteItemFromCart(Cart cart, int userId, int productId) {
 
         productService.findProductById(productId);
 
-        List<OrderItemRequest> items = cartItems.get(customerId);
+        List<OrderItemRequest> items = cartItems.get(userId);
 
         int index = IntStream.range(0, items.size())
                 .filter(i -> items.get(i).getProductId() == productId)
@@ -102,14 +102,14 @@ public class CartService {
 
         updateCartAmount(cart.getId(), cart.getTotalAmount() - (item.getQuantity() * item.getPrice()));
         items.remove(index);
-        cartItems.put(customerId, items);
+        cartItems.put(userId, items);
         return items;
     }
 
-    public List<OrderItemRequest> getCartContents(int customerId) {
-        if (getCartItems().get(customerId) == null)
-            throw new CartIsEmptyException(customerId);
-        else return cartItems.get(customerId);
+    public List<OrderItemRequest> getCartContents(int userId) {
+        if (getCartItems().get(userId) == null)
+            throw new CartIsEmptyException(userId);
+        else return cartItems.get(userId);
     }
 
     public Map<Integer, List<OrderItemRequest>> getCartItems() {
@@ -131,15 +131,15 @@ public class CartService {
         return product;
     }
 
-    public Cart addProductToCart(Customer customer, OrderItemRequest item) {
-        Cart cart = findCartByCustomer(customer);
+    public Cart addProductToCart(User user, OrderItemRequest item) {
+        Cart cart = findCartByUser(user);
 
         if (cart == null) {
-            // if there is no existing cart for the customerId, we create one, also initializing the amount with the product added
-            cart = createCart(customer, item.getQuantity() * item.getPrice(), item);
+            // if there is no existing cart for the user, we create one, also initializing the amount with the product added
+            cart = createCart(user, item.getQuantity() * item.getPrice(), item);
 
         } else {
-            addItemToCart(customer, item);
+            addItemToCart(user, item);
             addToCartAmount(cart.getId(), item.getQuantity() * item.getPrice());
         }
         return cart;

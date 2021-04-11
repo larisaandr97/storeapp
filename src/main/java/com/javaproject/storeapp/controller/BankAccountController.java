@@ -2,17 +2,20 @@ package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.dto.BankAccountRequest;
 import com.javaproject.storeapp.entity.BankAccount;
-import com.javaproject.storeapp.entity.Customer;
+import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.mapper.BankAccountMapper;
 import com.javaproject.storeapp.service.BankAccountService;
 import com.javaproject.storeapp.service.CustomerService;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -38,18 +41,19 @@ public class BankAccountController {
             @ApiResponse(code = 201, message = "The Bank Account was successfully created based on the received request"),
             @ApiResponse(code = 400, message = "Validation error on the received request")
     })
-    @PostMapping("/{customerId}")
+    @PostMapping()
     public ResponseEntity<BankAccount> createBankAccount(
             @Valid
             @ApiParam(name = "bankAccount", value = "Bank account details", required = true)
             @RequestBody
                     BankAccountRequest bankAccountRequest,
-            @PathVariable
-            @ApiParam(name = "customerId", value = "Id of account holder", required = true)
-                    int customerId) {
-        Customer customer = customerService.findCustomerById(customerId);
-
-        bankAccountRequest.setCustomer(customer);
+            // @PathVariable
+            //@ApiParam(name = "customerId", value = "Id of account holder", required = true)
+            //       int customerId) {
+            Principal principal) {
+        //Customer customer = customerService.findCustomerById(customerId);
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        bankAccountRequest.setUser(user);
 
         BankAccount bankAccount = bankAccountMapper.bankAccountRequestToBankAccount(bankAccountRequest);
         BankAccount createdBankAccount = bankAccountService.createBankAccount(bankAccount);
@@ -59,16 +63,21 @@ public class BankAccountController {
                 .body(createdBankAccount);
     }
 
-    @GetMapping("/{customerId}")
+    @GetMapping()
     @ApiOperation(value = "Get Bank Accounts for Customer",
             notes = "Get all Bank Accounts for a Customer based on the Id received in the request")
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "The Customer with the entered Id does not exist!")
     })
-    public List<BankAccount> getBankAccountsForCustomer(@PathVariable
-                                                        @ApiParam(name = "customerId", value = "Id of account holder", required = true)
-                                                                int customerId) {
-        return bankAccountService.getBankAccountsForCustomer(customerId);
+    public ModelAndView getBankAccountsForCustomer(Principal principal) {//@PathVariable
+        // @ApiParam(name = "customerId", value = "Id of account holder", required = true)
+        //int customerId) {
+
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        ModelAndView modelAndView = new ModelAndView("account");
+        List<BankAccount> accountsFound = bankAccountService.getBankAccountsForUser(user);
+        modelAndView.addObject("accounts", accountsFound);
+        return modelAndView;
     }
 
 }

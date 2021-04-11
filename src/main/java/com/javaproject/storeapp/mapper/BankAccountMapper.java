@@ -10,6 +10,6 @@ public class BankAccountMapper {
     public BankAccount bankAccountRequestToBankAccount(BankAccountRequest bankAccountRequest) {
         return new BankAccount(bankAccountRequest.getAccountNumber(),
                 bankAccountRequest.getBalance(),
-                bankAccountRequest.getCardNumber(), bankAccountRequest.getCustomer());
+                bankAccountRequest.getCardNumber(), bankAccountRequest.getUser());
     }
 }

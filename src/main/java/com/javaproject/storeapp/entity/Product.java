@@ -25,9 +25,16 @@ public class Product {
     @Column(name = "category")
     private ProductCategory productCategory;
 
+    @Lob
+    private Byte[] image;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnore
+  //  @JsonIgnore
     private List<OrderItem> orderItems;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+   // @JsonIgnore
+    private List<Review> reviewList;
 
     public Product() {
     }

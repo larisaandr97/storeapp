@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head"></head>
+<body>
+<nav th:replace="layout :: nav"></nav>
+<div th:replace="layout :: flash"></div>
+<div class="container text-center">
+    <a class="btn btn-primary marginTop" href="/products/new">Add new product</a>
+
+    <div class="row card-group">
+        <div class="col-4" th:each="product : ${products}">
+            <div class="card bg-light mb-4 text-center" style="text-align:center;margin:4rem;width:18rem;"
+                 th:onclick="'window.location= \'/products/' + ${product.id}">
+                <img th:src="@{'/products/getImage/' + ${product.id}}" style="width:15rem;" th:alt="${product.name}">
+                <br/>
+                <h4 class="card-title" th:text="${product.name}"></h4>
+                <div class="card-body">
+                    <!--                    <h5 th:text="${product.price}" class="card-link"></h5>-->
+                    <h3><span class="price badge badge-secondary" th:text="${product.price}"></span></h3>
+
+                    <!--                    <a href="#" class="card-link" th:href="@{'/products/' + ${product.id}}">See more</a>-->
+                    <!--                    <a href="#" class="card-link btn btn-primary addCart"-->
+                    <!--                       th:href="@{'/cart/add?productId=' + ${product.id} + '&quantity=1'}">Add to cart</a>-->
+                    <form th:action="'/cart/add?productId=' + ${product.id} + '&quantity=1'" method="post">
+                        <button type="submit" class="btn btn-primary">Add to cart</button>
+                    </form>
+                </div>
+                <div class="card-footer text-muted center" th:text="'Only ' + ${product.stock} + ' left!'">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

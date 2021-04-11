@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "orderItem")
+@Table(name = "order_item")
 public class OrderItem {
 
     @Id
@@ -17,12 +17,10 @@ public class OrderItem {
     private double price;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "orders")
     @JsonIgnore
-    private Order orders;
+    private Order order;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product")
     private Product product;
 
     public OrderItem() {

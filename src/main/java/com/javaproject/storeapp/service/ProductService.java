@@ -5,6 +5,9 @@ import com.javaproject.storeapp.entity.ProductCategory;
 import com.javaproject.storeapp.exception.ProductCategoryNotFound;
 import com.javaproject.storeapp.exception.ProductNotFoundException;
 import com.javaproject.storeapp.repository.ProductRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,7 +41,9 @@ public class ProductService {
             if (!ProductCategory.contains(upperCaseCategory))
                 throw new ProductCategoryNotFound(category);
         }
-        return productRepository.getProductsBy(category, name, descending);
+        Pageable sortedByPrice =
+                PageRequest.of(0, 6, descending ? Sort.by("price").descending() : Sort.by("price").ascending());
+        return productRepository.getProductsBy(category, name, descending, sortedByPrice);
     }
 
     public Product updateStock(int productId, int stock) {

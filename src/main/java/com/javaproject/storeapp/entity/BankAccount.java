@@ -1,14 +1,12 @@
 package com.javaproject.storeapp.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "bankAccount")
 @Data
 public class BankAccount {
 
@@ -22,29 +20,27 @@ public class BankAccount {
     private String cardNumber;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer")
-    @JsonIgnore
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Order> orders;
 
     public BankAccount() {
     }
 
-    public BankAccount(String accountNumber, double balance, String cardNumber, Customer customer) {
+    public BankAccount(String accountNumber, double balance, String cardNumber, User user) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.cardNumber = cardNumber;
-        this.customer = customer;
+        this.user = user;
     }
 
-    public BankAccount(int id, String accountNumber, double balance, String cardNumber, Customer customer) {
+    public BankAccount(int id, String accountNumber, double balance, String cardNumber, User user) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.cardNumber = cardNumber;
-        this.customer = customer;
+        this.user = user;
     }
 }
