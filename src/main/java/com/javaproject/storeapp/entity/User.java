@@ -6,10 +6,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static com.javaproject.storeapp.entity.Pattern.EMAIL_ADDRESS;
 
 @Entity
 @Data
@@ -25,6 +28,16 @@ public class User implements UserDetails {
 
     @Column(length = 100)
     private String password;
+
+    @Column(length = 100)
+    @Pattern(regexp = EMAIL_ADDRESS)
+    private String email;
+
+    @Column(length = 100)
+    private String firstName;
+
+    @Column(length = 100)
+    private String lastName;
 
     @Column(nullable = false)
     private boolean enabled;

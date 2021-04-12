@@ -7,12 +7,16 @@ import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.service.CartService;
 import com.javaproject.storeapp.service.OrderService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.net.URI;
@@ -34,13 +38,6 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    @ApiOperation(value = "Add Product to Cart",
-            notes = "Add the Product received in the request to the Cart")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The Product was successfully added to the cart, returning Cart details"),
-            @ApiResponse(code = 400, message = "Validation error on the received request")
-    })
-
     public String addProductToCart(@RequestParam int productId,
                                    @RequestParam int quantity, Principal principal) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
@@ -50,40 +47,34 @@ public class CartController {
         return "redirect:/cart/";
     }
 
+    @PostMapping("/update")
+    public String updateCart() {
+        return "cart";
+    }
+
     @Transactional
-    @DeleteMapping("/delete")
-    @ApiOperation(value = "Delete Product from Cart",
-            notes = "Deletes the Product received in the request from the Cart")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The Product was successfully deleted from the Cart, returning Cart details"),
-            @ApiResponse(code = 400, message = "Validation error on the received request")
-    })
-    public List<OrderItemRequest> deleteItemFromCart(@RequestParam int productId, Principal principal) {
+    @PostMapping("/delete")
+    public String deleteItemFromCart(@RequestParam int productId, Principal principal, Model model) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Cart cart = cartService.findCartByUser(user);
-        return cartService.deleteItemFromCart(cart, user.getId(), productId);
+        List<OrderItemRequest> items = cartService.getCartContents(user.getId());
+        model.addAttribute("items", items);
+        model.addAttribute("cart", cart);
+        cartService.deleteItemFromCart(cart, user.getId(), productId);
+        return "cart";
     }
 
     @GetMapping()
-    @ApiOperation(value = "Get Cart for Customer",
-            notes = "Get the Cart for the Customer received in the request")
-    @ApiResponses(value = {
-            @ApiResponse(code = 400, message = "Validation error on the received request")
-    })
     public String getCartContents(Principal principal, Model model) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        Cart cart = cartService.findCartByUser(user);
         List<OrderItemRequest> items = cartService.getCartContents(user.getId());
         model.addAttribute("items", items);
+        model.addAttribute("cart", cart);
         return "cart";
     }
 
     @PostMapping("/checkout")
-    @ApiOperation(value = "Checkout Cart for Customer",
-            notes = "Checkout all Products from Cart and pay with Account received in the request")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "The Order was successfully created based on the received request"),
-            @ApiResponse(code = 400, message = "Validation error on the received request")
-    })
     public ResponseEntity<Order> checkout(@RequestParam
                                           @ApiParam(name = "accountId", value = "Account used for paying for Order", required = true)
                                                   int accountId,
@@ -93,6 +84,7 @@ public class CartController {
         return ResponseEntity
                 .created(URI.create("/orders/" + order.getId()))
                 .body(order);
-
     }
+
+
 }

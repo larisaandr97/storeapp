@@ -22,7 +22,7 @@
                     <!--                    <a href="#" class="card-link btn btn-primary addCart"-->
                     <!--                       th:href="@{'/cart/add?productId=' + ${product.id} + '&quantity=1'}">Add to cart</a>-->
                     <form th:action="'/cart/add?productId=' + ${product.id} + '&quantity=1'" method="post">
-                        <button type="submit" class="btn btn-primary">Add to cart</button>
+                        <button type="submit" class="btn btn-primary">Add to cart <i class="bi bi-cart-plus"></i></button>
                     </form>
                 </div>
                 <div class="card-footer text-muted center" th:text="'Only ' + ${product.stock} + ' left!'">

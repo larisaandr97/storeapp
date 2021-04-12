@@ -1,4 +1,5 @@
 create database if not exists storeapp;
+delete from cart;
 
 create table if not exists audit(
     id int not null auto_increment primary key,
@@ -78,7 +79,7 @@ create table if not exists order_item(
    CONSTRAINT FK_orderId_item FOREIGN KEY (orders) REFERENCES orders(id)
 );
 
---drop table if exists cart;
+
 
 create table if not exists cart(
     id int not null auto_increment primary key,

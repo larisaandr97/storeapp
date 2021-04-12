@@ -30,7 +30,7 @@ public class CartService {
     }
 
     /**
-     * Find cart by customer method
+     * Find cart by user method
      *
      * @param user {@link User}
      * @return {@link Cart} Object
