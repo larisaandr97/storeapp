@@ -1,24 +1,29 @@
 package com.javaproject.storeapp.exception.advice;
 
 
+import com.javaproject.storeapp.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    //@ExceptionHandler({BankAccountNotFoundException.class, CustomerNotFoundException.class, CartNotFoundException.class, ProductCategoryNotFound.class, ProductNotInStock.class, InsufficientFundsException.class, BankAccountNotBelongingToCustomer.class})
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handle(RuntimeException e) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(e.getMessage()); //+ " at " + LocalDateTime.now());
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    //  @ExceptionHandler({BankAccountNotFoundException.class, CustomerNotFoundException.class, CartNotFoundException.class, ProductCategoryNotFound.class, ProductNotFoundException.class, OrderNotFoundException.class})
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ModelAndView handlerNotFoundException(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("notfound");
+        return modelAndView;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

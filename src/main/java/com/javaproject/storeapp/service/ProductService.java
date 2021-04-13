@@ -3,7 +3,7 @@ package com.javaproject.storeapp.service;
 import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.ProductCategory;
 import com.javaproject.storeapp.exception.ProductCategoryNotFound;
-import com.javaproject.storeapp.exception.ProductNotFoundException;
+import com.javaproject.storeapp.exception.ResourceNotFoundException;
 import com.javaproject.storeapp.repository.ProductRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ public class ProductService {
         if (productOptional.isPresent()) {
             return productOptional.get();
         } else {
-            throw new ProductNotFoundException(id);
+            throw new ResourceNotFoundException("Product with Id " + id + " not found.");
         }
     }
 

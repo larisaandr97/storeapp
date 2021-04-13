@@ -108,7 +108,8 @@ public class CartService {
 
     public List<OrderItemRequest> getCartContents(int userId) {
         if (getCartItems().get(userId) == null)
-            throw new CartIsEmptyException(userId);
+           // throw new CartIsEmptyException(userId);
+            return new ArrayList<>();
         else return cartItems.get(userId);
     }
 

@@ -2,8 +2,8 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entity.BankAccount;
 import com.javaproject.storeapp.entity.User;
-import com.javaproject.storeapp.exception.BankAccountNotFoundException;
 import com.javaproject.storeapp.exception.DuplicateCardNumberException;
+import com.javaproject.storeapp.exception.ResourceNotFoundException;
 import com.javaproject.storeapp.repository.BankAccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class BankAccountService {
         if (accountOptional.isPresent()) {
             return accountOptional.get();
         } else {
-            throw new BankAccountNotFoundException(id);
+            throw new ResourceNotFoundException("Bank account with Id " + id + " not found.");
         }
     }
 

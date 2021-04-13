@@ -70,7 +70,7 @@ public class CartController {
         Cart cart = cartService.findCartByUser(user);
         List<OrderItemRequest> items = cartService.getCartContents(user.getId());
         model.addAttribute("items", items);
-        model.addAttribute("cart", cart);
+        model.addAttribute("cart", cart!=null?cart:new Cart(0));
         return "cart";
     }
 

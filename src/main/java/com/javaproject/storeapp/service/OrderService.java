@@ -2,7 +2,10 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entity.*;
-import com.javaproject.storeapp.exception.*;
+import com.javaproject.storeapp.exception.BankAccountNotBelongingToCustomer;
+import com.javaproject.storeapp.exception.CartIsEmptyException;
+import com.javaproject.storeapp.exception.InsufficientFundsException;
+import com.javaproject.storeapp.exception.ResourceNotFoundException;
 import com.javaproject.storeapp.repository.OrderItemRepository;
 import com.javaproject.storeapp.repository.OrderRepository;
 import org.springframework.stereotype.Service;
@@ -37,7 +40,7 @@ public class OrderService {
         if (orderOptional.isPresent()) {
             return orderOptional.get();
         } else {
-            throw new OrderNotFoundException(id);
+            throw new ResourceNotFoundException("Order with Id " + id + " not found.");
         }
     }
 
@@ -54,7 +57,7 @@ public class OrderService {
 
         Cart cart = cartService.findCartByUser(user);
         if (cart == null)
-            throw new CartNotFoundException(user.getId());
+            throw new ResourceNotFoundException("Cart for customer with Id " + user.getId() + " not found.");
         if (cart.getTotalAmount() == 0)
             throw new CartIsEmptyException(user.getId());
 

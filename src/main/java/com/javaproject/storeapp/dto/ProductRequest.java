@@ -4,23 +4,23 @@ import com.javaproject.storeapp.entity.ProductCategory;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
 public class ProductRequest {
 
-    @NotBlank
-    @Length(min = 2, message = "Length of name must be at least 2.")
+    @NotNull
+    @Length(min = 2, message = "Name must have between 2 and 100 characters.")
     private String name;
 
     @NotNull
-    @Length(max = 100, message = "Description must not exceed 100 characters.")
+    @Length(min = 1, max = 100, message = "Description must have between 1 and 100 characters.")
     private String description;
 
     @NotNull
-    @Min(0)
+    @DecimalMin(value = "0.1", message = "Price cannot be zero.")
     private double price;
 
     @NotNull

@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/register*").permitAll()
                 .anyRequest().hasRole("USER")
                 .and()
                 .formLogin()
@@ -51,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll()
                 .logoutSuccessUrl("/login")
+                //.and()
+                //.exceptionHandling().accessDeniedPage("/access_denied")
                 .and()
                 .csrf();
     }

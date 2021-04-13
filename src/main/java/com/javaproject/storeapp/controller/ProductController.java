@@ -6,9 +6,11 @@ import com.javaproject.storeapp.entity.ProductCategory;
 import com.javaproject.storeapp.mapper.ProductMapper;
 import com.javaproject.storeapp.service.ImageService;
 import com.javaproject.storeapp.service.ProductService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,18 +45,15 @@ public class ProductController {
     }
 
     @PostMapping
-    @ApiOperation(value = "Create a Product",
-            notes = "Creates a new Product based on the information received in the request")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "The Product was successfully created based on the received request"),
-            @ApiResponse(code = 400, message = "Validation error on the received request")
-    })
     public String addProduct(@Valid
                              @RequestBody
                              @ModelAttribute
-                             @ApiParam(name = "product", value = "Product details", required = true)
                                      ProductRequest productRequest,
+                             BindingResult bindingResult,
                              @RequestParam("imagefile") MultipartFile file) {
+        if (bindingResult.hasErrors()) {
+            return "addProduct";
+        }
         Product product = productMapper.productRequestToProduct(productRequest);
         Product createdProduct = productService.createProduct(product);
         imageService.saveImageFile(createdProduct.getId(), file);
@@ -68,23 +67,12 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    @ApiOperation(value = "Get Product",
-            notes = "Get a Product based on the Id received in the request")
-    @ApiResponses(value = {
-            @ApiResponse(code = 404, message = "The Product with the entered Id does not exist!")
-    })
     public Product getProduct(@PathVariable int id) {
         return productService.findProductById(id);
     }
 
     @GetMapping
-    @ApiOperation(value = "Get all Products",
-            notes = "Retrieves all Products and filter them if wanted")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The data was retrieved successfully"),
-            @ApiResponse(code = 404, message = "Products with the entered properties were not found")
-    })
-    public /*ResponseEntity<?>*/ ModelAndView getAllProducts(
+    public ModelAndView getAllProducts(
             @RequestParam(required = false)
             @ApiParam(name = "category", value = "Product category", allowableValues = ("FASHION, SUPERMARKET, LAPTOPS, PHONES, HOME, BOOKS, TOYS"))
                     String category,

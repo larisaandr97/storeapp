@@ -15,7 +15,7 @@ public class Cart {
     private double totalAmount;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "cart", referencedColumnName = "id")
     private User user;
 
     public Cart() {
@@ -25,5 +25,9 @@ public class Cart {
         this.id = id;
         this.totalAmount = totalAmount;
         this.user = user;
+    }
+
+    public Cart(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }
