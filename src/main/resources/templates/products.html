@@ -5,23 +5,64 @@
 <nav th:replace="layout :: nav"></nav>
 <div th:replace="layout :: flash"></div>
 <div class="container text-center">
-    <a class="btn btn-primary marginTop" href="/products/new">Add new product</a>
+    <h1 style="font-family: 'Dancing Script', cursive;">Catalog</h1>
+    <a class="btn btn-primary mt-1" href="/products/new">Add new product</a>
+
+    <div class="pos-f-t marginTop">
+        <div class="collapse" id="navbarToggleExternalContent">
+            <div class="bg-light p-4">
+                <h4>Collapsed content</h4>
+                <form class="form-inline" action="/products" method="GET">
+                    <div class="form-group mb-2">
+                        <input name="name" type="text" class="form-control" placeholder="Keyword">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <!--                        <label for="category">Category: </label>-->
+                        <select id="category" class="custom-select" name="category">
+                            <option value="null">Choose category</option>
+                            <option
+                                    th:each="category:${T(com.javaproject.storeapp.entity.ProductCategory).values()}"
+                                    th:value="${category}" th:text="${category}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label class="mr-2">Price: </label>
+                        <input name="descending" class="form-check-input" type="radio" id="gridRadios2" value="true">
+                        <label class="form-check-label mr-2" for="gridRadios2">
+                            Descending
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">See results</button>
+                </form>
+            </div>
+        </div>
+        <nav class="navbar navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span> Filter products
+            </button>
+        </nav>
+    </div>
+
+    <div th:if="${productPage.content.size() == 0}" class="card-columns" style="margin-top:5rem;">
+        <!--        <h4 class="m-5 centered"> No products found</h4>-->
+        <h2 class="m-5 centered"><span class="badge badge-secondary">No products found!</span></h2>
+    </div>
 
     <div class="card-columns">
-        <!--        <div class="col-4" th:each="product : ${products}">-->
-        <div th:each="product : ${products}" class="card bg-light mb-1 text-center"
+
+        <div th:each="product : ${productPage.content}" class="card bg-light mb-1 text-center"
              style="text-align:center;margin:1rem;width:18rem;"
              th:onclick="'window.location= \'/products/' + ${product.id}">
             <img th:src="@{'/products/getImage/' + ${product.id}}" style="width:15rem;" th:alt="${product.name}">
             <br/>
             <h4 class="card-title" th:text="${product.name}"></h4>
             <div class="card-body">
-                <!--                    <h5 th:text="${product.price}" class="card-link"></h5>-->
                 <h3><span class="price badge badge-secondary" th:text="${product.price}"></span></h3>
 
-                <!--                    <a href="#" class="card-link" th:href="@{'/products/' + ${product.id}}">See more</a>-->
-                <!--                    <a href="#" class="card-link btn btn-primary addCart"-->
-                <!--                       th:href="@{'/cart/add?productId=' + ${product.id} + '&quantity=1'}">Add to cart</a>-->
                 <form th:action="'/cart/add?productId=' + ${product.id} + '&quantity=1'" method="post">
                     <button type="submit" class="btn btn-primary">Add to cart <i class="bi bi-cart-plus"></i></button>
                 </form>
@@ -29,7 +70,12 @@
             <div class="card-footer text-muted center" th:text="'Only ' + ${product.stock} + ' left!'">
             </div>
         </div>
-        <!--        </div>-->
+    </div>
+    <div th:if="${productPage.totalPages > 0}" class="pagination"
+         th:each="pageNumber : ${pageNumbers}">
+        <a th:href="@{/products(size=${productPage.getSize()}, page=${pageNumber})}"
+           th:text="${pageNumber}"
+           th:class="${pageNumber==productPage.number + 1} ? active"></a>
     </div>
 </div>
 </body>

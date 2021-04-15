@@ -7,17 +7,20 @@ import com.javaproject.storeapp.mapper.ProductMapper;
 import com.javaproject.storeapp.service.ImageService;
 import com.javaproject.storeapp.service.ProductService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/products")
@@ -58,12 +61,6 @@ public class ProductController {
         Product createdProduct = productService.createProduct(product);
         imageService.saveImageFile(createdProduct.getId(), file);
         return "redirect:/products/";
-//        return ResponseEntity
-//                //created() will return the 201 HTTP code and set the Location header on the response, with the url to the newly created customer
-//                //   .created()//URI.create("/products/" + createdProduct.getId()))
-//                //body() will populate the body of the response with the customer details
-//                .status(HttpStatus.CREATED)
-//                .body(product.getId());
     }
 
     @GetMapping("{id}")
@@ -72,27 +69,29 @@ public class ProductController {
     }
 
     @GetMapping
-    public ModelAndView getAllProducts(
+    public String getAllProducts(
             @RequestParam(required = false)
-            @ApiParam(name = "category", value = "Product category", allowableValues = ("FASHION, SUPERMARKET, LAPTOPS, PHONES, HOME, BOOKS, TOYS"))
                     String category,
             @RequestParam(required = false)
-            @ApiParam(name = "name", value = "Product name")
                     String name,
             @RequestParam(required = false)
-            @ApiParam(name = "descending", value = "Boolean value indicating if values will be displayed descending by price")
-                    boolean descending) {
+                    boolean descending,
+            Model model,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size) {
 
-        List<Product> productsFound = productService.getProductsBy(category, name, descending);
-        ModelAndView modelAndView = new ModelAndView("products");
-        modelAndView.addObject("products", productsFound);
-        return modelAndView;
-        /* if (productsFound.size() == 0)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Products with the entered properties were not found");
-        else return ResponseEntity
-                .ok()
-                .body(productsFound);*/
-
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(3);
+        Page<Product> productPage = productService.getProductsBy(category, name, descending, PageRequest.of(currentPage - 1, pageSize));//, descending ? Sort.by("price").descending() : Sort.by("price").ascending()));
+        model.addAttribute("productPage", productPage);
+        int totalPages = productPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+        return "products";
     }
 
 }

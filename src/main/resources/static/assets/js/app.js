@@ -20,4 +20,5 @@ jQuery(function ($) {
         });
         $('#totalAmount').text("Total amount: " + sum);
     });
+
 });

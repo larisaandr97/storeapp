@@ -5,8 +5,8 @@ import com.javaproject.storeapp.entity.BankAccount;
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.mapper.BankAccountMapper;
 import com.javaproject.storeapp.service.BankAccountService;
-import com.javaproject.storeapp.service.CustomerService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
@@ -27,20 +27,12 @@ public class BankAccountController {
 
     private final BankAccountMapper bankAccountMapper;
     private final BankAccountService bankAccountService;
-    private final CustomerService customerService;
 
-    public BankAccountController(BankAccountMapper bankAccountMapper, BankAccountService bankAccountService, CustomerService customerService) {
+    public BankAccountController(BankAccountMapper bankAccountMapper, BankAccountService bankAccountService) {
         this.bankAccountMapper = bankAccountMapper;
         this.bankAccountService = bankAccountService;
-        this.customerService = customerService;
     }
 
-    @ApiOperation(value = "Create a Bank Account",
-            notes = "Creates a new Bank Account based on the information received in the request")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "The Bank Account was successfully created based on the received request"),
-            @ApiResponse(code = 400, message = "Validation error on the received request")
-    })
     @PostMapping()
     public ResponseEntity<BankAccount> createBankAccount(
             @Valid
@@ -64,11 +56,6 @@ public class BankAccountController {
     }
 
     @GetMapping()
-    @ApiOperation(value = "Get Bank Accounts for Customer",
-            notes = "Get all Bank Accounts for a Customer based on the Id received in the request")
-    @ApiResponses(value = {
-            @ApiResponse(code = 404, message = "The Customer with the entered Id does not exist!")
-    })
     public ModelAndView getBankAccountsForCustomer(Principal principal) {//@PathVariable
         // @ApiParam(name = "customerId", value = "Id of account holder", required = true)
         //int customerId) {

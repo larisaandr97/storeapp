@@ -15,7 +15,7 @@ public class Cart {
     private double totalAmount;
 
     @OneToOne
-    @JoinColumn(name = "cart", referencedColumnName = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Cart() {
