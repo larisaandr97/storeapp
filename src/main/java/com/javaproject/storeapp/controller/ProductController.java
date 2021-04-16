@@ -64,8 +64,10 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public Product getProduct(@PathVariable int id) {
-        return productService.findProductById(id);
+    public String getProduct(@PathVariable int id, Model model) {
+        Product productFound = productService.findProductById(id);
+        model.addAttribute("product", productFound);
+        return "productDetails";
     }
 
     @GetMapping

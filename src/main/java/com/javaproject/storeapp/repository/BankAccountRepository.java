@@ -16,7 +16,7 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Intege
 
     default List<BankAccount> findBankAccountsByUser(User user) {
         return this.findAll()
-                .stream().filter(account -> account.getUser().equals(user))
+                .stream().filter(account -> account.getUser().getId() == user.getId())
                 .collect(Collectors.toList());
     }
 }

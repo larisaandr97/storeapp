@@ -3,20 +3,18 @@ package com.javaproject.storeapp.controller;
 import com.javaproject.storeapp.entity.Order;
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.service.OrderService;
-import io.swagger.annotations.Api;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/orders")
-@Api(value = "/orders",
-        tags = "Orders")
 public class OrderController {
 
     private final OrderService orderService;
@@ -31,8 +29,11 @@ public class OrderController {
     }
 
     @GetMapping("/all")
-    public List<Order> getOrdersByUser(Principal principal) {
+    public ModelAndView getOrdersByUser(Principal principal) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        return orderService.getOrdersByUser(user);
+        ModelAndView modelAndView = new ModelAndView("orders");
+        List<Order> ordersFound = orderService.getOrdersByUser(user);
+        modelAndView.addObject("orders", ordersFound);
+        return modelAndView;
     }
 }

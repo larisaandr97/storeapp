@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head th:replace="layout :: head"></head>
+
+<body>
+<nav th:replace="layout :: nav"></nav>
+<div th:replace="layout :: flash"></div>
+<div class="container marginTop centered">
+    <div class="card bg-light mb-1 text-center"
+         style="text-align:center;margin:5rem;">
+        <img th:src="@{'/products/getImage/' + ${product.id}}" style="width:15rem;" th:alt="${product.name}">
+        <br/>
+
+        <div class="card-body">
+            <h4 class="card-title" th:text="${product.name}"></h4>
+
+            <h3 class="card-text"><span class="price badge badge-secondary"
+                                        th:text="${product.price}"></span></h3>
+            <h3 class="card-text" th:text="${product.description}"></h3>
+            <form sec:authorize="isAuthenticated()"
+                  th:action="'/cart/add?productId=' + ${product.id} + '&quantity=1'" method="post">
+                <button type="submit" class="btn btn-primary">Add to cart <i class="bi bi-cart-plus"></i></button>
+            </form>
+            <button sec:authorize="isAnonymous()" class="btn btn-primary" data-toggle="modal"
+                    data-target="#exampleModal">Add to cart <i class="bi bi-cart-plus"></i>
+            </button>
+        </div>
+        <div class="card-footer text-muted center" th:text="'Only ' + ${product.stock} + ' left!'">
+        </div>
+    </div>
+
+    <div class="card bg-light mb-1 mt-5 text-center">
+        <div class="card-body">
+            <h4 class="card-title"> Reviews</h4>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Account required</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You need to login to add a product to the cart!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a type="button" href="/login" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

@@ -40,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/register*").permitAll()
-                .anyRequest().hasRole("USER")
+                //  .antMatchers("/register*").permitAll()
+                //   .anyRequest().hasRole("USER")
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -52,8 +52,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll()
                 .logoutSuccessUrl("/login")
-                //.and()
-                //.exceptionHandling().accessDeniedPage("/access_denied")
+                .and()
+                .exceptionHandling().accessDeniedPage("/access_denied")
+                .and()
+                .authorizeRequests()
+                .mvcMatchers("/register", "/login", "/login-error", "/home", "/notfound", "/products").permitAll()
+                .mvcMatchers("/products/new").hasRole("ADMIN")
+                .mvcMatchers("/cart/**", "/orders/**", "/accounts/**").hasAnyRole("USER", "ADMIN")
+                //  .mvcMatchers("/support/admin/**").access("isFullyAuthenticated() and hasRole('ADMIN')")
+                //  .access("@isPortfolioOwnerOrAdmin.check(#username)")
+                //.anyRequest().denyAll()
                 .and()
                 .csrf();
     }

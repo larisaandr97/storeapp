@@ -28,7 +28,6 @@ public class BankAccountService {
     }
 
     public List<BankAccount> getBankAccountsForUser(User user) {
-        //   Customer customer = customerService.findCustomerById(customerId);
         return bankAccountRepository.findBankAccountsByUser(user);
     }
 

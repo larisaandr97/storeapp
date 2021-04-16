@@ -1,7 +1,6 @@
 package com.javaproject.storeapp.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.javaproject.storeapp.entity.User;
 import lombok.Data;
 
@@ -25,7 +24,7 @@ public class BankAccountRequest {
     @Pattern(regexp = VISA_CREDIT_CARD, message = "Card number not valid! Only Visa accepted.")
     private String cardNumber;
 
-    @JsonIgnore
+    // @JsonIgnore
     private User user;
 
     public BankAccountRequest() {

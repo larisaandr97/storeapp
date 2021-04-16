@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head th:fragment="head" lang="en">
     <meta charset="UTF-8"/>
     <meta description="viewport" content="width=device-width, initial-scale=1"/>
@@ -36,17 +36,17 @@
             <li class="nav-item">
                 <a class="nav-link" href="/products">Catalog</a>
             </li>
-            <li class="nav-item">
+            <li sec:authorize="isAuthenticated()" class="nav-item">
                 <a class="nav-link" href="/cart">Your cart</a>
             </li>
-            <li class="nav-item dropdown">
+            <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     Profile
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Bank accounts</a>
-                    <a class="dropdown-item" href="#">Orders</a>
+                    <a class="dropdown-item" href="/accounts">Bank accounts</a>
+                    <a class="dropdown-item" href="/orders/all">Orders</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Wishlist</a>
                 </div>
@@ -62,11 +62,18 @@
         </ul>
         <ul class="nav justify-content-end">
             <li class="text-white" sec:authentication="name"></li>
-            <li>
+            <li sec:authorize="isAuthenticated()">
                 <form class="logout inline" th:action="@{/logout}" method="post">
                     <button type="submit" class="text-white"><i class="material-icons">power_settings_new</i></button>
                 </form>
             </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="/register">Register</a>
+            </li>
+
         </ul>
 
     </div>

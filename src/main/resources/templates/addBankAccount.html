@@ -5,73 +5,44 @@
 <body>
 <nav th:replace="layout :: nav"></nav>
 <div th:replace="layout :: flash"></div>
-
 <div class="container marginTop centered">
-
     <div class="card bg-light mb-1 marginTop text-center" style="width:40rem;margin:0 auto;">
-        <div class="card-body">
-            <h1 class="card-title" style="font-family: 'Dancing Script', cursive;"> New product </h1>
-            <form class="needs-validation card-text" novalidate th:object="${productRequest}" th:action="@{/products/}"
-                  method="post"
-                  enctype="multipart/form-data">
-                <!--          class="was-validated">-->
 
+        <div class="card-body">
+            <h1 class="card-title" style="font-family: 'Dancing Script', cursive;"> New bank account </h1>
+            <form class="needs-validation card-text" novalidate th:object="${bankAccountRequest}"
+                  th:action="@{/accounts/}"
+                  method="post">
                 <div class="form-row">
                     <div class="col-md-6">
-                        <label>Product name:</label>
+                        <label>Account number:</label>
                         <!--                        <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</label>-->
-                        <i th:if="${#fields.hasErrors('name')}" class="fa fa-exclamation tooltips"
+                        <i th:if="${#fields.hasErrors('accountNumber')}" class="fa fa-exclamation tooltips"
                            data-original-title="please enter a valid name" data-container="body"></i>
                         <input minlength="2" maxlength="100" required type="text" class="form-control"
-                               th:field="*{name}"/>
+                               th:field="*{accountNumber}"/>
 
-                        <div class="invalid-feedback">Name must have between 2 and 100 characters.
+                        <div class="invalid-feedback">The account number cannot be empty.
                         </div>
                         <!--                        <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</label>-->
                         <!--                        <span th:if="${#fields.hasErrors('name')}" class="help-block" th:errors="*{name}"></span>-->
                     </div>
                     <div class="col-md-6">
-                        <label>Description:</label>
+                        <label>Card number:</label>
                         <!--                    <label th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</label>-->
                         <input minlength="1" maxlength="100" required type="text" class="form-control"
-                               th:field="*{description}"/>
-                        <div class="invalid-feedback">Description must have between 1 and 100 characters.
+                               th:field="*{cardNumber}" pattern="4[0-9]{12}(?:[0-9]{3})?$"/>
+                        <div class="invalid-feedback">Card number not valid! Only Visa accepted.
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="form-group">
-                        <label class="control-label">Select image:</label>
-                        <input accept="image/*" title="Only images are allowed" required id="imagefile" name="imagefile"
-                               type="file" class="file form-control">
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col">
-                        <label th:for="price">Price:</label>
-                        <input type="number" min="0.10" step="any" class="form-control" th:field="*{price}"/>
-                        <div class="invalid-feedback">Price cannot be zero.
+                        <label th:for="price">Balance:</label>
+                        <input type="number" min="0.10" step="any" class="form-control" th:field="*{balance}"/>
+                        <div class="invalid-feedback">Balance cannot be negative.
                         </div>
-                    </div>
-                    <div class="col">
-                        <label th:for="stock">Stock:</label>
-                        <label th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}">Error</label>
-                        <input type="number" min="0" class="form-control" th:field="*{stock}"/>
-                        <div class="invalid-feedback">Stock must be greater than zero.
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Category: </label>
-                        <select id="category" class="custom-select" name="category" th:field="*{productCategory}">
-                            <option
-
-                                    th:each="category:${T(com.javaproject.storeapp.entity.ProductCategory).values()}"
-                                    th:value="${category}" th:text="${category}">
-
-                            </option>
-                        </select>
-                        <div class="invalid-feedback">Example invalid custom select feedback</div>
                     </div>
                 </div>
 

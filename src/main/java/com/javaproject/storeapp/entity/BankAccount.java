@@ -19,11 +19,11 @@ public class BankAccount {
     @Column(name = "cardNumber")
     private String cardNumber;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "account")
     private List<Order> orders;
 
     public BankAccount() {

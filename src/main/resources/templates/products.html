@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head th:replace="layout :: head"></head>
 <body>
 <nav th:replace="layout :: nav"></nav>
 <div th:replace="layout :: flash"></div>
 <div class="container text-center">
     <h1 style="font-family: 'Dancing Script', cursive;">Catalog</h1>
-    <a class="btn btn-primary mt-1" href="/products/new">Add new product</a>
+    <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary mt-1" href="/products/new">Add new product</a>
 
     <div class="pos-f-t marginTop">
         <div class="collapse" id="navbarToggleExternalContent">
@@ -55,17 +55,25 @@
     <div class="card-columns">
 
         <div th:each="product : ${productPage.content}" class="card bg-light mb-1 text-center"
-             style="text-align:center;margin:1rem;width:18rem;"
-             th:onclick="'window.location= \'/products/' + ${product.id}">
+             style="text-align:center;margin:1rem;width:18rem;">
+
             <img th:src="@{'/products/getImage/' + ${product.id}}" style="width:15rem;" th:alt="${product.name}">
             <br/>
-            <h4 class="card-title" th:text="${product.name}"></h4>
-            <div class="card-body">
-                <h3><span class="price badge badge-secondary" th:text="${product.price}"></span></h3>
 
-                <form th:action="'/cart/add?productId=' + ${product.id} + '&quantity=1'" method="post">
+            <div class="card-body">
+                <h4 class="card-title" th:text="${product.name}"></h4>
+
+                <h3 class="card-text"><span class="price badge badge-secondary"
+                                            th:text="${product.price}"></span></h3>
+
+                <form sec:authorize="isAuthenticated()"
+                      th:action="'/cart/add?productId=' + ${product.id} + '&quantity=1'" method="post">
                     <button type="submit" class="btn btn-primary">Add to cart <i class="bi bi-cart-plus"></i></button>
                 </form>
+                <button sec:authorize="isAnonymous()" class="btn btn-primary" data-toggle="modal"
+                        data-target="#exampleModal">Add to cart <i class="bi bi-cart-plus"></i>
+                </button>
+                <a class="stretched-link" th:href="'/products/' + ${product.id} "></a>
             </div>
             <div class="card-footer text-muted center" th:text="'Only ' + ${product.stock} + ' left!'">
             </div>
@@ -78,5 +86,29 @@
            th:class="${pageNumber==productPage.number + 1} ? active"></a>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Account required</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You need to login to add a product to the cart!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a type="button" href="/login" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
 </body>
 </html>
