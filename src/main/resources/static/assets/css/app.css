@@ -178,8 +178,14 @@ td {
     }
 }
 
-
-
+.bi-star-fill{
+    color: yellow;
+}
+.myCard{
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
 
 /*@media (min-width: 34em) {*/
 /*    .card-columns {*/

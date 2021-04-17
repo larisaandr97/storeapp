@@ -20,13 +20,17 @@ public class ReviewRequest {
     @Max(5)
     private int rating;
 
-    @NotNull
-    @Length(min = 2, max = 100)
-    private String author;
+//    @NotNull
+//    @Length(min = 2, max = 100)
+//    private String author;
 
-    public ReviewRequest(String comment, int rating, String author) {
+//    @NotNull
+//    private Product product;
+
+    public ReviewRequest(String comment, int rating) {//, Product product) {
         this.comment = comment;
         this.rating = rating;
-        this.author = author;
+        // this.author = author;
+        //  this.product = product;
     }
 }

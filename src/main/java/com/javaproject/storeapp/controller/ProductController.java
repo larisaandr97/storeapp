@@ -3,9 +3,11 @@ package com.javaproject.storeapp.controller;
 import com.javaproject.storeapp.dto.ProductRequest;
 import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.ProductCategory;
+import com.javaproject.storeapp.entity.Review;
 import com.javaproject.storeapp.mapper.ProductMapper;
 import com.javaproject.storeapp.service.ImageService;
 import com.javaproject.storeapp.service.ProductService;
+import com.javaproject.storeapp.service.ReviewService;
 import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,11 +34,13 @@ public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final ImageService imageService;
+    private final ReviewService reviewService;
 
-    public ProductController(ProductService productService, ProductMapper productMapper, ImageService imageService) {
+    public ProductController(ProductService productService, ProductMapper productMapper, ImageService imageService, ReviewService reviewService) {
         this.productService = productService;
         this.productMapper = productMapper;
         this.imageService = imageService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping("/new")
@@ -66,6 +70,8 @@ public class ProductController {
     @GetMapping("{id}")
     public String getProduct(@PathVariable int id, Model model) {
         Product productFound = productService.findProductById(id);
+        List<Review> reviewsFound = reviewService.getReviewsForProduct(id);
+        model.addAttribute("reviews", reviewsFound);
         model.addAttribute("product", productFound);
         return "productDetails";
     }

@@ -79,12 +79,16 @@
             </div>
         </div>
     </div>
-    <div th:if="${productPage.totalPages > 0}" class="pagination"
-         th:each="pageNumber : ${pageNumbers}">
-        <a th:href="@{/products(size=${productPage.getSize()}, page=${pageNumber})}"
-           th:text="${pageNumber}"
-           th:class="${pageNumber==productPage.number + 1} ? active"></a>
-    </div>
+    <navbar aria-label="Page navigation example">
+        <ul class="pagination mt-3">
+            <li th:if="${productPage.totalPages > 0}" class="page-item myCard bg-light mr-1" style="min-width: 2rem;"
+                th:each="pageNumber : ${pageNumbers}">
+                <a class="page-link" th:href="@{/products(size=${productPage.getSize()}, page=${pageNumber})}"
+                   th:text="${pageNumber}"
+                   th:class="${pageNumber==productPage.number + 1} ? active"></a>
+            </li>
+        </ul>
+    </navbar>
 </div>
 
 <!-- Modal -->

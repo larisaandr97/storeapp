@@ -1,6 +1,5 @@
 package com.javaproject.storeapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +20,8 @@ public class Product {
 
     private int stock;
 
+    private double rating;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private ProductCategory productCategory;
@@ -29,11 +30,11 @@ public class Product {
     private Byte[] image;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-  //  @JsonIgnore
+    //  @JsonIgnore
     private List<OrderItem> orderItems;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-   // @JsonIgnore
+    // @JsonIgnore
     private List<Review> reviewList;
 
     public Product() {

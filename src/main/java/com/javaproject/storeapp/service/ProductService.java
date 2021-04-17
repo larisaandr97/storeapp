@@ -70,5 +70,10 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public void updateRating(Product product, double value) {
+        product.setRating(value);
+        productRepository.save(product);
+    }
+
 }
 

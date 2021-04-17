@@ -5,18 +5,30 @@
 <body>
 <nav th:replace="layout :: nav"></nav>
 <div th:replace="layout :: flash"></div>
-<div class="container marginTop centered">
-    <div class="card bg-light mb-1 text-center"
-         style="text-align:center;margin:5rem;">
-        <img th:src="@{'/products/getImage/' + ${product.id}}" style="width:15rem;" th:alt="${product.name}">
-        <br/>
+<link rel="stylesheet" th:href="@{/assets/css/commentSection.css}"/>
 
-        <div class="card-body">
+<div class="container marginTop centered">
+    <div class="row myCard bg-light mb-1 text-center"
+         style="text-align:center;margin:5rem;">
+        <div class="col-6 marginTop">
+            <img th:src="@{'/products/getImage/' + ${product.id}}" style="width:15rem;" th:alt="${product.name}">
+        </div>
+
+        <div class="col-6 marginTop">
             <h4 class="card-title" th:text="${product.name}"></h4>
 
             <h3 class="card-text"><span class="price badge badge-secondary"
                                         th:text="${product.price}"></span></h3>
             <h3 class="card-text" th:text="${product.description}"></h3>
+            <input type="hidden" id="ratingProduct" name="ratingProduct" th:value="${product.rating}">
+            <div class="card-text main">
+                <i class="bi bi-star" id="one1"></i>
+                <i class="bi bi-star" id="two2"></i>
+                <i class="bi bi-star" id="three3"></i>
+                <i class="bi bi-star" id="four4"></i>
+                <i class="bi bi-star" id="five5"></i>
+            </div>
+            <br/>
             <form sec:authorize="isAuthenticated()"
                   th:action="'/cart/add?productId=' + ${product.id} + '&quantity=1'" method="post">
                 <button type="submit" class="btn btn-primary">Add to cart <i class="bi bi-cart-plus"></i></button>
@@ -25,13 +37,90 @@
                     data-target="#exampleModal">Add to cart <i class="bi bi-cart-plus"></i>
             </button>
         </div>
-        <div class="card-footer text-muted center" th:text="'Only ' + ${product.stock} + ' left!'">
+        <div class="card-footer text-muted center" style="width:100%;" th:text="'Only ' + ${product.stock} + ' left!'">
         </div>
     </div>
 
-    <div class="card bg-light mb-1 mt-5 text-center">
-        <div class="card-body">
-            <h4 class="card-title"> Reviews</h4>
+</div>
+
+
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10">
+
+            <form class="needs-validation" novalidate th:object="${reviewRequest}"
+                  th:action="'/reviews/' + ${product.id}" method="post">
+                <div class="d-flex flex-row align-items-center add-comment p-2 bg-white rounded">
+                    <img class="rounded-circle"
+                         src="https://shooterstv.live/wp-content/uploads/2020/10/ti-default.png"
+                         width="40">
+                    <input type="hidden" id="rating" name="rating" value="2">
+                    <input type="hidden" id="product" name="product" th:value="${product.id}">
+
+                    <input
+                            type="text" class="form-control border-0 no-box-shadow ml-1"
+                            placeholder="Leave your review here..." name="comment">
+
+                </div>
+                <div class="d-flex flex-row align-items-center add-comment p-2 bg-white rounded">
+
+                    <div class="main" style="width:100%;">
+                        <i class="bi bi-star-fill" id="one"></i>
+                        <i class="bi bi-star-fill" id="two"></i>
+                        <i class="bi bi-star" id="three"></i>
+                        <i class="bi bi-star" id="four"></i>
+                        <i class="bi bi-star" id="five"></i>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div th:each="review, stat : ${reviews}" th:id="${review.id}" class="p-3 bg-light mt-2 rounded">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex flex-row user">
+                <img class="rounded-circle img-fluid img-responsive"
+                     src="https://shooterstv.live/wp-content/uploads/2020/10/ti-default.png" width="40">
+                <div class="d-flex flex-column ml-2">
+                    <span class="font-weight-bold" th:text="${review.author}"></span>
+                    <span class="day" th:text="${review.dateAdded}"></span>
+                </div>
+            </div>
+            <div class="d-flex align-items-center px-3">
+
+                <form th:action="'/reviews/delete/' + ${review.id}" method="get">
+                    <!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+
+                    <button type="submit" class="btn btn-dark"><i class="bi bi-trash"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="comment-text text-justify mt-2">
+            <p th:text="${review.comment}"></p>
+        </div>
+    </div>
+
+</div>
+
+<!--Toast -->
+<div th:if="${sameUser=='YES'}" aria-live="polite" aria-atomic="true"
+     class="d-flex justify-content-center align-items-center"
+     style="min-height: 200px;">
+
+    <!-- Then put toasts within -->
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="..." class="rounded mr-2" alt="...">
+            <strong class="mr-auto">Not authorized</strong>
+            <small>Just now</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            This comment doesn't belong to you, you cannot delete it.
         </div>
     </div>
 </div>

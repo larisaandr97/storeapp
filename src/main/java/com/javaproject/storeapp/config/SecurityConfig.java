@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .mvcMatchers("/register", "/login", "/login-error", "/home", "/notfound", "/products").permitAll()
                 .mvcMatchers("/products/new").hasRole("ADMIN")
-                .mvcMatchers("/cart/**", "/orders/**", "/accounts/**").hasAnyRole("USER", "ADMIN")
+                .mvcMatchers("/cart/**", "/orders/**", "/accounts/**", "/reviews/**").hasAnyRole("USER", "ADMIN")
                 //  .mvcMatchers("/support/admin/**").access("isFullyAuthenticated() and hasRole('ADMIN')")
                 //  .access("@isPortfolioOwnerOrAdmin.check(#username)")
                 //.anyRequest().denyAll()
