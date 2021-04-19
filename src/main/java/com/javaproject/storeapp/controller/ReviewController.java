@@ -56,23 +56,27 @@ public class ReviewController {
 
         ModelAndView modelAndView = new ModelAndView("productDetails");
         modelAndView.addObject("product", product);
+        List<Review> reviewsFound = reviewService.getReviewsForProduct(product.getId());
+        modelAndView.addObject("reviews", reviewsFound);
         return modelAndView;
     }
 
-    @GetMapping("/delete/{reviewId}")
+    @PostMapping("/delete/{reviewId}")
     public ModelAndView deleteReview(@PathVariable int reviewId,
                                      Principal principal) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Review review = reviewService.findReviewById(reviewId);
         Product product = productService.findProductById(review.getProduct().getId());
         ModelAndView modelAndView = new ModelAndView("productDetails");
-        if (user.getUsername().equals(review.getAuthor())) {
+        if (user.getUsername().equals(review.getAuthor()) || user.getRole().getName().equals("ROLE_ADMIN")) {
             reviewService.deleteReview(review);
             modelAndView.addObject("sameUser", "YES");
         } else {
             modelAndView.addObject("sameUser", "NO");
         }
         modelAndView.addObject("product", product);
+        List<Review> reviewsFound = reviewService.getReviewsForProduct(product.getId());
+        modelAndView.addObject("reviews", reviewsFound);
         return modelAndView;
     }
 }

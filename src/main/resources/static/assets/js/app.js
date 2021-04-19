@@ -1,5 +1,6 @@
 jQuery(function ($) {
 
+
     let inputs = $('input[name="quantity"]');
 
     $('.quantity').on('input', function () {
@@ -53,15 +54,23 @@ jQuery(function ($) {
         document.getElementById(list2[i]).classList.remove("bi-star");
         document.getElementById(list2[i]).classList.add("bi-star-fill");
     }
-
+    let sameUser = $('#sameUser').val();
+    if (sameUser == 'YES') {
+        $('#myToas').toast('show');
+    }
 
 });
 
-// $(window).load(function () {
-//     let rating = $('#ratingProduct').val();
-//     let list = ['one1', 'two2', 'three3', 'four4', 'five5'];
-//     for (let i = 0; i < rating; i++) {
-//         document.getElementById(list[i]).classList.remove("bi-star");
-//         document.getElementById(list[i]).classList.add("bi-star-fill");
-//     }
-// });
+$(document).ready(function () {
+    $('.toast').toast('show');
+});
+/*function deleteReview() {
+    let id = $('#reviewId').val();
+    $.ajax({
+        url: '/reviews/delete/' + id,
+        type: 'DELETE',
+        success: function (result) {
+            alert("Review deleted");
+        }
+    });
+}*/
