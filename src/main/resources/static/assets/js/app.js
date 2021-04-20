@@ -56,14 +56,94 @@ jQuery(function ($) {
     }
     let sameUser = $('#sameUser').val();
     if (sameUser == 'YES') {
-        $('#myToas').toast('show');
+        $('#myToast').toast('show');
     }
 
 });
 
-$(document).ready(function () {
-    $('.toast').toast('show');
-});
+
+//
+// $(document).ready(function () {
+//     function getCookie(c_name) {
+//         if (document.cookie.length > 0) {
+//             c_start = document.cookie.indexOf(c_name + "=");
+//             if (c_start != -1) {
+//                 c_start = c_start + c_name.length + 1;
+//                 c_end = document.cookie.indexOf(";", c_start);
+//                 if (c_end == -1) c_end = document.cookie.length;
+//                 return unescape(document.cookie.substring(c_start, c_end));
+//             }
+//         }
+//         return "";
+//     }
+//
+//     $(function () {
+//         $.ajaxSetup({
+//             headers: {
+//                 "X-CSRFToken": getCookie("csrftoken")
+//             }
+//         });
+//     });
+// });
+
+// function updateCartQuantities() {
+//     $("table > tbody > tr").each(function () {
+//         let currentRow = $(this); //Do not search the whole HTML tree twice, use a subtree instead
+//         // let price = currentRow.find("td:nth-child(4)").text();
+//         let productId = currentRow.find("td:nth-child(1)").text();
+//         console.log("ID:" + productId);
+//         let quantity = $('#' + productId).val();
+//         console.log("quantity:" + quantity);
+//         $.ajax({
+//             url: '/cart/update/productId=' + productId + '&quantity=' + quantity,
+//             type: 'POST',
+//             success: function (result) {
+//             }
+//         });
+//         // alert(currentRow.find(".FieldNameID").text() + " " + currentRow.fint("#OperatorID").text());
+//     });
+// }
+
+//$(document).ready(function () {
+// $('.toast').toast('show');
+// $('#updateCart').addEventListener('click', function () {
+//     console.log('HIIIIIIIIIII');
+//     $("table > tbody > tr").each(function () {
+//         let currentRow = $(this); //Do not search the whole HTML tree twice, use a subtree instead
+//         // let price = currentRow.find("td:nth-child(4)").text();
+//         let productId = currentRow.find("td:nth-child(1)").text();
+//         console.log("ID:" + productId);
+//         let quantity = $('#' + productId).val();
+//         console.log("quantity:" + quantity);
+//         $.ajax({
+//             url: '/cart/update/productId=' + productId + '&quantity=' + quantity,
+//             type: 'POST',
+//             success: function (result) {
+//             }
+//         });
+//         // alert(currentRow.find(".FieldNameID").text() + " " + currentRow.fint("#OperatorID").text());
+//     });
+// });
+//});
+
+// function updateCartQuantities() {
+//     $("table > tbody > tr").each(function () {
+//         let currentRow = $(this); //Do not search the whole HTML tree twice, use a subtree instead
+//         // let price = currentRow.find("td:nth-child(4)").text();
+//         let productId = currentRow.find("td:nth-child(1)").text();
+//         console.log("ID:" + productId);
+//         let quantity = $('#' + productId).val();
+//         console.log("quantity:" + quantity);
+//         $.ajax({
+//             url: '/cart/update/productId=' + productId + '&quantity=' + quantity,
+//             type: 'POST',
+//             success: function (result) {
+//             }
+//         });
+//         // alert(currentRow.find(".FieldNameID").text() + " " + currentRow.fint("#OperatorID").text());
+//     });
+// }
+
 /*function deleteReview() {
     let id = $('#reviewId').val();
     $.ajax({

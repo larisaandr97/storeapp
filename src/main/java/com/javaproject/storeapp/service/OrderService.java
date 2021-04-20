@@ -51,8 +51,6 @@ public class OrderService {
     @Transactional
     public Order createOrder(User user, List<OrderItemRequest> orderItemRequests, int accountId) {
 
-        //  Customer customer = customerService.findCustomerById(customerId);
-
         BankAccount bankAccount = validateBankAccount(user.getId(), accountId);
 
         Cart cart = cartService.findCartByUser(user);

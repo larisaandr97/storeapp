@@ -18,11 +18,11 @@ public class Order {
     private double totalAmount;
     private LocalDate datePlaced;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     private BankAccount account;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

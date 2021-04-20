@@ -4,7 +4,6 @@ import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entity.Cart;
 import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.User;
-import com.javaproject.storeapp.exception.CartIsEmptyException;
 import com.javaproject.storeapp.exception.NegativeQuantityException;
 import com.javaproject.storeapp.exception.ProductNotInCartException;
 import com.javaproject.storeapp.exception.ProductNotInStockException;
@@ -85,6 +84,27 @@ public class CartService {
         cartItems.put(user.getId(), items);
     }
 
+    public OrderItemRequest getItemByProductId(int productId, int userId) {
+        List<OrderItemRequest> items = cartItems.get(userId);
+        int index = IntStream.range(0, items.size())
+                .filter(i -> items.get(i).getProductId() == productId)
+                .findFirst().orElse(-1);
+        return items.get(index);
+    }
+
+    public void updateItemQuantity(int userId, OrderItemRequest item, int quantity) {
+        List<OrderItemRequest> items = cartItems.get(userId);
+        int index = IntStream.range(0, items.size())
+                .filter(i -> items.get(i).getProductId() == item.getProductId())
+                .findFirst().orElse(-1);
+        if (index != -1) {
+            OrderItemRequest itemFound = items.get(index);
+            itemFound.setQuantity(quantity);
+            items.set(index, itemFound);
+            cartItems.put(userId, items);
+        }
+    }
+
     public List<OrderItemRequest> deleteItemFromCart(Cart cart, int userId, int productId) {
 
         productService.findProductById(productId);
@@ -108,7 +128,7 @@ public class CartService {
 
     public List<OrderItemRequest> getCartContents(int userId) {
         if (getCartItems().get(userId) == null)
-           // throw new CartIsEmptyException(userId);
+            // throw new CartIsEmptyException(userId);
             return new ArrayList<>();
         else return cartItems.get(userId);
     }
