@@ -65,13 +65,10 @@
                         <label for="category">Category: </label>
                         <select id="category" class="custom-select" name="category" th:field="*{productCategory}">
                             <option
-
                                     th:each="category:${T(com.javaproject.storeapp.entity.ProductCategory).values()}"
                                     th:value="${category}" th:text="${category}">
-
                             </option>
                         </select>
-                        <div class="invalid-feedback">Example invalid custom select feedback</div>
                     </div>
                 </div>
 

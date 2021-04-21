@@ -7,10 +7,10 @@
 
 <div class="container marginTop centered">
     <h1 style="font-family: 'Dancing Script', cursive;"> Your orders </h1>
-    <tr th:if="${orders.size() == 0}">
+    <tr th:if="${orders?.size() == 0}">
         <h2 class="m-5 centered"><span class="badge badge-secondary">No orders placed!</span></h2>
     </tr>
-    <table th:if="${orders.size() != 0}" id="items" class="table table-hover marginTop"
+    <table th:if="${orders?.size() != 0}" id="items" class="table table-hover marginTop"
            style="text-align:center;vertical-align: center;">
         <thead class="thead-dark">
         <tr>

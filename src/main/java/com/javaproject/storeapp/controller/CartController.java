@@ -4,9 +4,9 @@ import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entity.Cart;
 import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.User;
+import com.javaproject.storeapp.service.BankAccountService;
 import com.javaproject.storeapp.service.CartService;
 import com.javaproject.storeapp.service.OrderService;
-import io.swagger.annotations.Api;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,16 +22,16 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
-@Api(value = "/cart",
-        tags = "Cart")
 public class CartController {
 
     private final OrderService orderService;
     private final CartService cartService;
+    private final BankAccountService bankAccountService;
 
-    public CartController(OrderService orderService, CartService cartService) {
+    public CartController(OrderService orderService, CartService cartService, BankAccountService bankAccountService) {
         this.orderService = orderService;
         this.cartService = cartService;
+        this.bankAccountService = bankAccountService;
     }
 
     @PostMapping("/add")
@@ -43,11 +43,6 @@ public class CartController {
         cartService.addProductToCart(user, item);
         return "redirect:/cart/";
     }
-
-//    @PostMapping("/update")
-//    public String updateCart() {
-//        return "cart";
-//    }
 
     @Transactional
     @PostMapping("/delete")
@@ -68,28 +63,32 @@ public class CartController {
         List<OrderItemRequest> items = cartService.getCartContents(user.getId());
         model.addAttribute("items", items);
         model.addAttribute("cart", cart != null ? cart : new Cart(0));
+        model.addAttribute("accounts", bankAccountService.getBankAccountsForUser(user));
         return "cart";
     }
 
     @PostMapping("/checkout")
-    public String checkout(//@RequestParam int accountId,
-                           Principal principal) {
+    public ModelAndView checkout(@RequestParam int accountId,
+                                 Principal principal) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-
-        orderService.createOrder(user, cartService.getCartItems().get(user.getId()), 1);
+        orderService.createOrder(user, cartService.getCartItems().get(user.getId()), accountId);
         ModelAndView modelAndView = new ModelAndView("orders");
         modelAndView.addObject("orders", orderService.getOrdersByUser(user));
-        return "orders";
+        return modelAndView;
     }
 
     @PostMapping("/update")
-    public void updateQuantity(@RequestParam int productId,
-                               @RequestParam int quantity,
-                               Principal principal) {
+    public ModelAndView updateQuantity(@RequestParam int productId,
+                                       @RequestParam int quantity,
+                                       Principal principal) {
 
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         OrderItemRequest itemRequest = cartService.getItemByProductId(productId, user.getId());
         cartService.updateItemQuantity(user.getId(), itemRequest, quantity);
+        Cart cart = cartService.findCartByUser(user);
+        ModelAndView model = new ModelAndView("cart");
+        model.addObject("cart", cart != null ? cart : new Cart(0));
+        return model;
     }
 }
 

@@ -51,21 +51,25 @@
         <tfoot>
         <tr>
             <td id="totalAmount" colspan="3" style="float:right;" th:text="'Total amount: ' + ${cart.totalAmount} ">
-                <!--                <form method="post" th:action="'/cart/update">-->
-                <!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
-                <!--                    <button type="submit" class="btn btn-dark">Update</button>-->
-                <!--                </form>-->
-
             </td>
         </tr>
         </tfoot>
     </table>
-    <button id="updateCart" onclick="updateCartQuantities()" class="btn btn-dark">Update cart</button>
+    <button style="float:left;" id="updateCart" onclick="updateCartQuantities()" class="btn btn-dark">Update cart
+    </button>
     <form method="post" action="/cart/checkout">
         <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="form-group">
+            <label for="account">Category: </label>
+            <select id="account" class="custom-select" name="accountId">
+                <option
+                        th:each="account, stat : ${accounts}" th:id="${account.id}"
+                        th:value="${account.id}" th:text="${account.cardNumber}">
+                </option>
+            </select>
+        </div>
         <button type="submit" class="btn btn-dark">Checkout</button>
     </form>
-    <!--    <a class="btn btn-success marginTop" href="/cart/checkout">Checkout <i class="bi bi-cart-check"></i></a>-->
 </div>
 
 <div th:replace="layout :: scripts"></div>
@@ -73,16 +77,14 @@
     function updateCartQuantities() {
         $("table > tbody > tr").each(function () {
             let currentRow = $(this); //Do not search the whole HTML tree twice, use a subtree instead
-            // let price = currentRow.find("td:nth-child(4)").text();
             let productId = currentRow.find("td:nth-child(1)").text();
             console.log("ID:" + productId);
-            //let quantity = $('#' + productId).val();
             let quantity = currentRow.find("td:nth-child(3) .quantity").val();
             console.log("quantity:" + quantity);
             let token = $('#token').val();
 
             $.ajax({
-                url: 'cart/update/productId=' + productId + '&quantity=' + quantity,
+                url: '/cart/update?productId=' + productId + '&quantity=' + quantity,
                 type: 'POST',
                 headers: {
                     'X-CSRF-Token': token
@@ -91,7 +93,6 @@
                 success: function (result) {
                 }
             });
-            // alert(currentRow.find(".FieldNameID").text() + " " + currentRow.fint("#OperatorID").text());
         });
     }
 </script>

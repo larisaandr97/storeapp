@@ -63,6 +63,7 @@ public class CartService {
 
     public void resetCart(Cart cart) {
         cart.setTotalAmount(0);
+        cartItems.put(cart.getUser().getId(), new ArrayList<>());
         cartRepository.save(cart);
     }
 
