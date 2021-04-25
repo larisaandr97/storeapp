@@ -3,6 +3,7 @@ package com.javaproject.storeapp.service;
 import com.javaproject.storeapp.entity.BankAccount;
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.repository.BankAccountRepository;
+import com.javaproject.storeapp.service.impl.BankAccountServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class BankAccountServiceIT {
 
     @Autowired
-    private BankAccountService bankAccountService;
+    private BankAccountServiceImpl bankAccountService;
     @Autowired
     private BankAccountRepository bankAccountRepository;
 

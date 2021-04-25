@@ -17,8 +17,7 @@ public class Review {
     private int rating;
     private String author;
 
-    @ManyToOne() //(cascade = CascadeType.ALL)
-    //  @JoinColumn(name = "product")
+    @ManyToOne()
     private Product product;
 
     private LocalDate dateAdded;

@@ -57,10 +57,11 @@
     </table>
     <button style="float:left;" id="updateCart" onclick="updateCartQuantities()" class="btn btn-dark">Update cart
     </button>
+    <br/>
     <form method="post" action="/cart/checkout">
         <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="form-group">
-            <label for="account">Category: </label>
+            <label for="account">Payment account: </label>
             <select id="account" class="custom-select" name="accountId">
                 <option
                         th:each="account, stat : ${accounts}" th:id="${account.id}"

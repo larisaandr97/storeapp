@@ -16,7 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Product findProductById(int id);
 
     default List<Product> getProductsBy(String category, String name, boolean descending) {//, Pageable pageable) {
-        //   return this.findAll(pageable).stream()
         return this.findAll().stream()
                 .filter(product -> {
                     if (category != null) {//we filter by category only if the category was sent in the request

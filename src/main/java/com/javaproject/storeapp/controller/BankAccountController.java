@@ -4,7 +4,7 @@ import com.javaproject.storeapp.dto.BankAccountRequest;
 import com.javaproject.storeapp.entity.BankAccount;
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.mapper.BankAccountMapper;
-import com.javaproject.storeapp.service.BankAccountService;
+import com.javaproject.storeapp.service.impl.BankAccountServiceImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +23,9 @@ import java.util.List;
 public class BankAccountController {
 
     private final BankAccountMapper bankAccountMapper;
-    private final BankAccountService bankAccountService;
+    private final BankAccountServiceImpl bankAccountService;
 
-    public BankAccountController(BankAccountMapper bankAccountMapper, BankAccountService bankAccountService) {
+    public BankAccountController(BankAccountMapper bankAccountMapper, BankAccountServiceImpl bankAccountService) {
         this.bankAccountMapper = bankAccountMapper;
         this.bankAccountService = bankAccountService;
     }

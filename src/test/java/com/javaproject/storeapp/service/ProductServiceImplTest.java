@@ -3,9 +3,9 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.ProductCategory;
-import com.javaproject.storeapp.exception.ProductCategoryNotFound;
-import com.javaproject.storeapp.exception.ProductNotFoundException;
+import com.javaproject.storeapp.exception.ResourceNotFoundException;
 import com.javaproject.storeapp.repository.ProductRepository;
+import com.javaproject.storeapp.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,13 +19,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceTest {
+public class ProductServiceImplTest {
 
     @Mock
     private ProductRepository productRepository;
 
     @InjectMocks
-    private ProductService productService;
+    private ProductServiceImpl productService;
 
 
     @Test
@@ -73,7 +73,7 @@ public class ProductServiceTest {
         when(productRepository.findProductById(product.getId()))
                 .thenReturn(null);
 
-        RuntimeException exception = assertThrows(ProductNotFoundException.class, () -> productService.findProductById(product.getId()));
+        RuntimeException exception = assertThrows(ResourceNotFoundException.class, () -> productService.findProductById(product.getId()));
         assertEquals("Product with Id " + product.getId() + " not found.", exception.getMessage());
 
     }

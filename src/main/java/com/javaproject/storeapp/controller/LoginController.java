@@ -4,7 +4,7 @@ import com.javaproject.storeapp.dto.UserRequest;
 import com.javaproject.storeapp.entity.Role;
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.mapper.UserMapper;
-import com.javaproject.storeapp.service.UserServiceImpl;
+import com.javaproject.storeapp.service.impl.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

@@ -1,8 +1,9 @@
-package com.javaproject.storeapp.service;
+package com.javaproject.storeapp.service.impl;
 
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.exception.UserAlreadyExistException;
 import com.javaproject.storeapp.repository.UserRepository;
+import com.javaproject.storeapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

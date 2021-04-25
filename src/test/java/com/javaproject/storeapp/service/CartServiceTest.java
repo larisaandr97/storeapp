@@ -7,6 +7,8 @@ import com.javaproject.storeapp.exception.CartIsEmptyException;
 import com.javaproject.storeapp.exception.NegativeQuantityException;
 import com.javaproject.storeapp.exception.ProductNotInStockException;
 import com.javaproject.storeapp.repository.CartRepository;
+import com.javaproject.storeapp.service.impl.CartServiceImpl;
+import com.javaproject.storeapp.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +29,10 @@ public class CartServiceTest {
     private CartRepository cartRepository;
 
     @Mock
-    private ProductService productService;
+    private ProductServiceImpl productService;
 
     @InjectMocks
-    private CartService cartService;
+    private CartServiceImpl cartService;
 
     @Test
     @DisplayName("Get Cart Contents - happy flow")

@@ -1,79 +1,15 @@
 package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entity.Product;
-import com.javaproject.storeapp.entity.ProductCategory;
-import com.javaproject.storeapp.exception.ResourceNotFoundException;
-import com.javaproject.storeapp.repository.ProductRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+public interface ProductService {
+    Product findProductById(int id);
 
-@Service
-public class ProductService {
+    Page<Product> getProductsBy(String category, String name, boolean descending, Pageable pageable);
 
-    private final ProductRepository productRepository;
+    Product updateStock(int productId, int stock);
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
-    public Product createProduct(Product p) {
-        return productRepository.save(p);
-    }
-
-    public Product findProductById(int id) {
-        Optional<Product> productOptional = Optional.ofNullable(productRepository.findProductById(id));
-        if (productOptional.isPresent()) {
-            return productOptional.get();
-        } else {
-            throw new ResourceNotFoundException("Product with Id " + id + " not found.");
-        }
-    }
-
-    public Page<Product> getProductsBy(String category, String name, boolean descending, Pageable pageable) {
-        if (category != null && !category.equals("null")) {
-            String upperCaseCategory = category.toUpperCase();
-            if (!ProductCategory.contains(upperCaseCategory))
-                throw new ResourceNotFoundException("Category " + category + " not found.");
-        }
-        if (category != null && category.equals("null"))
-            category = null;
-        List<Product> products = productRepository.getProductsBy(category, name, descending);
-        return findPaginated(products, pageable);
-    }
-
-    public Page<Product> findPaginated(List<Product> products, Pageable pageable) {
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<Product> result;
-
-        if (products.size() < startItem) {
-            result = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, products.size());
-            result = products.subList(startItem, toIndex);
-        }
-
-        return new PageImpl<>(result, PageRequest.of(currentPage, pageSize), products.size());//descending ? Sort.by("price").descending() : Sort.by("price").ascending()), products.size());
-    }
-
-    public Product updateStock(int productId, int stock) {
-        Product product = findProductById(productId);
-        product.setStock(stock);
-        return productRepository.save(product);
-    }
-
-    public void updateRating(Product product, double value) {
-        product.setRating(value);
-        productRepository.save(product);
-    }
-
+    void updateRating(Product product, double value);
 }
-

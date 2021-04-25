@@ -2,9 +2,16 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entity.*;
-import com.javaproject.storeapp.exception.*;
+import com.javaproject.storeapp.exception.BankAccountNotBelongingToCustomer;
+import com.javaproject.storeapp.exception.CartIsEmptyException;
+import com.javaproject.storeapp.exception.InsufficientFundsException;
+import com.javaproject.storeapp.exception.ResourceNotFoundException;
 import com.javaproject.storeapp.repository.OrderItemRepository;
 import com.javaproject.storeapp.repository.OrderRepository;
+import com.javaproject.storeapp.service.impl.BankAccountServiceImpl;
+import com.javaproject.storeapp.service.impl.CartServiceImpl;
+import com.javaproject.storeapp.service.impl.OrderServiceImpl;
+import com.javaproject.storeapp.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,23 +28,23 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceTest {
+public class OrderServiceImplTest {
 
     @Mock
     private OrderRepository orderRepository;
     @Mock
-    private CartService cartService;
+    private CartServiceImpl cartService;
+    //    @Mock
+//    private CustomerService customerService;
     @Mock
-    private CustomerService customerService;
-    @Mock
-    private ProductService productService;
+    private ProductServiceImpl productService;
     @Mock
     private OrderItemRepository orderItemRepository;
     @Mock
-    private BankAccountService bankAccountService;
+    private BankAccountServiceImpl bankAccountService;
 
     @InjectMocks
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @Test
     @DisplayName("Find Order By Id - happy flow")
@@ -64,7 +71,7 @@ public class OrderServiceTest {
         when(orderRepository.findOrderById(order.getId()))
                 .thenReturn(null);
 
-        RuntimeException exception = assertThrows(OrderNotFoundException.class, () -> orderService.findOrderById(order.getId()));
+        RuntimeException exception = assertThrows(ResourceNotFoundException.class, () -> orderService.findOrderById(order.getId()));
         assertEquals("Order with Id " + order.getId() + " not found.", exception.getMessage());
     }
 
@@ -142,7 +149,7 @@ public class OrderServiceTest {
         when(bankAccountService.findBankAccountById(bankAccount.getId())).thenReturn(bankAccount);
         when(cartService.findCartByUser(any())).thenReturn(null);
 
-        CartNotFoundException exception = assertThrows(CartNotFoundException.class, () -> orderService.createOrder(user, new ArrayList<>(), bankAccount.getId()));
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> orderService.createOrder(user, new ArrayList<>(), bankAccount.getId()));
         assertEquals("Cart for customer with Id " + user.getId() + " not found.", exception.getMessage());
     }
 

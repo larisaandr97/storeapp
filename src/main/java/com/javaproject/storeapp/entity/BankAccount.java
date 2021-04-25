@@ -1,6 +1,5 @@
 package com.javaproject.storeapp.entity;
 
-
 import lombok.Data;
 
 import javax.persistence.*;

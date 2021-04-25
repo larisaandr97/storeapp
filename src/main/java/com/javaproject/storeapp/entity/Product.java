@@ -30,11 +30,9 @@ public class Product {
     private Byte[] image;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    //  @JsonIgnore
     private List<OrderItem> orderItems;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    // @JsonIgnore
     private List<Review> reviewList;
 
     public Product() {

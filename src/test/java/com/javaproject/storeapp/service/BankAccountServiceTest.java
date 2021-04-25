@@ -2,9 +2,10 @@ package com.javaproject.storeapp.service;
 
 import com.javaproject.storeapp.entity.BankAccount;
 import com.javaproject.storeapp.entity.User;
-import com.javaproject.storeapp.exception.BankAccountNotFoundException;
 import com.javaproject.storeapp.exception.DuplicateCardNumberException;
+import com.javaproject.storeapp.exception.ResourceNotFoundException;
 import com.javaproject.storeapp.repository.BankAccountRepository;
+import com.javaproject.storeapp.service.impl.BankAccountServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,11 +26,11 @@ public class BankAccountServiceTest {
     @Mock
     private BankAccountRepository bankAccountRepository;
 
-    @Mock
-    private CustomerService customerService;
+//    @Mock
+//    private CustomerService customerService;
 
     @InjectMocks
-    private BankAccountService bankAccountService;
+    private BankAccountServiceImpl bankAccountService;
 
     @Test
     @DisplayName("Add a new BankAccount - happy flow")
@@ -127,7 +128,7 @@ public class BankAccountServiceTest {
         when(bankAccountRepository.findBankAccountById(account.getId()))
                 .thenReturn(null);
 
-        RuntimeException exception = assertThrows(BankAccountNotFoundException.class, () -> bankAccountService.findBankAccountById(account.getId()));
+        RuntimeException exception = assertThrows(ResourceNotFoundException.class, () -> bankAccountService.findBankAccountById(account.getId()));
         assertEquals("Bank account with Id " + account.getId() + " not found.", exception.getMessage());
 
     }

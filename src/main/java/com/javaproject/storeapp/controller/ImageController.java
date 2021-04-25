@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.entity.Product;
-import com.javaproject.storeapp.service.ProductService;
+import com.javaproject.storeapp.service.impl.ProductServiceImpl;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +15,9 @@ import java.io.InputStream;
 
 @Controller
 public class ImageController {
-    private final ProductService productService;
+    private final ProductServiceImpl productService;
 
-    public ImageController(@Autowired ProductService productService) {
+    public ImageController(@Autowired ProductServiceImpl productService) {
         this.productService = productService;
     }
 

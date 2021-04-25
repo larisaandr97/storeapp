@@ -5,9 +5,9 @@ import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.ProductCategory;
 import com.javaproject.storeapp.entity.Review;
 import com.javaproject.storeapp.mapper.ProductMapper;
-import com.javaproject.storeapp.service.ImageService;
-import com.javaproject.storeapp.service.ProductService;
-import com.javaproject.storeapp.service.ReviewService;
+import com.javaproject.storeapp.service.impl.ImageServiceImpl;
+import com.javaproject.storeapp.service.impl.ProductServiceImpl;
+import com.javaproject.storeapp.service.impl.ReviewServiceImpl;
 import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,12 +31,12 @@ import java.util.stream.IntStream;
         tags = "Products")
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductServiceImpl productService;
     private final ProductMapper productMapper;
-    private final ImageService imageService;
-    private final ReviewService reviewService;
+    private final ImageServiceImpl imageService;
+    private final ReviewServiceImpl reviewService;
 
-    public ProductController(ProductService productService, ProductMapper productMapper, ImageService imageService, ReviewService reviewService) {
+    public ProductController(ProductServiceImpl productService, ProductMapper productMapper, ImageServiceImpl imageService, ReviewServiceImpl reviewService) {
         this.productService = productService;
         this.productMapper = productMapper;
         this.imageService = imageService;

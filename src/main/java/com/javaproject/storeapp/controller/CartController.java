@@ -4,9 +4,9 @@ import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entity.Cart;
 import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.User;
-import com.javaproject.storeapp.service.BankAccountService;
-import com.javaproject.storeapp.service.CartService;
-import com.javaproject.storeapp.service.OrderService;
+import com.javaproject.storeapp.service.impl.BankAccountServiceImpl;
+import com.javaproject.storeapp.service.impl.CartServiceImpl;
+import com.javaproject.storeapp.service.impl.OrderServiceImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,11 +24,11 @@ import java.util.List;
 @RequestMapping("/cart")
 public class CartController {
 
-    private final OrderService orderService;
-    private final CartService cartService;
-    private final BankAccountService bankAccountService;
+    private final OrderServiceImpl orderService;
+    private final CartServiceImpl cartService;
+    private final BankAccountServiceImpl bankAccountService;
 
-    public CartController(OrderService orderService, CartService cartService, BankAccountService bankAccountService) {
+    public CartController(OrderServiceImpl orderService, CartServiceImpl cartService, BankAccountServiceImpl bankAccountService) {
         this.orderService = orderService;
         this.cartService = cartService;
         this.bankAccountService = bankAccountService;

@@ -1,35 +1,7 @@
 package com.javaproject.storeapp.service;
 
-import com.javaproject.storeapp.entity.Product;
-import com.javaproject.storeapp.repository.ProductRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
-//@CrossOrigin(origins = {"http://localhost:3000"})
-@Service
-public class ImageService {
-
-    private final ProductRepository productRepository;
-
-    public ImageService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
-    @Transactional
-    public void saveImageFile(int productId, MultipartFile file) {
-        try {
-            Product product = productRepository.findProductById(productId);
-            Byte[] byteObjects = new Byte[file.getBytes().length];
-            int i = 0;
-            for (byte b : file.getBytes()) {
-                byteObjects[i++] = b;
-            }
-            product.setImage(byteObjects);
-            productRepository.save(product);
-        } catch (IOException e) {
-        }
-    }
+public interface ImageService {
+    void saveImageFile(int productId, MultipartFile file);
 }
