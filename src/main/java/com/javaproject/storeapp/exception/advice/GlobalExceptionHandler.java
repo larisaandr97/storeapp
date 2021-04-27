@@ -17,7 +17,6 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    //  @ExceptionHandler({BankAccountNotFoundException.class, CustomerNotFoundException.class, CartNotFoundException.class, ProductCategoryNotFound.class, ProductNotFoundException.class, OrderNotFoundException.class})
     @ExceptionHandler({ResourceNotFoundException.class})
     public ModelAndView handlerNotFoundException(Exception exception) {
         ModelAndView modelAndView = new ModelAndView();

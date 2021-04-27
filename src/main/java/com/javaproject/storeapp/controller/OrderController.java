@@ -24,8 +24,12 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public Order getOrderById(@PathVariable int id) {
-        return orderService.findOrderById(id);
+    public ModelAndView getOrderById(@PathVariable int id) {
+        Order order = orderService.findOrderById(id);
+        ModelAndView modelAndView = new ModelAndView("orderDetails");
+        modelAndView.addObject("order", order);
+        modelAndView.addObject("items", order.getOrderItems());
+        return modelAndView;
     }
 
     @GetMapping("/all")
