@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -89,7 +90,7 @@ public class OrderServiceImplTest {
         Order orderCreated = new Order(200, LocalDate.now(), user);
         orderCreated.setId(1);
         orderCreated.setAccount(bankAccount);
-        List<OrderItemRequest> items = Collections.singletonList(new OrderItemRequest(1, 1, 100.0));
+        List<OrderItemRequest> items = Collections.singletonList(new OrderItemRequest(product, 1, 100.0));
         OrderItem item = new OrderItem(1, 100, product);
         orderCreated.setOrderItems(Collections.singletonList(item));
         // when(customerService.findCustomerById(anyInt())).thenReturn(customer);
@@ -101,12 +102,12 @@ public class OrderServiceImplTest {
         when(bankAccountService.findBankAccountById(anyInt())).thenReturn(bankAccount);
 
         //act
-        Order result = orderService.createOrder(user, items, bankAccount.getId());
+        Optional<Order> result = orderService.createOrder(user, items, bankAccount.getId());
 
         //assert
         // assertEquals(Arrays.asList(item), result.getOrderItems());
-        assertEquals(cart.getTotalAmount(), result.getTotalAmount());
-        assertEquals(user, result.getUser());
+        assertEquals(cart.getTotalAmount(), result.get().getTotalAmount());
+        assertEquals(user, result.get().getUser());
 
     }
 

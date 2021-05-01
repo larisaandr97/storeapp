@@ -24,7 +24,7 @@ public class UserRequest {
     private String lastName;
 
     @NotBlank
-    @Length(max = 100)
+    @Length(min = 8, max = 100)
     private String password;
 
     @NotBlank

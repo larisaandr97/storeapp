@@ -74,14 +74,14 @@ public class CartServiceImpl implements CartService {
     private void addItemToCart(User user, OrderItemRequest item) {
         List<OrderItemRequest> items = cartItems.get(user.getId());
         int index = IntStream.range(0, items.size())
-                .filter(i -> items.get(i).getProductId() == item.getProductId())
+                .filter(i -> items.get(i).getProduct().getId() == item.getProduct().getId())
                 .findFirst().orElse(-1);
 
         if (index != -1) { // item already exists in lists, only add
             OrderItemRequest old = items.get(index);
 
             // update quantity of item in customer's list
-            items.set(index, new OrderItemRequest(old.getProductId(), old.getQuantity() + item.getQuantity(), old.getPrice()));
+            items.set(index, new OrderItemRequest(old.getProduct(), old.getQuantity() + item.getQuantity(), old.getPrice()));
 
         } else {
             items.add(item);
@@ -93,7 +93,7 @@ public class CartServiceImpl implements CartService {
     public OrderItemRequest getItemByProductId(int productId, int userId) {
         List<OrderItemRequest> items = cartItems.get(userId);
         int index = IntStream.range(0, items.size())
-                .filter(i -> items.get(i).getProductId() == productId)
+                .filter(i -> items.get(i).getProduct().getId() == productId)
                 .findFirst().orElse(-1);
         return items.get(index);
     }
@@ -102,7 +102,7 @@ public class CartServiceImpl implements CartService {
     public int updateItemQuantity(int userId, OrderItemRequest item, int quantity) {
         List<OrderItemRequest> items = cartItems.get(userId);
         int index = IntStream.range(0, items.size())
-                .filter(i -> items.get(i).getProductId() == item.getProductId())
+                .filter(i -> items.get(i).getProduct().getId() == item.getProduct().getId())
                 .findFirst().orElse(-1);
         if (index != -1) {
             OrderItemRequest itemFound = items.get(index);
@@ -123,7 +123,7 @@ public class CartServiceImpl implements CartService {
         List<OrderItemRequest> items = cartItems.get(userId);
 
         int index = IntStream.range(0, items.size())
-                .filter(i -> items.get(i).getProductId() == productId)
+                .filter(i -> items.get(i).getProduct().getId() == productId)
                 .findFirst().orElse(-1);
 
         if (index == -1) {

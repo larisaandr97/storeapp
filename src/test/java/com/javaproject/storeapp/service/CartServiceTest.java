@@ -16,9 +16,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +42,9 @@ public class CartServiceTest {
     @DisplayName("Get Cart Contents - happy flow")
     public void getCartContentsTestHappyFlow() {
         Map<Integer, List<OrderItemRequest>> cartItems = new HashMap<>();
-        cartItems.put(1, Collections.singletonList(new OrderItemRequest(1, 1, 50)));
+        Product product = new Product();
+        product.setId(1);
+        cartItems.put(1, Collections.singletonList(new OrderItemRequest(product, 1, 50)));
         int customerId = 1;
         cartService.setCartItems(cartItems);
 

@@ -1,15 +1,16 @@
 package com.javaproject.storeapp.dto;
 
+import com.javaproject.storeapp.entity.Product;
 import lombok.Data;
 
 @Data
 public class OrderItemRequest {
-    private int productId;
+    private Product product;
     private int quantity;
     private double price;
 
-    public OrderItemRequest(int productId, int quantity, double price) {
-        this.productId = productId;
+    public OrderItemRequest(Product product, int quantity, double price) {
+        this.product = product;
         this.quantity = quantity;
         this.price = price;
     }

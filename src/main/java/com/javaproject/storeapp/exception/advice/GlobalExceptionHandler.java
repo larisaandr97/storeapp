@@ -1,7 +1,9 @@
 package com.javaproject.storeapp.exception.advice;
 
 
-import com.javaproject.storeapp.exception.ResourceNotFoundException;
+import com.javaproject.storeapp.dto.BankAccountRequest;
+import com.javaproject.storeapp.entity.User;
+import com.javaproject.storeapp.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,6 +24,37 @@ public class GlobalExceptionHandler {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.getModel().put("exception", exception);
         modelAndView.setViewName("notfound");
+        return modelAndView;
+    }
+
+    @ExceptionHandler({UserAlreadyExistException.class})
+    public ModelAndView handlerUserExistsException(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView("register");
+        modelAndView.addObject("exception", exception);
+        modelAndView.addObject("userRequest", new User());
+        return modelAndView;
+    }
+
+    @ExceptionHandler({DuplicateCardNumberException.class})
+    public ModelAndView handlerCardExistsException(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView("addBankAccount");
+        modelAndView.addObject("exception", exception);
+        modelAndView.addObject("bankAccountRequest", new BankAccountRequest());
+        return modelAndView;
+    }
+
+    @ExceptionHandler({ProductNotInStockException.class})
+    public ModelAndView handlerNotEnoughStockException(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView("cart");
+        modelAndView.addObject("exception", exception);
+        return modelAndView;
+    }
+
+    @ExceptionHandler({NegativeQuantityException.class})
+    public ModelAndView handlerNegativeQuantityException(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView("notfound");
+        modelAndView.addObject("exception", exception);
+        // modelAndView.addObject("bankAccountRequest", new BankAccountRequest());
         return modelAndView;
     }
 

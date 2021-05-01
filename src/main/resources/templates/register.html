@@ -16,47 +16,78 @@
     <div class="auth-inner">
         <h3>Create an account</h3>
         <div th:replace="layout :: flash"></div>
-        <form th:action="@{/register}" th:object="${userRequest}" method="post">
+        <p th:if="${exception != null}" style="color:red;" th:text="${exception.message}"> User with this e-mail already
+            exists, please login.</p>
+
+        <form th:action="@{/register}" th:object="${userRequest}" method="post" class="needs-validation" novalidate>
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="form-group">
                 <label>Username</label>
-                <input
-                        th:field="*{username}"
-                        class="form-control"
-                        placeholder="Enter username"/>
+                <i th:if="${#fields.hasErrors('username')}" class="fa fa-exclamation tooltips"
+                   data-original-title="please enter a valid name" data-container="body"></i>
+                <input required
+                       th:field="*{username}"
+                       minlength="8" maxlength="20"
+                       class="form-control"
+                       placeholder="Enter username"/>
+                <div class="invalid-feedback">Username must have between 8 and 20 characters.
+                </div>
             </div>
 
             <div class="form-group">
                 <label>First name</label>
-                <input
-                        th:field="*{firstName}"
-                        class="form-control"
-                        placeholder="Enter first name"/>
+                <i th:if="${#fields.hasErrors('firstName')}" class="fa fa-exclamation tooltips"
+                   data-original-title="please enter a valid name" data-container="body"></i>
+                <input required
+                       th:field="*{firstName}"
+                       maxlength="100"
+                       class="form-control"
+                       placeholder="Enter first name"/>
+                <div class="invalid-feedback"> First name is a mandatory field.
+                </div>
             </div>
 
             <div class="form-group">
                 <label>Last name</label>
-                <input
-                        th:field="*{lastName}"
-                        class="form-control"
-                        placeholder="Enter last name"/>
+                <i th:if="${#fields.hasErrors('lastName')}" class="fa fa-exclamation tooltips"
+                   data-original-title="please enter a valid name" data-container="body"></i>
+                <input required
+                       th:field="*{lastName}"
+                       class="form-control"
+                       maxlength="100"
+                       placeholder="Enter last name"/>
+                <div class="invalid-feedback"> Last name is a mandatory field.
+                </div>
+
             </div>
 
             <div class="form-group">
                 <label>E-mail</label>
-                <input
-                        th:field="*{email}"
-                        class="form-control"
-                        placeholder="Enter e-mail address"/>
+                <i th:if="${#fields.hasErrors('email')}" class="fa fa-exclamation tooltips"
+                   data-original-title="please enter a valid name" data-container="body"></i>
+                <input required
+                       type="email"
+                       th:field="*{email}"
+                       class="form-control"
+                       pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                       placeholder="Enter e-mail address"/>
+                <div class="invalid-feedback">Invalid e-mail.
+                </div>
             </div>
 
             <div class="form-group">
                 <label>Password</label>
-                <input
-                        th:field="*{password}"
-                        type="password"
-                        class="form-control"
-                        placeholder="Enter password"/>
+                <i th:if="${#fields.hasErrors('password')}" class="fa fa-exclamation tooltips"
+                   data-original-title="please enter a valid name" data-container="body"></i>
+                <input required
+                       th:field="*{password}"
+                       type="password"
+                       maxlength="100"
+                       minlength="8"
+                       class="form-control"
+                       placeholder="Enter password"/>
+                <div class="invalid-feedback"> Password must have between 8 and 100 characters.
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">
@@ -68,6 +99,26 @@
         </form>
     </div>
 </div>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
 </body>
 
 </html>

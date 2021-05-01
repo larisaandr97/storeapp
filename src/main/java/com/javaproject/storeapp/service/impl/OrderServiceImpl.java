@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Order createOrder(User user, List<OrderItemRequest> orderItemRequests, int accountId) {
+    public Optional<Order> createOrder(User user, List<OrderItemRequest> orderItemRequests, int accountId) {
 
         BankAccount bankAccount = validateBankAccount(user.getId(), accountId);
 
@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
         double total = 0;
         List<OrderItem> orderItems = new ArrayList<>();
         for (OrderItemRequest item : orderItemRequests) {
-            Product product = productService.findProductById(item.getProductId());
+            Product product = productService.findProductById(item.getProduct().getId());
             int stock = product.getStock();
             // if there is available stock for the product, we add to list of order items
             if (stock >= item.getQuantity()) {
@@ -78,6 +78,9 @@ public class OrderServiceImpl implements OrderService {
                 orderItems.add(new OrderItem(item.getQuantity(), item.getPrice(), product));
             }
         }
+
+        if (total == 0)
+            return Optional.empty();
         // check if there is enough money in the account to pay the order
         boolean result = checkBalanceForOrder(bankAccount, total);
         order.setTotalAmount(total);
@@ -94,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
         bankAccountService.withdrawMoneyFromAccount(bankAccount.getId(), bankAccount.getBalance() - total);
 
         cartService.resetCart(cart);
-        return order;
+        return Optional.of(order);
     }
 
     @Override
