@@ -52,7 +52,7 @@ public class CartServiceImpl implements CartService {
         return cartRepository.save(cart);
     }
 
-    private void updateCartAmount(int cartId, double value) {
+    public void updateCartAmount(int cartId, double value) {
         Cart cart = cartRepository.findCartById(cartId);
         cart.setTotalAmount(value);
         cartRepository.save(cart);
@@ -99,17 +99,20 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void updateItemQuantity(int userId, OrderItemRequest item, int quantity) {
+    public int updateItemQuantity(int userId, OrderItemRequest item, int quantity) {
         List<OrderItemRequest> items = cartItems.get(userId);
         int index = IntStream.range(0, items.size())
                 .filter(i -> items.get(i).getProductId() == item.getProductId())
                 .findFirst().orElse(-1);
         if (index != -1) {
             OrderItemRequest itemFound = items.get(index);
+            int oldQuantity = itemFound.getQuantity();
             itemFound.setQuantity(quantity);
             items.set(index, itemFound);
             cartItems.put(userId, items);
+            return oldQuantity;
         }
+        return -1;
     }
 
     @Override

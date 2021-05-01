@@ -17,7 +17,10 @@
             <th>Action</th>
         </tr>
         </thead>
-        <tbody>
+        <tr th:if="${items?.size() == 0}">
+            <h2 class="m-5 centered"><span class="badge badge-secondary">No items added yet!</span></h2>
+        </tr>
+        <tbody th:if="${items?.size() != 0}">
         <tr th:each="item, stat : ${items}" th:id="${item.productId}" class="table-light">
             <td th:text="${item.productId}"></td>
 
@@ -55,19 +58,32 @@
         </tr>
         </tfoot>
     </table>
-    <button style="float:left;" id="updateCart" onclick="updateCartQuantities()" class="btn btn-dark">Update cart
+    <button th:if="${items?.size() != 0}" style="float:left;" id="updateCart" onclick="updateCartQuantities()"
+            class="btn btn-dark">Update cart
     </button>
     <br/>
-    <form method="post" action="/cart/checkout">
+    <br/>
+
+    <form th:if="${items?.size() != 0}" method="post" action="/cart/checkout">
         <input type="hidden" id="token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="form-group">
             <label for="account">Payment account: </label>
-            <select id="account" class="custom-select" name="accountId">
+            <a th:if="${accounts.size() == 0}" href="/accounts/new">Add an account before checkout </a>
+            <select th:if="${accounts.size() != 0}" id="account" class="custom-select" name="accountId">
                 <option
                         th:each="account, stat : ${accounts}" th:id="${account.id}"
+                        th:if="${account.balance >= cart.totalAmount}"
+                        th:value="${account.id}" th:text="${account.cardNumber}">
+                </option>
+                <option
+                        th:each="account, stat : ${accounts}" th:id="${account.id}"
+                        th:if="${account.balance < cart.totalAmount}" disabled
                         th:value="${account.id}" th:text="${account.cardNumber}">
                 </option>
             </select>
+            <br/>
+            <p>*If you cannot select an account, it means it does not have enough funds available or you do not have an
+                account added yet.</p>
         </div>
         <button type="submit" class="btn btn-dark">Checkout</button>
     </form>
@@ -92,6 +108,7 @@
                 },
                 contentType: 'application/json',
                 success: function (result) {
+                    location.reload();
                 }
             });
         });

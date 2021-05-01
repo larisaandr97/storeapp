@@ -84,8 +84,11 @@ public class CartController {
 
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         OrderItemRequest itemRequest = cartService.getItemByProductId(productId, user.getId());
-        cartService.updateItemQuantity(user.getId(), itemRequest, quantity);
         Cart cart = cartService.findCartByUser(user);
+        int oldQuantity = cartService.updateItemQuantity(user.getId(), itemRequest, quantity);
+        double newValue = cart.getTotalAmount() - oldQuantity * itemRequest.getPrice() + quantity * itemRequest.getPrice();
+        cartService.updateCartAmount(cart.getId(), newValue);
+        cart = cartService.findCartByUser(user);
         ModelAndView model = new ModelAndView("cart");
         model.addObject("cart", cart != null ? cart : new Cart(0));
         return model;

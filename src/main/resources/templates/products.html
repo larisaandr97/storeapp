@@ -74,7 +74,11 @@
 
                 <a class="stretched-link" th:href="'/products/' + ${product.id} "></a>
             </div>
-            <div class="card-footer text-muted center" th:text="'Only ' + ${product.stock} + ' left!'">
+            <div th:if="${product.stock !=0}" class="card-footer text-muted center"
+                 th:text="'Only ' + ${product.stock} + ' left!'">
+            </div>
+            <div th:if="${product.stock ==0}" class="card-footer text-muted center"
+                 th:text="'No items left!'">
             </div>
         </div>
     </div>

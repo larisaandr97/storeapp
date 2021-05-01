@@ -16,7 +16,7 @@ public interface CartService {
 
     OrderItemRequest getItemByProductId(int productId, int userId);
 
-    void updateItemQuantity(int userId, OrderItemRequest item, int quantity);
+    int updateItemQuantity(int userId, OrderItemRequest item, int quantity);
 
     List<OrderItemRequest> deleteItemFromCart(Cart cart, int userId, int productId);
 
