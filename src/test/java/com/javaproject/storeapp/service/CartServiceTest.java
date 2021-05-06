@@ -3,7 +3,6 @@ package com.javaproject.storeapp.service;
 import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.ProductCategory;
-import com.javaproject.storeapp.exception.CartIsEmptyException;
 import com.javaproject.storeapp.exception.NegativeQuantityException;
 import com.javaproject.storeapp.exception.ProductNotInStockException;
 import com.javaproject.storeapp.repository.CartRepository;
@@ -61,9 +60,8 @@ public class CartServiceTest {
         int customerId = 1;
         cartService.setCartItems(cartItems);
 
-        CartIsEmptyException exception = assertThrows(CartIsEmptyException.class, () -> cartService.getCartContents(customerId));
-
-        assertEquals("Cart for customer with Id " + customerId + " is empty! You must add some items before making an order.", exception.getMessage());
+        List<OrderItemRequest> result = cartService.getCartContents(customerId);
+        assertEquals(0, result.size());
     }
 
     @Test

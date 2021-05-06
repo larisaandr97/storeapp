@@ -6,6 +6,7 @@ import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +18,14 @@ import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
+    public ModelAndView handlerMethodNotSupportedException(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("error_default");
+        return modelAndView;
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({ResourceNotFoundException.class})

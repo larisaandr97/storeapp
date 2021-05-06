@@ -73,7 +73,7 @@ public class ReviewController {
             //update rating
             List<Review> reviews = reviewService.getReviewsForProduct(product.getId());
             int sum = reviews.stream().mapToInt(Review::getRating).sum();
-            double newRating = sum / reviews.size();
+            double newRating = reviews.size() != 0 ? sum / reviews.size() : sum;
             productService.updateRating(product, newRating);
 
             modelAndView.addObject("sameUser", "YES");

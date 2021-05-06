@@ -18,25 +18,17 @@
             <th>Account number</th>
             <th>Card number</th>
             <th>Balance</th>
-            <th>Action</th>
         </tr>
         </thead>
+
         <tbody>
-
         <tr th:each="account, stat : ${accounts}" th:id="${account.id}" class="table-light">
-
 
             <td th:text="${account.accountNumber}"></td>
 
             <td th:text="${account.cardNumber}"></td>
 
             <td th:text="${account.balance}"></td>
-
-            <td>
-                <div class="btn-group" role="group">
-                    <a class="btn btn-dark" th:href="@{'/accounts/' + ${account.id}}"><i class="bi bi-eye"></i></a>
-                </div>
-            </td>
         </tr>
         </tbody>
 

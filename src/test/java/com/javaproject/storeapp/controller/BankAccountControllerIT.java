@@ -5,6 +5,7 @@ import com.javaproject.storeapp.dto.BankAccountRequest;
 import com.javaproject.storeapp.entity.BankAccount;
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.mapper.BankAccountMapper;
+import com.javaproject.storeapp.service.UserService;
 import com.javaproject.storeapp.service.impl.BankAccountServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,8 @@ public class BankAccountControllerIT {
     private ObjectMapper objectMapper;
     @MockBean
     private BankAccountServiceImpl bankAccountService;
-    //    @MockBean
-//    private CustomerService customerService;
+        @MockBean
+    private UserService userService;
     @MockBean
     private BankAccountMapper bankAccountMapper;
 
@@ -38,10 +39,11 @@ public class BankAccountControllerIT {
     public void createBankAccountHappyFlow() throws Exception {
         User user = new User();
         user.setId(1);
+        user.setUsername("User1234");
         BankAccountRequest request = new BankAccountRequest("3331965465", 200, "4331256148952346", user);
 
         when(bankAccountService.createBankAccount(any())).thenReturn(new BankAccount(1, "3331965465", 200, "4331256148952346", user));
-        // when(customerService.findCustomerById(customer.getId())).thenReturn(customer);
+        when(userService.findByUsername(user.getUsername())).thenReturn(user);
 
         mockMvc.perform(post("/accounts/" + user.getId())
                 .contentType("application/json")

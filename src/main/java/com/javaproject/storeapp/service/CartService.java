@@ -26,4 +26,6 @@ public interface CartService {
 
     Cart addProductToCart(User user, OrderItemRequest item);
 
+    void updateCartAmount(int cartId, double value);
+
 }

@@ -52,15 +52,10 @@ public class CartServiceImpl implements CartService {
         return cartRepository.save(cart);
     }
 
+    @Override
     public void updateCartAmount(int cartId, double value) {
         Cart cart = cartRepository.findCartById(cartId);
         cart.setTotalAmount(value);
-        cartRepository.save(cart);
-    }
-
-    private void addToCartAmount(int cartId, double value) {
-        Cart cart = cartRepository.findCartById(cartId);
-        cart.setTotalAmount(cart.getTotalAmount() + value);
         cartRepository.save(cart);
     }
 
@@ -163,6 +158,12 @@ public class CartServiceImpl implements CartService {
             throw new ProductNotInStockException(productId);
         }
         return product;
+    }
+
+    private void addToCartAmount(int cartId, double value) {
+        Cart cart = cartRepository.findCartById(cartId);
+        cart.setTotalAmount(cart.getTotalAmount() + value);
+        cartRepository.save(cart);
     }
 
     @Override

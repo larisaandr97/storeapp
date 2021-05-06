@@ -1,5 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Varela+Round);
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans");
 
 * {
     font-family: 'varela round';
@@ -218,3 +219,24 @@ td {
 /*        column-count: 4;*/
 /*    }*/
 /*}*/
+
+.orangeButton {
+    padding: 10px 20px;
+    font-family: Poppins;
+    font-size: 1.2rem;
+    color: #fff;
+    border: 2px solid #ff9c61;
+    background-color: #ff9c61;
+    border-radius: 50px;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0px 0px 15px #ff9c61;
+    text-decoration: none;
+}
+
+.orangeButton:hover {
+    cursor: pointer;
+    background-color: transparent;
+}
