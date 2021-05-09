@@ -8,7 +8,10 @@ import com.javaproject.storeapp.exception.InsufficientFundsException;
 import com.javaproject.storeapp.exception.ResourceNotFoundException;
 import com.javaproject.storeapp.repository.OrderItemRepository;
 import com.javaproject.storeapp.repository.OrderRepository;
+import com.javaproject.storeapp.service.BankAccountService;
+import com.javaproject.storeapp.service.CartService;
 import com.javaproject.storeapp.service.OrderService;
+import com.javaproject.storeapp.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,12 +24,12 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final BankAccountServiceImpl bankAccountService;
+    private final BankAccountService bankAccountService;
     private final OrderItemRepository orderItemRepository;
-    private final ProductServiceImpl productService;
-    private final CartServiceImpl cartService;
+    private final ProductService productService;
+    private final CartService cartService;
 
-    public OrderServiceImpl(OrderRepository orderRepository, BankAccountServiceImpl bankAccountService, OrderItemRepository orderItemRepository, ProductServiceImpl productService, CartServiceImpl cartService) {
+    public OrderServiceImpl(OrderRepository orderRepository, BankAccountService bankAccountService, OrderItemRepository orderItemRepository, ProductService productService, CartService cartService) {
         this.orderRepository = orderRepository;
         this.bankAccountService = bankAccountService;
         this.orderItemRepository = orderItemRepository;

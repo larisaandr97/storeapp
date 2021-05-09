@@ -29,14 +29,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceImplTest {
+public class OrderServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
     @Mock
     private CartServiceImpl cartService;
-    //    @Mock
-//    private CustomerService customerService;
     @Mock
     private ProductServiceImpl productService;
     @Mock

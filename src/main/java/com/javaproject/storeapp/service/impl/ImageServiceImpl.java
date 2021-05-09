@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-//@CrossOrigin(origins = {"http://localhost:3000"})
 @Service
 public class ImageServiceImpl implements ImageService {
 

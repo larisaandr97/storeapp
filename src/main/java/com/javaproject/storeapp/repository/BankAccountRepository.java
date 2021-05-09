@@ -1,7 +1,6 @@
 package com.javaproject.storeapp.repository;
 
 import com.javaproject.storeapp.entity.BankAccount;
-import com.javaproject.storeapp.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +13,9 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Intege
 
     BankAccount findBankAccountByCardNumber(String cardNumber);
 
-    default List<BankAccount> findBankAccountsByUser(User user) {
+    default List<BankAccount> findBankAccountsByUser(int id) {
         return this.findAll()
-                .stream().filter(account -> account.getUser().getId() == user.getId())
+                .stream().filter(account -> account.getUser().getId() == id)
                 .collect(Collectors.toList());
     }
 }

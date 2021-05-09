@@ -5,6 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
+
+    Product createProduct(Product product);
+
     Product findProductById(int id);
 
     Page<Product> getProductsBy(String category, String name, boolean descending, Pageable pageable);

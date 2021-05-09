@@ -2,6 +2,7 @@ package com.javaproject.storeapp.aspect;
 
 import com.javaproject.storeapp.entity.Audit;
 import com.javaproject.storeapp.repository.AuditRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Aspect
 @Component
+@Slf4j
 public class LoggingAspect {
 
     private final AuditRepository auditRepository;
@@ -21,7 +23,7 @@ public class LoggingAspect {
 
     @AfterReturning("execution(* com.javaproject.storeapp.service.*.*(..))")
     public void log(JoinPoint joinPoint) {
-        System.out.println("Method " + joinPoint.getSignature().getName() +
+        log.info("Method " + joinPoint.getSignature().getName() +
                 " from " + joinPoint.getTarget().getClass() +
                 " will be executed. Timestamp: " + LocalDateTime.now());
 

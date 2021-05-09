@@ -26,9 +26,6 @@ public class BankAccountServiceTest {
     @Mock
     private BankAccountRepository bankAccountRepository;
 
-//    @Mock
-//    private CustomerService customerService;
-
     @InjectMocks
     private BankAccountServiceImpl bankAccountService;
 
@@ -88,7 +85,7 @@ public class BankAccountServiceTest {
 
        /* when(customerService.findCustomerById(user.getId()))
                 .thenReturn(customer);*/
-        when(bankAccountRepository.findBankAccountsByUser(user))
+        when(bankAccountRepository.findBankAccountsByUser(user.getId()))
                 .thenReturn(Arrays.asList(bankAccount1, bankAccount2));
 
         //act
@@ -100,7 +97,7 @@ public class BankAccountServiceTest {
         assertEquals(result.get(0).getBalance(), 200);
 
         //verify(customerService, times(1)).findCustomerById(customer.getId());
-        verify(bankAccountRepository, times(1)).findBankAccountsByUser(user);
+        verify(bankAccountRepository, times(1)).findBankAccountsByUser(user.getId());
     }
 
     @Test

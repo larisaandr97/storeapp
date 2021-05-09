@@ -37,22 +37,26 @@ public class BankAccountController {
     }
 
     @PostMapping()
-    public String createBankAccount(
+    public ModelAndView createBankAccount(
             @Valid
             @RequestBody
             @ModelAttribute
                     BankAccountRequest bankAccountRequest,
             BindingResult bindingResult,
             Principal principal) {
+        ModelAndView modelAndView = new ModelAndView("bankAccounts");
 
         if (bindingResult.hasErrors()) {
-            return "addBankAccount";
+            return modelAndView;
         }
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         bankAccountRequest.setUser(user);
         BankAccount bankAccount = bankAccountMapper.bankAccountRequestToBankAccount(bankAccountRequest);
         bankAccountService.createBankAccount(bankAccount);
-        return "bankAccounts";
+
+        List<BankAccount> accountsFound = bankAccountService.getBankAccountsForUser(user);
+        modelAndView.addObject("accounts", accountsFound);
+        return modelAndView;
     }
 
     @GetMapping()

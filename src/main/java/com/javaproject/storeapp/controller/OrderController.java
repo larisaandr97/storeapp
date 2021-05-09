@@ -2,7 +2,7 @@ package com.javaproject.storeapp.controller;
 
 import com.javaproject.storeapp.entity.Order;
 import com.javaproject.storeapp.entity.User;
-import com.javaproject.storeapp.service.impl.OrderServiceImpl;
+import com.javaproject.storeapp.service.OrderService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +17,9 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final OrderServiceImpl orderService;
+    private final OrderService orderService;
 
-    public OrderController(OrderServiceImpl orderService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 

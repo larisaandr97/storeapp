@@ -9,6 +9,7 @@ import com.javaproject.storeapp.exception.ProductNotInCartException;
 import com.javaproject.storeapp.exception.ProductNotInStockException;
 import com.javaproject.storeapp.repository.CartRepository;
 import com.javaproject.storeapp.service.CartService;
+import com.javaproject.storeapp.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,9 +23,9 @@ public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private Map<Integer, List<OrderItemRequest>> cartItems = new HashMap<>();
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
 
-    public CartServiceImpl(CartRepository cartRepository, ProductServiceImpl productService) {
+    public CartServiceImpl(CartRepository cartRepository, ProductService productService) {
         this.cartRepository = cartRepository;
         this.productService = productService;
     }

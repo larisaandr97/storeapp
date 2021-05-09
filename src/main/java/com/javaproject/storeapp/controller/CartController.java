@@ -86,7 +86,6 @@ public class CartController {
             Cart cart = cartService.findCartByUser(user);
             List<OrderItemRequest> items = cartService.getCartContents(user.getId());
             modelAndView.addObject("items", items);
-//            modelAndView.addObject("noStock", true);
             modelAndView.addObject("cart", cart != null ? cart : new Cart(0));
             modelAndView.addObject("accounts", bankAccountService.getBankAccountsForUser(user));
         }
@@ -101,7 +100,6 @@ public class CartController {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         OrderItemRequest itemRequest = cartService.getItemByProductId(productId, user.getId());
         Cart cart = cartService.findCartByUser(user);
-        // Product product = cartService.validateProduct(productId, quantity);
         Product product = productService.findProductById(productId);
 
         ModelAndView model = new ModelAndView("cart");

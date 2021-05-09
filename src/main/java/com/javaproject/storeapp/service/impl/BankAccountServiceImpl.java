@@ -31,7 +31,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public List<BankAccount> getBankAccountsForUser(User user) {
-        return bankAccountRepository.findBankAccountsByUser(user);
+        return bankAccountRepository.findBankAccountsByUser(user.getId());
     }
 
     @Override

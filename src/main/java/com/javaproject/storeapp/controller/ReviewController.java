@@ -5,6 +5,8 @@ import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.Review;
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.mapper.ReviewMapper;
+import com.javaproject.storeapp.service.ProductService;
+import com.javaproject.storeapp.service.ReviewService;
 import com.javaproject.storeapp.service.impl.ProductServiceImpl;
 import com.javaproject.storeapp.service.impl.ReviewServiceImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,11 +23,11 @@ import java.util.List;
 @RequestMapping("/reviews")
 public class ReviewController {
 
-    private final ReviewServiceImpl reviewService;
-    private final ProductServiceImpl productService;
+    private final ReviewService reviewService;
+    private final ProductService productService;
     private final ReviewMapper reviewMapper;
 
-    public ReviewController(ReviewServiceImpl reviewService, ProductServiceImpl productService, ReviewMapper reviewMapper) {
+    public ReviewController(ReviewService reviewService, ProductService productService, ReviewMapper reviewMapper) {
         this.reviewService = reviewService;
         this.productService = productService;
         this.reviewMapper = reviewMapper;

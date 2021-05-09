@@ -4,7 +4,7 @@ import com.javaproject.storeapp.dto.UserRequest;
 import com.javaproject.storeapp.entity.Role;
 import com.javaproject.storeapp.entity.User;
 import com.javaproject.storeapp.mapper.UserMapper;
-import com.javaproject.storeapp.service.impl.UserServiceImpl;
+import com.javaproject.storeapp.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,9 +18,9 @@ import javax.validation.Valid;
 public class LoginController {
 
     private final UserMapper userMapper;
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public LoginController(UserMapper userMapper, UserServiceImpl userService) {
+    public LoginController(UserMapper userMapper, UserService userService) {
         this.userMapper = userMapper;
         this.userService = userService;
     }
@@ -34,7 +34,6 @@ public class LoginController {
 
             request.getSession().removeAttribute("flash");
         } catch (Exception ex) {
-            // "flash" session attribute must not exist...do nothing and proceed normally
         }
         return "login";
     }
@@ -48,7 +47,6 @@ public class LoginController {
 
             request.getSession().removeAttribute("flash");
         } catch (Exception ex) {
-            // "flash" session attribute must not exist...do nothing and proceed normally
         }
         return "register";
     }

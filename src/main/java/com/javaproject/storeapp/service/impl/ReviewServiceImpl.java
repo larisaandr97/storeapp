@@ -4,6 +4,7 @@ import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.Review;
 import com.javaproject.storeapp.exception.ResourceNotFoundException;
 import com.javaproject.storeapp.repository.ReviewRepository;
+import com.javaproject.storeapp.service.ProductService;
 import com.javaproject.storeapp.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,10 @@ import java.util.Optional;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
 
     @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ProductServiceImpl productService) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ProductService productService) {
         this.reviewRepository = reviewRepository;
         this.productService = productService;
     }
