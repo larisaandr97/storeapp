@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureTestDatabase
-@TestPropertySource(locations = "classpath:application-test.properties")
+//@Profile("h2")
+//@TestPropertySource(locations = "classpath:application-test.properties")
 public class BankAccountServiceIT {
 
     @Autowired

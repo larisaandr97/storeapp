@@ -83,8 +83,6 @@ public class BankAccountServiceTest {
 
         user.setBankAccounts(Arrays.asList(bankAccount1, bankAccount2));
 
-       /* when(customerService.findCustomerById(user.getId()))
-                .thenReturn(customer);*/
         when(bankAccountRepository.findBankAccountsByUser(user.getId()))
                 .thenReturn(Arrays.asList(bankAccount1, bankAccount2));
 

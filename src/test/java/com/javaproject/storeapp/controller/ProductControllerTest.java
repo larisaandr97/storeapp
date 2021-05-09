@@ -51,7 +51,7 @@ public class ProductControllerTest {
     ArgumentCaptor<Product> argumentCaptor;
 
     @Test
-    @DisplayName("Get Product by Id")
+    @DisplayName("Get Product by Id Test")
     public void getProductByIdTest() {
         int id = 1;
         Product productTest = new Product();

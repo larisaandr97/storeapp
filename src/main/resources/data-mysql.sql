@@ -1,4 +1,4 @@
-create database if not exists storeapp2;
+create database if not exists storeapp;
 
 -- Insert role
 insert into roles(name) values ('ROLE_USER');

@@ -8,16 +8,15 @@ import com.javaproject.storeapp.mapper.ProductMapper;
 import com.javaproject.storeapp.service.ImageService;
 import com.javaproject.storeapp.service.ProductService;
 import com.javaproject.storeapp.service.ReviewService;
+import com.javaproject.storeapp.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,13 +25,13 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("mysql")
+@WebMvcTest(controllers = ProductController.class)
+//@SpringBootTest
+//@AutoConfigureMockMvc
+//@ActiveProfiles("mysql")
 public class ProductControllerIT {
 
     @Autowired
@@ -40,6 +39,9 @@ public class ProductControllerIT {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private UserService userService;
 
     @MockBean
     private ProductService productService;
@@ -82,8 +84,10 @@ public class ProductControllerIT {
     @Test
     @DisplayName("Get Product by Id - Positive case")
     public void getProductByIdTest() throws Exception {
-        mockMvc.perform(get("/products/{id}", "1"))
+        Product product = new Product(1, "Cupcake", "chocolate", 12, ProductCategory.SUPERMARKET, 5);
+        mockMvc.perform(get("/products/{id}", "1"))//.param("product", String.valueOf(product)))
                 .andExpect(status().isOk())
+                .andExpect(model().attribute("product", product))
                 .andExpect(view().name("productDetails"));
 
     }
