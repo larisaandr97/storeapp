@@ -86,7 +86,8 @@
             <p>*If you cannot select an account, it means it does not have enough funds available or you do not have an
                 account added yet.</p>
         </div>
-        <button type="submit" class="btn btn-dark">Checkout</button>
+        <button th:if="${accounts?.size() != 0}" type="submit" class="btn btn-dark">Checkout</button>
+        <button th:if="${accounts?.size() == 0}" type="submit" class="btn btn-dark" disabled>Checkout</button>
     </form>
 </div>
 

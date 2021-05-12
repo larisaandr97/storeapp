@@ -31,14 +31,19 @@
             <br/>
             <form sec:authorize="isAuthenticated()"
                   th:action="'/cart/add?productId=' + ${product.id} + '&quantity=1'" method="post">
-                <button th:if="${product.stock !=0}" type="submit" class="btn btn-primary">Add to cart <i
-                        class="bi bi-cart-plus"></i></button>
-                <button th:if="${product.stock ==0}" disabled type="submit" class="btn btn-primary">Add to cart <i
-                        class="bi bi-cart-plus"></i></button>
+                <button th:if="${product.stock !=0}" type="submit" class="btn btn-primary" style="margin-top:4rem;">
+                    Add to cart <i class="bi bi-cart-plus"></i></button>
+                <button th:if="${product.stock ==0}" disabled type="submit" class="btn btn-primary"
+                        style="margin-top:4rem;">
+                    Add to cart <i class="bi bi-cart-plus"></i></button>
             </form>
             <button sec:authorize="isAnonymous()" class="btn btn-primary" data-toggle="modal"
                     data-target="#exampleModal">Add to cart <i class="bi bi-cart-plus"></i>
             </button>
+            <i class="bi bi-tags" style="float:right;"></i>
+            <h5 style="float:right;"
+                th:text="${product.productCategory} ">
+            </h5>
         </div>
         <div th:if="${product.stock !=0}" class="card-footer text-muted center" style="width:100%;"
              th:text="'Only ' + ${product.stock} + ' left!'">

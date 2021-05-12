@@ -8,9 +8,6 @@ import com.javaproject.storeapp.mapper.ProductMapper;
 import com.javaproject.storeapp.service.ImageService;
 import com.javaproject.storeapp.service.ProductService;
 import com.javaproject.storeapp.service.ReviewService;
-import com.javaproject.storeapp.service.impl.ImageServiceImpl;
-import com.javaproject.storeapp.service.impl.ProductServiceImpl;
-import com.javaproject.storeapp.service.impl.ReviewServiceImpl;
 import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -92,7 +89,7 @@ public class ProductController {
             @RequestParam("size") Optional<Integer> size) {
 
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(3);
+        int pageSize = size.orElse(6);
         Page<Product> productPage = productService.getProductsBy(category, name, descending, PageRequest.of(currentPage - 1, pageSize));//, descending ? Sort.by("price").descending() : Sort.by("price").ascending()));
         model.addAttribute("productPage", productPage);
         int totalPages = productPage.getTotalPages();
