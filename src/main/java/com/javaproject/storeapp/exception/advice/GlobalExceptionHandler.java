@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,6 +19,15 @@ import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({MethodArgumentTypeMismatchException.class})
+    public ModelAndView handlerArgumentMismatchException(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModel().put("exception", exception);
+        modelAndView.setViewName("error_default");
+        return modelAndView;
+    }
 
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
     public ModelAndView handlerMethodNotSupportedException(Exception exception) {
@@ -36,6 +46,7 @@ public class GlobalExceptionHandler {
         return modelAndView;
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({UserAlreadyExistException.class})
     public ModelAndView handlerUserExistsException(Exception exception) {
         ModelAndView modelAndView = new ModelAndView("register");
@@ -44,6 +55,7 @@ public class GlobalExceptionHandler {
         return modelAndView;
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({DuplicateCardNumberException.class})
     public ModelAndView handlerCardExistsException(Exception exception) {
         ModelAndView modelAndView = new ModelAndView("addBankAccount");
