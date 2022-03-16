@@ -45,6 +45,7 @@ public class ProductController {
 
     @GetMapping("/new")
     public String newProduct(Model model) {
+        System.out.println("LALALALALA");
         List<ProductCategory> categoriesAll = Arrays.asList(ProductCategory.values());
         model.addAttribute("productRequest", new ProductRequest());
         model.addAttribute("categoriesAll", categoriesAll);
