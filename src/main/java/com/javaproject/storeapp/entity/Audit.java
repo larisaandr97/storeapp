@@ -29,4 +29,36 @@ public class Audit {
 
     public Audit() {
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    public String getTargetClass() {
+        return targetClass;
+    }
+
+    public void setTargetClass(String targetClass) {
+        this.targetClass = targetClass;
+    }
+
+    public LocalDateTime getTimestampValue() {
+        return timestampValue;
+    }
+
+    public void setTimestampValue(LocalDateTime timestampValue) {
+        this.timestampValue = timestampValue;
+    }
 }

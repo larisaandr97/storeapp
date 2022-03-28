@@ -36,4 +36,52 @@ public class Order {
         this.datePlaced = datePlaced;
         this.user = user;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public LocalDate getDatePlaced() {
+        return datePlaced;
+    }
+
+    public void setDatePlaced(LocalDate datePlaced) {
+        this.datePlaced = datePlaced;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public BankAccount getAccount() {
+        return account;
+    }
+
+    public void setAccount(BankAccount account) {
+        this.account = account;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 }

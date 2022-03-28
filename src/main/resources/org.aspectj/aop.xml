@@ -7,6 +7,7 @@
 
     <aspects>
         <aspect name="com.javaproject.storeapp.aspect.World"/>
+        <aspect name="com.javaproject.storeapp.aspect.LoggingAspect"/>
     </aspects>
 
 </aspectj>
