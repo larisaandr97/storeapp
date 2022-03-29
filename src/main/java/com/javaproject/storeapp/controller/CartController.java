@@ -1,5 +1,6 @@
 package com.javaproject.storeapp.controller;
 
+import com.javaproject.storeapp.annotations.TrackExecutionTime;
 import com.javaproject.storeapp.dto.OrderItemRequest;
 import com.javaproject.storeapp.entity.Cart;
 import com.javaproject.storeapp.entity.Order;
@@ -72,6 +73,7 @@ public class CartController {
         return "cart";
     }
 
+    @TrackExecutionTime
     @PostMapping("/checkout")
     public ModelAndView checkout(@RequestParam int accountId,
                                  Principal principal) {
