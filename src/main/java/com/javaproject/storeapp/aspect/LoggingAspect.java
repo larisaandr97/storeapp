@@ -29,12 +29,9 @@ public class LoggingAspect {
 //    }
     @After("execution(* com.javaproject.storeapp.controller.LoginController.loginForm(..))")
     public void logController(JoinPoint joinPoint) {
-//        log.info("Method " + joinPoint.getSignature().getName() +
-//                " from " + joinPoint.getTarget().getClass() +
-//                " will be executed. Timestamp: " + LocalDateTime.now());
-//
-//        Audit audit = new Audit(joinPoint.getSignature().toString(), joinPoint.getTarget().getClass().getCanonicalName(), LocalDateTime.now());
-//        auditRepository.save(audit);
+        System.out.println("Method " + joinPoint.getSignature().getName() +
+                " from " + joinPoint.getTarget().getClass() +
+                " will be executed. Timestamp: " + LocalDateTime.now());
         System.out.println("Da da da2321");
     }
 

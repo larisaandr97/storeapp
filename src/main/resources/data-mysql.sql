@@ -12,3 +12,4 @@ insert into users(username, enabled, password, role_id) values ('admin2021', tru
 -- Insert bank accounts
 insert into bankaccount( accountNumber,balance,cardNumber,user_id) values('4343434',120,'4217737771886809',1);
 insert into bankaccount(accountNumber,balance,cardNumber,user_id) values('43445462',750,'4217737771886877',1);
+insert into bankaccount(accountNumber,balance,cardNumber,user_id) values('43445462',750,'4217737771886877',1);
