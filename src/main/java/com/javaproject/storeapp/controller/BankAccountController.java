@@ -1,5 +1,6 @@
 package com.javaproject.storeapp.controller;
 
+import com.javaproject.storeapp.annotations.TrackExecutionTime;
 import com.javaproject.storeapp.dto.BankAccountRequest;
 import com.javaproject.storeapp.entity.BankAccount;
 import com.javaproject.storeapp.entity.User;
@@ -30,8 +31,9 @@ public class BankAccountController {
         this.bankAccountService = bankAccountService;
     }
 
+    @TrackExecutionTime
     @GetMapping("/new")
-    public String newAccount(Model model) {
+    private String newAccount(Model model) {
         model.addAttribute("bankAccountRequest", new BankAccountRequest());
         return "addBankAccount";
     }

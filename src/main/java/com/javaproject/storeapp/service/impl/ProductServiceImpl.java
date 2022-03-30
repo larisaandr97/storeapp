@@ -32,12 +32,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product findProductById(int id) {
-        Optional<Product> productOptional = Optional.ofNullable(productRepository.findProductById(id));
-        if (productOptional.isPresent()) {
-            return productOptional.get();
-        } else {
-            throw new ResourceNotFoundException("Product with Id " + id + " not found.");
-        }
+        return productRepository.findProductById(id);
+//        Optional<Product> productOptional = Optional.ofNullable(productRepository.findProductById(id));
+//        if (productOptional.isPresent()) {
+//            return productOptional.get();
+//        } else {
+//            throw new ResourceNotFoundException("Product with Id " + id + " not found.");
+//        }
     }
 
     @Override

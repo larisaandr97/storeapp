@@ -1,5 +1,6 @@
 package com.javaproject.storeapp.controller;
 
+import com.javaproject.storeapp.annotations.TrackExecutionTime;
 import com.javaproject.storeapp.dto.ProductRequest;
 import com.javaproject.storeapp.entity.Product;
 import com.javaproject.storeapp.entity.ProductCategory;
@@ -43,15 +44,16 @@ public class ProductController {
         this.reviewService = reviewService;
     }
 
+    @TrackExecutionTime
     @GetMapping("/new")
     public String newProduct(Model model) {
-        System.out.println("LALALALALA");
         List<ProductCategory> categoriesAll = Arrays.asList(ProductCategory.values());
         model.addAttribute("productRequest", new ProductRequest());
         model.addAttribute("categoriesAll", categoriesAll);
         return "addProduct";
     }
 
+    @TrackExecutionTime
     @PostMapping
     public String addProduct(@Valid
                              @RequestBody
@@ -77,6 +79,7 @@ public class ProductController {
         return "productDetails";
     }
 
+    @TrackExecutionTime
     @GetMapping
     public String getAllProducts(
             @RequestParam(required = false)
