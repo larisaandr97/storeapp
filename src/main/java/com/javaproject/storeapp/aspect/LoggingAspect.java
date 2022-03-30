@@ -15,14 +15,12 @@ public class LoggingAspect {
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
 
-
     @After("execution(* com.javaproject.storeapp.controller.LoginController.loginForm(..))")
     public void logControllerMethod(JoinPoint joinPoint) {
 
         logger.info("Method " + joinPoint.getSignature().getName() +
                 " from " + joinPoint.getTarget().getClass() +
                 " will be executed. Timestamp: " + LocalDateTime.now());
-
 
     }
 
@@ -33,10 +31,6 @@ public class LoggingAspect {
                 " from " + joinPoint.getTarget().getClass() +
                 " will be executed. Timestamp: " + LocalDateTime.now());
 
-
-
     }
-
-
 
 }
