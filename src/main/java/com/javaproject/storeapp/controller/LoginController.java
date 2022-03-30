@@ -1,5 +1,6 @@
 package com.javaproject.storeapp.controller;
 
+import com.javaproject.storeapp.annotations.TrackExecutionTime;
 import com.javaproject.storeapp.dto.UserRequest;
 import com.javaproject.storeapp.entity.Role;
 import com.javaproject.storeapp.entity.User;
@@ -25,6 +26,7 @@ public class LoginController {
         this.userService = userService;
     }
 
+    @TrackExecutionTime
     @RequestMapping(path = "/login", method = RequestMethod.GET)
     public String loginForm(Model model, HttpServletRequest request) {
         model.addAttribute("user", new User());
@@ -51,6 +53,7 @@ public class LoginController {
         return "register";
     }
 
+    @TrackExecutionTime
     @PostMapping("/register")
     public ModelAndView register(@Valid
                                  @RequestBody
