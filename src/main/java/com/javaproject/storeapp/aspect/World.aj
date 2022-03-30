@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public aspect World {
 
-    pointcut greeting(): execution (* com.javaproject.storeapp.service.ProductService.createProduct());
+    pointcut greeting(): execution (* com.javaproject.storeapp.controller.LoginController.loginForm());
 
     after() returning(): greeting() {
         System.out.println("Hello!");
