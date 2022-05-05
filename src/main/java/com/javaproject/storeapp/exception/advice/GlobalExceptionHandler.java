@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ModelAndView handlerArgumentMismatchException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView();
+        final ModelAndView modelAndView = new ModelAndView();
         modelAndView.getModel().put("exception", exception);
         modelAndView.setViewName("error_default");
         return modelAndView;
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
     public ModelAndView handlerMethodNotSupportedException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView();
+        final ModelAndView modelAndView = new ModelAndView();
         modelAndView.getModel().put("exception", exception);
         modelAndView.setViewName("error_default");
         return modelAndView;
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({ResourceNotFoundException.class})
     public ModelAndView handlerNotFoundException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView();
+        final ModelAndView modelAndView = new ModelAndView();
         modelAndView.getModel().put("exception", exception);
         modelAndView.setViewName("notfound");
         return modelAndView;
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({UserAlreadyExistException.class})
     public ModelAndView handlerUserExistsException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView("register");
+        final ModelAndView modelAndView = new ModelAndView("register");
         modelAndView.addObject("exception", exception);
         modelAndView.addObject("userRequest", new User());
         return modelAndView;
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({DuplicateCardNumberException.class})
     public ModelAndView handlerCardExistsException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView("addBankAccount");
+        final ModelAndView modelAndView = new ModelAndView("addBankAccount");
         modelAndView.addObject("exception", exception);
         modelAndView.addObject("bankAccountRequest", new BankAccountRequest());
         return modelAndView;
@@ -66,14 +66,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({ProductNotInStockException.class})
     public ModelAndView handlerNotEnoughStockException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView("cart");
+        final ModelAndView modelAndView = new ModelAndView("cart");
         modelAndView.addObject("exception", exception);
         return modelAndView;
     }
 
     @ExceptionHandler({NegativeQuantityException.class})
     public ModelAndView handlerNegativeQuantityException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView("notfound");
+        final ModelAndView modelAndView = new ModelAndView("notfound");
         modelAndView.addObject("exception", exception);
         // modelAndView.addObject("bankAccountRequest", new BankAccountRequest());
         return modelAndView;

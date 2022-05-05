@@ -21,10 +21,15 @@ public class Audit {
     @Column(name = "timestamp_value")
     private LocalDateTime timestampValue;
 
-    public Audit(String signature, String targetClass, LocalDateTime timestampValue) {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private AuditCategory auditCategory;
+
+    public Audit(String signature, String targetClass, LocalDateTime timestampValue, AuditCategory category) {
         this.signature = signature;
         this.targetClass = targetClass;
         this.timestampValue = timestampValue;
+        this.auditCategory = category;
     }
 
     public Audit() {
@@ -60,5 +65,13 @@ public class Audit {
 
     public void setTimestampValue(LocalDateTime timestampValue) {
         this.timestampValue = timestampValue;
+    }
+
+    public AuditCategory getAuditCategory() {
+        return auditCategory;
+    }
+
+    public void setAuditCategory(AuditCategory auditCategory) {
+        this.auditCategory = auditCategory;
     }
 }
