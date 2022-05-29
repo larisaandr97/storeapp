@@ -83,7 +83,7 @@ public class OrderServiceTest {
         user.setId(1);
         BankAccount bankAccount = new BankAccount(1, "3331965465", 200, "4331256148952346", user);
         Cart cart = new Cart(1, 100, user);
-        Product product = new Product("Lego", "disney", 100.0, ProductCategory.TOYS, 20);
+        Product product = new Product("Mickey Mouse", "disney", 100.0, ProductCategory.COMEDIE, 20);
         product.setId(1);
         Order orderCreated = new Order(200, LocalDate.now(), user);
         orderCreated.setId(1);

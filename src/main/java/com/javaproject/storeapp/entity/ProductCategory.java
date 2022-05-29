@@ -1,7 +1,7 @@
 package com.javaproject.storeapp.entity;
 
 public enum ProductCategory {
-    FASHION, SUPERMARKET, LAPTOPS, PHONES, HOME, BOOKS, TOYS;
+    DRAMA, COMEDIE, POLITISTE, FANTEZIE, POEZIE, BIBLIGRAFIE;
 
     public static boolean contains(String test) {
         for (ProductCategory c : ProductCategory.values()) {

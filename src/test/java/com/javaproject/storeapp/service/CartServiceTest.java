@@ -67,7 +67,7 @@ public class CartServiceTest {
     @Test
     @DisplayName("Validate Product - happy flow")
     public void validateProductTestHappyFlow() {
-        Product product = new Product("Sapiens", "self-development book", 50, ProductCategory.BOOKS, 10);
+        Product product = new Product("Sapiens", "self-development book", 50, ProductCategory.FANTEZIE, 10);
         product.setId(1);
         when(productService.findProductById(anyInt())).thenReturn(product);
         int quantity = 2;
@@ -82,7 +82,7 @@ public class CartServiceTest {
     @Test
     @DisplayName("Validate Product - negative quantity")
     public void validateProductTestNegativeQuantity() {
-        Product product = new Product("Sapiens", "self-development book", 50, ProductCategory.BOOKS, 10);
+        Product product = new Product("Sapiens", "self-development book", 50, ProductCategory.FANTEZIE, 10);
         product.setId(1);
         when(productService.findProductById(anyInt())).thenReturn(product);
         int quantity = -1;
@@ -94,7 +94,7 @@ public class CartServiceTest {
     @Test
     @DisplayName("Validate Product - not in stock")
     public void validateProductTestNotInStock() {
-        Product product = new Product("Sapiens", "self-development book", 50, ProductCategory.BOOKS, 2);
+        Product product = new Product("Sapiens", "self-development book", 50, ProductCategory.FANTEZIE, 2);
         product.setId(1);
         when(productService.findProductById(anyInt())).thenReturn(product);
         int quantity = 4;

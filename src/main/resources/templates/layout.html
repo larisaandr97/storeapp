@@ -15,12 +15,9 @@
     <title>Your store</title>
 </head>
 <body>
-<nav th:fragment="nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav th:fragment="nav" class="navbar navbar-expand-lg navbar-dark "STYLE="background: darkgoldenrod">
 
-    <a class="navbar-brand" href="/" style="font-family: 'Dancing Script', cursive;">
-        <img
-                style="width:4rem;"
-                th:src="@{/assets/images/shop-store.png}">
+    <a class="navbar-brand" href="/" style="font-family: 'Franklin Gothic Book', fantasy;">
         Your store
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -34,7 +31,7 @@
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/products">Catalog</a>
+                <a class="nav-link" href="/products">Carti</a>
             </li>
             <li sec:authorize="isAuthenticated()" class="nav-item">
                 <a class="nav-link" href="/cart">Your cart</a>

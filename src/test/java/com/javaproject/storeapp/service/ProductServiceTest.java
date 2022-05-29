@@ -32,8 +32,8 @@ public class ProductServiceTest {
     @DisplayName("Add a new Product")
     public void createProductTest() {
         //arrange
-        Product product = new Product("Harry Potter", "fantasy series book", 60.0, ProductCategory.BOOKS, 10);
-        Product savedProduct = new Product("Harry Potter", "fantasy series book", 60.0, ProductCategory.BOOKS, 10);
+        Product product = new Product("Harry Potter", "fantasy series book", 60.0, ProductCategory.FANTEZIE, 10);
+        Product savedProduct = new Product("Harry Potter", "fantasy series book", 60.0, ProductCategory.FANTEZIE, 10);
         when(productRepository.save(product)).thenReturn(savedProduct);
 
         //act

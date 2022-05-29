@@ -59,9 +59,9 @@ public class ProductControllerIT {
     @DisplayName("Create a new Product")
     @WithMockUser(roles = "ADMIN")
     public void createProductTest() throws Exception {
-        ProductRequest request = new ProductRequest("Cupcake", "Chocolate mousse", 10, 12, ProductCategory.SUPERMARKET);
+        ProductRequest request = new ProductRequest("Memoriile unui Samruai", "test name", 10, 12, ProductCategory.BIBLIGRAFIE);
 
-        when(productService.createProduct(any())).thenReturn(new Product(1, "Cupcake", "Chocolate mousse", 10, ProductCategory.SUPERMARKET, 12));
+        when(productService.createProduct(any())).thenReturn(new Product(1, "Cupcake", "Chocolate mousse", 10, ProductCategory.BIBLIGRAFIE, 12));
 
         mockMvc.perform(post("/products")
                 .contentType("application/json")
@@ -84,7 +84,7 @@ public class ProductControllerIT {
     @Test
     @DisplayName("Get Product by Id - Positive case")
     public void getProductByIdTest() throws Exception {
-        Product product = new Product(1, "Cupcake", "chocolate", 12, ProductCategory.SUPERMARKET, 5);
+        Product product = new Product(1, "JohnLennon", "JohnLennon", 12, ProductCategory.BIBLIGRAFIE, 5);
         mockMvc.perform(get("/products/{id}", "1"))//.param("product", String.valueOf(product)))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("product", product))
